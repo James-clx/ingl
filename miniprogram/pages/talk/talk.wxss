@@ -1,0 +1,219 @@
+page{
+  background-color: white;
+  height: 100%;
+}
+/* 用户推文组件 */
+.push{
+  width: 100%;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction:column;
+}
+.user{
+  display: flex;
+  flex-direction:row;
+}
+.userinfoimg{
+  margin-left: 20rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+.nickname{
+  font-weight: 600;
+}
+.userpushtime{
+  color: gray;
+  font-size: x-small;
+}
+.userinfotext{
+  width: 300rpx;
+  margin-left: 20rpx;
+}
+.userpushtext{
+  font-weight: 500;
+  word-break:break-all;
+  display: inline-block;
+  width: 93%;
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+.userpushimg{
+  background-color: rgba(236, 236, 236, 0.342);
+  margin-top: 20rpx;
+  margin-left: 3%;
+  width: 94%;
+  height: 500rpx;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+.itemimg{
+  height: 100%;
+}
+.pushinfo{
+  margin-top: 20rpx;
+  display: flex;
+  margin-right: 50rpx;
+  font-size: small;
+  font-weight: 600;
+}
+.likeimg{
+  margin-left: 20rpx;
+  flex: 2;
+  width: 40rpx;
+  height: 40rpx;
+}
+.commentimg{
+  margin-left: 20rpx;
+  flex: 2;
+  width: 40rpx;
+  height: 40rpx;
+}
+.commentimg{
+  width: 45rpx;
+  height: 45rpx;
+  flex: 1;
+}
+.pushinput{
+  /* padding: 10rpx; */
+  /* border: 1px solid gray; */
+  flex: 4;
+}
+.inputpost{
+  border-radius: 10rpx;
+  padding-left: 10rpx;
+  border: 1px solid rgb(223, 222, 222);
+  min-height: 30rpx;
+}
+.postsend{
+  border-radius: 10rpx;
+  text-align: center;
+  line-height: 48rpx;
+  background-color: rgb(223, 222, 222);
+  margin-left: 10rpx;
+  flex: 2;
+  font-size: small;
+}
+.commentlist{
+  margin-top: 0rpx;
+  font-size: small;
+  margin-left: 30rpx;
+  width: 500rpx;
+}
+.commit{
+  word-break:break-all;
+}
+.comment{
+  margin-top: -20rpx;
+}
+.line{
+  padding: 20rpx;
+  margin-left: 0%;
+  width: 100%;
+  border-bottom: 1px solid rgb(240, 240, 240);
+}
+/* 打开上传页面悬浮按钮 */
+.pushbutton{
+  border: 1px solid gray;
+  border-radius: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  position: fixed;
+  bottom: 100rpx;
+  right: 20rpx;
+  background-color: white;
+}
+/* 悬浮按钮图片 */
+.pushbuttonimg{
+  margin-top: 10rpx;
+  margin-left: 10rpx;
+  width: 80rpx;
+  height: 80rpx;
+}
+
+/*页面最外层view*/
+.input{
+  z-index: 5;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 5000rpx;
+  
+}
+/* 第二层view */
+.inputinfo{
+  z-index: 10;
+  position: fixed;
+  bottom: 0rpx;
+  width: 100%;
+  height: 650rpx;
+  background-color: white;
+}
+/* 输入框 */
+.section{
+  width: 88%;
+  height: 260rpx;
+  margin-top: 50rpx;
+  padding-bottom: 40rpx;
+  margin-bottom: 20rpx;
+  margin-left: 5%;
+  border-bottom: 2px solid rgb(216, 216, 216);
+  display: flex;
+}
+.section>section{
+  height: 240rpx;
+  flex: 1;
+}
+/*选择图片View*/
+.container{
+  flex: 1;
+	padding: 20rpx;
+}
+/* 添加照片view */
+.add{
+  border: 1px solid rgb(156, 156, 156);
+  border-radius: 30rpx;
+	width: 200rpx;
+	height: 200rpx;
+  text-align: center;
+  margin-top: -20rpx;
+  margin-bottom: 10rpx;
+}
+.addImv{
+  margin: 20rpx 20rpx;
+  height: 600rpx;
+  background-color: #EEEEEE;
+  display: flex;
+  padding: 0 20rpx;
+  flex-direction: row; 
+  flex-wrap: wrap; 
+}
+.add>image{
+	width: 200rpx;
+	height: 200rpx;
+}
+.image{
+  border: 1px solid gray;
+  border-radius: 30rpx;
+	width: 200rpx;
+	height: 200rpx;
+}
+.image>image{
+  border-radius: 30rpx;
+	width: 200rpx;
+	height: 200rpx;
+}
+.imgtext{
+  color: #acacac;
+  font-size: xx-small;
+  text-align: center;
+}
+/* 底部提交按钮 */
+.tips{
+  color: #acacac;
+  font-weight: 600;
+  font-size: smaller;
+	text-align: center;
+}

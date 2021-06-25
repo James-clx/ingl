@@ -1,0 +1,82 @@
+<view class="header-user">
+
+  <view class="header-userinfo">
+    <image class="header-avatarurl" src="{{userInfo.avatarUrl}}"></image>
+    <view class="header-name">
+      <view class="header-sex">{{userInfo.nickName}}
+        <image wx:if="{{userInfo.gender == 1}}" src="/images/male.png"></image>
+        <image wx:if="{{userInfo.gender == 2}}" src="/images/female.png"></image>
+      </view>
+      <view class="header-country">{{userInfo.country}}</view>
+      <view class="header-country">{{userInfo.city}}</view>
+    </view>
+  </view>
+
+  <view class="header-postinfo">
+    <view class="header-like">
+      <text>点赞\n</text>
+      <text>{{likecount}}</text>
+    </view>
+    <view class="header-post">
+      <text>发帖\n</text>
+      <text>{{iforumlength}}</text>
+    </view>
+  </view>
+  
+</view>
+
+<view style="margin-top:250rpx">
+  <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="unique" touchmove="touchmove" style="filter: blur({{filter}})">
+    <view class="user">
+      <view>
+        <image src="{{item.avatarurl}}" class="userinfoimg"></image>
+      </view>
+      <view class="userinfotext">
+        <view class="nickname">{{item.nickname}}</view>
+        <view class="userpushtime">{{item.pushtime}}</view>
+      </view> 
+      <view class="delete">
+        <image class="deletepost" data-id="{{item._id}}" src="/images/deletepost.png" bindtap="deletepost"></image>
+      </view>
+    </view>
+    <view class="userpush">
+      <text class="userpushtext">{{item.info}}</text>
+      <view class="userpushimg" wx:if="{{item.imgurl}}">
+        <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill" bindtap="tapimg"></image>
+      </view>
+    </view>
+
+    <view class="pushinfo" bindtap="inputcomment">
+
+      <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
+      <image class="likeimg" src="/images/liked.png"></image>
+      <text class="likes">{{item.likecount}}</text>
+    </view>
+
+    <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd">
+      <image class="likeimg" src="/images/like.png"></image>
+      <text class="likes">{{item.likecount}}</text>
+    </view>
+
+      <view class="commentimg">
+        <image class="commentimg" src="/images/comment.png"></image>
+      </view>
+      <view class="pushinput">
+        <input class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}"/>
+      </view>
+      <text class="postsend" data-id="{{item._id}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
+    </view>
+
+    <view class="commentlist" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique">
+      <text wx:if="{{post.postid == item._id}}">{{post.postuser}}:</text>
+      <text class="commit" wx:if="{{post.postid == item._id}}">{{post.commit}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+</view>
+
+<view class="shownothing" bindtap="shownothing" style="display:{{shownothing}}">
+  <text>什么都没有哦！\n</text>
+  <text>去说说发表点什么吧！</text>
+</view>
+

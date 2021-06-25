@@ -1,0 +1,191 @@
+page{
+  background-color: white;
+  height: 100%;
+}
+.header-user{
+  z-index: 10;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 200rpx;
+  border-bottom: 1px solid rgb(236, 236, 236);
+  margin-bottom: 50rpx;
+  display: flex;
+  flex-direction: row;
+}
+.header-userinfo{
+  padding-left: 50rpx;
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+}
+.header-avatarurl{
+  width: 150rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  flex: 1;
+}
+.header-name{
+  padding-left: 20rpx;
+  flex: 2;
+}
+.header-sex{
+  font-size: x-large;
+  font-weight: 600;
+}
+.header-sex>image{
+  width: 30rpx;
+  height: 30rpx;
+}
+.header-country{
+  font-size: smaller;
+
+}
+.header-postinfo{
+  padding-right: 50rpx;
+  margin-top: 60rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 50rpx;
+}
+.header-like{
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+  border-right: 1px solid gray;
+}
+.header-post{
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+/* 用户推文组件 */
+.push{
+  width: 100%;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction:column;
+}
+.user{
+  display: flex;
+  flex-direction:row;
+}
+.userinfoimg{
+  margin-left: 20rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+.nickname{
+  font-weight: 600;
+}
+.userpushtime{
+  color: gray;
+  font-size: x-small;
+}
+.userinfotext{
+  width: 300rpx;
+  margin-left: 20rpx;
+}
+.userpushtext{
+  font-weight: 500;
+  word-break:break-all;
+  display: inline-block;
+  width: 600rpx;
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+.delete{
+  position: absolute;
+  right:60rpx;
+  margin-top: 20rpx;
+}
+.deletepost{
+  width: 50rpx;
+  height: 50rpx;
+}
+.userpushimg{
+  background-color: rgba(236, 236, 236, 0.342);
+  margin-top: 20rpx;
+  margin-left: 3%;
+  width: 94%;
+  height: 500rpx;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+.itemimg{
+  height: 100%;
+}
+.pushinfo{
+  margin-top: 20rpx;
+  display: flex;
+  margin-right: 50rpx;
+  font-size: small;
+  font-weight: 600;
+}
+.likeimg{
+  margin-left: 20rpx;
+  flex: 2;
+  width: 40rpx;
+  height: 40rpx;
+}
+.commentimg{
+  margin-left: 20rpx;
+  flex: 2;
+  width: 40rpx;
+  height: 40rpx;
+}
+.commentimg{
+  width: 45rpx;
+  height: 45rpx;
+  flex: 1;
+}
+.pushinput{
+  /* padding: 10rpx; */
+  /* border: 1px solid gray; */
+  flex: 4;
+}
+.inputpost{
+  border-radius: 10rpx;
+  padding-left: 10rpx;
+  border: 1px solid rgb(223, 222, 222);
+  min-height: 30rpx;
+}
+.postsend{
+  border-radius: 10rpx;
+  text-align: center;
+  line-height: 48rpx;
+  background-color: rgb(223, 222, 222);
+  margin-left: 10rpx;
+  flex: 2;
+  font-size: small;
+}
+.commentlist{
+  margin-top: 0rpx;
+  font-size: small;
+  margin-left: 30rpx;
+  width: 500rpx;
+}
+.commit{
+  word-break:break-all;
+}
+.comment{
+  margin-top: -20rpx;
+}
+.line{
+  padding: 20rpx;
+  margin-left: 0%;
+  width: 100%;
+  border-bottom: 1px solid rgb(240, 240, 240);
+}
+.shownothing{
+  text-align: center;
+  padding-top: 500rpx;
+  color: rgb(68, 177, 240);
+  font-weight: 600;
+}

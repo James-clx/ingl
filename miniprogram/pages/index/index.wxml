@@ -1,0 +1,68 @@
+<view>
+  <swiper duration="500" vertical="true" current="{{current}}" style="height:{{swiperHeight}}rpx">
+    <swiper-item>    
+      <swiper
+        autoplay="true"
+        interval="3000"
+        duration="500"
+        style="height:{{swiperHeight}}rpx"
+        bindtransition="toChange"
+        bindanimationfinish="toChangeEnd"
+        >
+        <swiper-item>
+          <image bindtap="toIndex" src="{{images[0]}}"></image>
+          <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
+              <view class="v-title">{{botTitle[0]}}</view>
+              <view class="v-text">{{botText[0]}}</view>
+          </view>
+        </swiper-item>
+        <swiper-item>
+          <image bindtap="toIndex" src='{{images[1]}}'></image>
+          <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
+              <view class="v-title">{{botTitle[1]}}</view>
+              <view class="v-text">{{botText[1]}}</view>
+          </view>
+        </swiper-item>
+        <swiper-item>
+          <image bindtap="toIndex" src='{{images[2]}}'></image>
+          <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
+              <view class="v-title">{{botTitle[2]}}</view>
+              <view class="v-text">{{botText[2]}}</view>
+          </view>
+        </swiper-item>
+      </swiper> 
+
+      <view class="buttom" bindtap="toIndex">
+        <view class="bot-others">查看更多</view>
+        <image class="bot-others-img" src="/images/up.png"></image>
+      </view>
+    </swiper-item>
+
+    <swiper-item>
+      <scroll-view scroll-y="true" style="height: {{swiperHeight}}rpx">
+        <view>
+          <view class="select">
+            <view class="sel-block">
+              <view class="sel-block-item">
+                <in-sblock bindtap="toschoolinfo" src="/images/schoolnote.jpg" title="校园事务" />
+                <in-sblock bindtap="toschoolnote" src="/images/schoolinfo.jpg" title="学校信息" />
+              </view>
+              <view class="sel-block-item">
+                <in-sblock bindtap="toschoollife" src="/images/schoolhelp.jpg" title="生活助手" />
+                <in-sblock bindtap="toschooltraffic" src="/images/schooltraffic.jpg" title="周边交通" />
+              </view>
+            </view>
+          </view>
+
+          <view class="footer">
+            <text>更多</text>
+            <view class="fo-other">
+              <in-rblock src="/images/av1.jpg" bindtap="more" />
+            </view>
+          </view>
+
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </swiper>
+</view>

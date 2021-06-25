@@ -1,0 +1,10 @@
+.title{
+  background-color: rgb(209, 209, 209);
+  padding-top: 5rpx;
+  padding-bottom: 5rpx;
+  font-size: large;
+  font-weight: 600;
+  border-radius: 30rpx;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+}

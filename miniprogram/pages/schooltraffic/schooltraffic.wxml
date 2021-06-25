@@ -1,0 +1,141 @@
+<view class="fix">
+
+  <view class="title">
+    <text>公交出行</text>
+  </view>
+
+  <view class="info">
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="354路" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">起始：穗丰村总站</text>
+        <text class="fixinfo">首班 6：30</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">途径：地铁长平站</text> 
+        <text class="fixinfo">末班 21：00</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">终点：地铁长平总站</text>
+        <text class="fixinfo">票价 2元</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="346路" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">起始：穗丰村总站</text>
+        <text class="fixinfo">首班 6：30</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">途径：地铁长湴站</text> 
+        <text class="fixinfo">末班 20：00</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">　　　天河客运站</text>
+        <text class="fixinfo">票价 3元</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">终点：长福路总站</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="专线7" bindtap="gotowechatminipeogram" />
+      <text class="zxinfo">每逢周五、周末、节假日才有</text>
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">起始：穗丰村总站</text>
+        <text class="fixinfo">首班 8：00</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">途径：体育西路站</text> 
+        <text class="fixinfo">末班 19：00</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">终点：动物园南门总站</text>
+        <text class="fixinfo">票价 8元</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="973路" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">起始：兴丰村总站</text>
+        <text class="fixinfo">首班 6：20</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">途径：地铁太和站</text> 
+        <text class="fixinfo">末班 22：00</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">终点：太和总站</text>
+        <text class="fixinfo">票价 2元</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="如约巴士" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">需网上购票，途径站较少</text>
+        <text class="fixinfo">票价：5-10元</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">如　起始：穗丰村总站</text>
+      </view>
+      <view class="bus">
+        <text class="phonecall">　　终点：地铁长平站</text>
+      </view>
+    </view>
+
+  </view>
+
+</view>
+
+<view class="fix">
+
+  <view class="title">
+    <text>拼车出行</text>
+  </view>
+
+  <view class="info">
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="小程序拼车" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view>
+        <text class="pinche">在IN广里生活小程序内发布拼车信息</text>
+        <text class="pinche">\n有需要的小伙伴在拼车信息下评论即可</text>
+      </view>
+      <!-- <view>
+        <text class="pinche goto" bindtap="totalk">\n>>点击跳转至拼车模块</text> 
+      </view> -->
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="群内拼车" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view>
+        <text class="pinche">在IN广里微信公众号回复：拼车</text>
+        <text class="pinche">\n获得微信群二维码，在群内发布拼车信息</text>
+      </view>
+      <!-- <view>
+        <text class="pinche goto" bindtap="download">\n>>点击跳转至IN广里公众号</text> 
+      </view> -->
+    </view>
+
+  </view>
+
+</view>

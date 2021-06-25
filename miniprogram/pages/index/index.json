@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "in-sblock":"/components/in-sblock/index",
+    "in-rblock":"/components/in-rblock/index"
+  },
+  "navigationStyle": "custom"
+}

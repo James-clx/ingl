@@ -1,0 +1,72 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/logs/logs",
+          "pathName": "pages/logs/logs",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/schedule/schedule",
+          "pathName": "pages/schedule/schedule",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/talk/talk",
+          "pathName": "pages/talk/talk",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/index/index",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/schoolinfo/schoolinfo",
+          "pathName": "pages/schoolinfo/schoolinfo",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/schoolnote/schoolnote",
+          "pathName": "pages/schoolnote/schoolnote",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/schooltraffic/schooltraffic",
+          "pathName": "pages/schooltraffic/schooltraffic",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/schoollife/schoollife",
+          "pathName": "pages/schoollife/schoollife",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/mytalk/mytalk",
+          "pathName": "pages/mytalk/mytalk",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+image{
+  width: 345rpx;
+  height: 355rpx;
+  margin-left: 5rpx;
+  margin-right: 5rpx;
+}
+.in-block-shadow{
+  width: 345rpx;
+  height: 155rpx;
+  background-color:rgba(0, 0, 0, 0.5);
+  margin-top:-160rpx;
+  margin-left:4rpx;
+  position: relative;
+  z-index:1;
+}
+.in-block-text{
+  text-align: center;
+  margin-top:-100rpx;
+  color:white;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 60rpx;
+}

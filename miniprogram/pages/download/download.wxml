@@ -1,0 +1,2 @@
+<!--完美校园下载页面-->
+ <web-view :webview-styles="webviewStyles" src="https://mp.weixin.qq.com/s/3mNrEScK9nWbGa1vPEuryA"></web-view>

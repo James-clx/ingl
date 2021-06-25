@@ -1,0 +1,120 @@
+<view class="bar">
+  <view class="bar-set" wx:if="{{hideweekend == true}}" bindtap="hideweekend">显示周末</view>
+  <view class="bar-set" wx:if="{{hideweekend == false}}" bindtap="hideweekend">隐藏周末</view>
+  <view class="bar-title">课程表</view>
+</view>
+
+<view class="schedule">
+  <!-- 周次选择器 -->
+  <view class="section">
+    <picker bindchange="bindPickerChange" value="{{todayweek}}" range="{{weekarray}}">
+      <view class="picker week">
+        {{weekarray[todayweek]}}周
+      </view>
+    </picker>
+  </view>
+  <view class="week backweek" wx:if="{{todayweek != backweek}}" bindtap="backweek">回到本周</view>
+  <!-- 周1-7 -->
+  <view style="display:{{hideweekend == true?'none':'block'}}">
+    <view class="today" style="border-radius:{{day == 7?'0 15rpx 15rpx 0':'0'}};margin-left:{{day >= 4? day*89+(day+1):day*89+(day*day)-day*3}}rpx"></view>
+    <view class="top" >
+      <view wx:for="{{['一','二','三','四','五','六','日']}}" class="top-text" wx:key="key">周{{item}}</view>
+    </view>
+    <view class="top" style="border-radius:0;">
+      <view wx:for="{{date7}}" class="top-text" wx:key="key">{{item}}</view>
+    </view>
+
+    <view style="background-color:#fff;color:#808080;border-radius:0 0 20rpx 20rpx; ">
+        <view wx:for="{{time}}" class="left" wx:key="key">
+          <text>{{item.time}}\n{{item.start}}\n{{item.finish}}</text>
+        </view>
+    </view>
+
+    <view wx:for="{{[1,2,3,4,5,6,7,8,9]}}" wx:key="key">
+      <view style="width:720rpx;margin-top:{{(index+1)*120+90}}rpx;position:absolute;top:275rpx;border-bottom:1rpx solid {{index%2!=0?'#C0C0C0':'#DCDCDC'}};z-index:6"></view>
+    </view>
+
+    <view wx:for="{{z101}}" wx:key="key">
+
+      <view class="flex-item kcb-item" bindtap="showCardView" data-statu="open" data-index="{{index}}" style="margin-left:{{(item.weekday-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*120+120}}rpx;height:2*850-5rpx;background-color:{{colorArrays[index%9]}}">
+        <view class="smalltext">
+          <text class="smalltext-info" style="padding-bottom:5rpx">{{item.course_name}}</text>
+          <text class="smalltext-info">{{item.class_location}}</text>
+        </view>
+      </view>
+
+    </view>
+
+  </view>
+
+  <!-- 周1-5 -->
+  <view style="display:{{hideweekend == true?'block':'none'}}">
+    <view class="today" style="border-radius:{{day == 5?'0 15rpx 15rpx 0':'0'}};margin-left:{{day >= 3? day*120:day*120}}rpx;width:120rpx"></view>
+    <view class="top" style="padding-left:115rpx">
+      <view wx:for="{{['一','二','三','四','五']}}" class="top-text" wx:key="key" style="width:110rpx;padding-left:10rpx">周{{item}}</view>
+    </view>
+    <view class="top" style="border-radius:0;padding-left:115rpx">
+      <view wx:for="{{date5}}" class="top-text" wx:key="key" style="width:110rpx;padding-left:10rpx">{{item}}</view>
+    </view>
+
+    <view style="background-color:#fff;color:#808080;border-radius:0 0 20rpx 20rpx">
+        <view wx:for="{{time}}" class="left" wx:key="key">
+          <text style="margin-left:30rpx">{{item.time}}\n{{item.start}}\n{{item.finish}}</text>
+        </view>
+    </view>
+
+    <view wx:for="{{[1,2,3,4,5,6,7,8,9]}}" wx:key="key">
+      <view style="width:720rpx;margin-top:{{(index+1)*120+50}}rpx;position:absolute;top:315rpx;border-bottom:1rpx solid {{index%2!=0?'#C0C0C0':'#DCDCDC'}};z-index:6"></view>
+    </view>
+ 
+
+    <view wx:for="{{z101}}" wx:key="key">
+
+      <view class="flex-item kcb-item" bindtap="showCardView" data-statu="open" data-index="{{index}}" style="margin-left:{{(item.weekday-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*120+120}}rpx;height:2*850-5rpx;background-color:{{colorArrays[index%9]}};width:115rpx;left:140rpx" wx:if="{{item.weekday<6}}">
+        <view class="smalltext">
+          <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.course_name}}</text>
+          <text class="smalltext-info" style="margin-right:2rpx">{{item.class_location}}</text>
+        </view>
+      </view>
+
+    </view>
+
+  </view>
+  <!-- ---------- -->
+</view>
+  
+<!-- 本周无课提示 -->
+<view class="noclass" wx:if="{{z101 == ''}}">
+  <view class="noclass-info">此周没有课程</view>
+  <view class="noclass-info">如课表有变动请清楚课表缓存再试</view>
+</view>
+
+<!-- 课程详细信息 -->
+<view class="class-mask" style="height:{{swiperHeight}}rpx;display:{{showclassmassage}}" bindtap="hidemask"></view>
+<view class="class-massage" style="display:{{showclassmassage}}" bindtap="hidemask">
+  <view class="class-title">课程信息：</view>
+  <view class="class-info">
+    <view class="class-detail">课程名称：{{course_name}}</view>
+    <view class="class-detail">课程性质：{{course_type}}</view>
+    <view class="class-detail">上课地点：{{class_location}}</view>
+    <view class="class-detail">授课教师：{{teacher_name}}</view>
+  </view>
+</view>
+
+<!-- 登录弹窗 -->
+<view class="class-mask" style="height:{{swiperHeight}}rpx;display:{{hidelogin}}" bindtap="hidemask"></view>
+<view class="class-massage" style="display:{{hidelogin}};bottom:400rpx" bindtap="hidemask">
+  <view class="class-title" style="margin-left:185rpx;font-weight: 500;">教务系统登录</view>
+  <view class="class-title" style="margin-left:155rpx;font-size:small;color:#808080;font-weight: 500;">请使用教务系统账号登录</view>
+  <view class="class-info">
+    <view class="login">
+      <view class="login-title">账号:</view>
+      <input class="login-input" type="text" placeholder="账号" bindinput="account"></input>
+    </view>
+    <view class="login">
+      <view class="login-title">密码:</view>
+      <input class="login-input" type="text" placeholder="密码" bindinput="passwd"></input>
+    </view>
+  </view>
+  <view class="class-title login login-button" bindtap="login">登录</view>
+</view>

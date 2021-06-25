@@ -1,0 +1,86 @@
+<view>
+
+  <view class="title">
+    <text>校园网</text>
+  </view>
+
+  <view class="info">
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="完美校园缴费" bindtap="gotowechatminipeogram" />
+      <text class="functtime">每月1日、10日、20日可用</text>
+    </view>
+
+    <view class="stap">
+      <view class="wmxyinfo">
+        <view class="wmxystap">
+          <text bindtap="download">第一步，<text class="goto">>>表格填报校园网登记信息。</text></text>
+        </view>
+        <view class="wmxystap">
+          <text>第二步，在完美校园APP进行缴费。</text>
+        </view>
+        <text class="goto" bindtap="download">>>点击链接下载完美校园</text>
+      </view>
+      <image class="wmxy" src="/images/wmxy.png"></image>
+    </view>
+    <view class="liantong">
+      <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="http://tmp/LYNBl234CyRB6886e7573ffda497193ec8a42b9873d8.png" src="/images/wmxycz.png"></image>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="联通宽带缴费" />
+      <text class="functtime">所有时间可用</text>
+    </view>
+
+    <view class="liantongstap">
+      <view>
+        <text>如果你错过了登记信息时间，可以通过联通宽带小程序缴费：</text>
+        <text class="goto" bindtap="gowechatminipeogram">>>点击跳转小程序</text>
+      </view>
+      <view class="liantong">
+        <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="http://tmp/592aOV0X43Dl37c05dd0971b9fba5922230753c2e020.png" src="/images/liantong.png"></image>
+      </view>
+    </view>
+
+  </view>
+</view>
+
+<view class="fix">
+
+  <view class="title">
+    <text>宿舍维修</text>
+  </view>
+
+  <view class="info">
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="水电维修" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <text class="phonecall" bindtap="makePhoneCall" data-id="13538931430">辛师傅：13538931430 <text class="fixinfo">(点击拨打电话)</text></text>
+      <text class="fixinfo">\n维修电器，家具门窗，热水使用问题，给排水漏水和股长堵塞</text>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="建筑维修" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <text class="phonecall" bindtap="makePhoneCall" data-id="13556011593">黄师傅：13556011593 <text class="fixinfo">(点击拨打电话)</text></text>
+      <text class="fixinfo">\n天花墙身脱落，天花板漏水，洗手台、厕盆瓷砖破裂故障</text>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="空调维修" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <text class="phonecall" bindtap="makePhoneCall" data-id="13533232807">刘师傅：13533232807 <text class="fixinfo">(点击拨打电话)</text></text>
+      <text class="fixinfo">\n空调不制冷，空调漏水，跳闸故障</text>
+    </view>
+
+    <view class="fixinfops">
+      <text>PS:\n联系方式：拨打手机电话或发送短信\n编辑短信内容时要说明楼栋号+房间号+故障描述</text>
+    </view>
+
+  </view>
+
+</view>

@@ -1,0 +1,105 @@
+.fix{
+  margin-bottom: 50rpx;
+}
+.title{
+  font-size: x-large;
+  margin-left: 4%;
+  padding-top: 70rpx;
+}
+.info{
+  padding-bottom: 50rpx;
+  border-radius: 20rpx;
+  width: 92%;
+  margin-left: 4%;
+  background-color: rgb(236, 236, 236);
+}
+.infotitle{
+  margin-top: 20rpx;
+  padding-top: 50rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+}
+.infofunct{
+  margin-left: 20rpx;
+  flex: 1;
+}
+.functtime{
+  margin-left: -50rpx;
+  margin-top: 5rpx;
+  color: rgb(160, 159, 159);
+  font-weight: 600;
+  font-size: small;
+  flex: 1;
+}
+.stap{
+  font-size: small;
+  font-weight: 600;
+  margin-left: 4%;
+  margin-top: 20rpx;
+  display: flex;
+}
+.wmxyinfo{
+  flex: 3;
+}
+.wmxystap{
+  padding-bottom: 10rpx;
+}
+.wmxy{
+  margin-right: 50rpx;
+  flex:1;
+  height: 150rpx;
+}
+.liantongstap{
+  width: 92%;
+  font-size: small;
+  font-weight: 600;
+  margin-left: 4%;
+  margin-top: 20rpx;
+}
+.goto{
+  color: rgb(68, 177, 240);
+}
+.liantong{
+  display: flex;
+  justify-content: center;
+}
+.ltstap{
+  margin-left: -25rpx;
+  width: 100%;
+}
+.fixcall{
+  width: 90%;
+  margin-left: 4%;
+  font-size: medium;
+  font-weight: 600;
+}
+.bus{
+}
+.pinche{
+  font-size: medium;
+}
+
+.phonecall{
+  line-height: 60rpx;
+}
+.zxinfo{
+  font-weight: 600;
+  padding-top: 6rpx;
+  margin-left: -250rpx;
+  color: rgb(160, 159, 159);
+}
+.fixinfo{
+  font-weight: 600;
+  padding-top: 8rpx;
+  flex: 1;
+  color: rgb(160, 159, 159);
+}
+.fixinfops{
+  width: 90%;
+  color: rgb(160, 159, 159);
+  margin-left: 4%;
+  font-size: small;
+  font-weight: 600;
+  margin-top: 70rpx;
+  padding-bottom: 50rpx;
+}

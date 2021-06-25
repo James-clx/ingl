@@ -1,0 +1,126 @@
+<view class="fix">
+
+  <view class="title">
+    <text>学校组织</text>
+  </view>
+
+  <view class="info">
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="学生会" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">秘书处 新媒体运营中心 宣传部</text>
+        <text class="phonecall">\n文体艺术部 对外交流部 科技创新部</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="青年志愿者协会" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">主席团 秘书处 外联部 策划部 网络编辑部</text>
+        <text class="phonecall">\n宣传部 会员部 义教组 驿站组 天鹿湖组</text> 
+        <text class="phonecall">\n夕阳组 家综组 文娱组</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="广播台" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">公关部 播音部 新媒体部 策划部 主持部</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="招生就业委员会" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">理事会 综合事务部 媒体宣传部</text>
+        <text class="phonecall">\n 对外交流部 就业活动部</text> 
+        <text class="phonecall">\n招生志愿者 人才与企业资源库拓展部</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="宿舍管理委员会" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">主席团 秘书处 生活部 组织部 考核部</text>
+        <text class="phonecall">\n外联部 宣传部 网络部</text>
+      </view>
+    </view>
+
+    <view class="infotitle">
+      <functbg class="infofunct" title="艺术团" bindtap="gotowechatminipeogram" />
+    </view>
+    <view class="fixcall">
+      <view class="bus">
+        <text class="phonecall">秘书处 舞台工作部 设计部 外联部 技术部</text>
+        <text class="phonecall">\n礼仪队 主持表演队 光音歌唱队 舞蹈队</text>
+        <text class="phonecall">\n化妆队</text>
+      </view>
+    </view>
+
+  </view>
+
+</view>
+
+<view class="fix">
+
+<view class="title">
+  <text>学生社团</text>
+</view>
+
+<view class="info">
+
+  <view class="infotitle">
+    <functbg class="infofunct" title="学术类" bindtap="gotowechatminipeogram" />
+  </view>
+  <view class="fixcall">
+    <view class="bus">
+      <text class="phonecall">无线电协会 会计学术协会 管理人俱乐部 </text>
+      <text class="phonecall">\n金融学术协会 现代制造协会 英语俱乐部</text>
+      <text class="phonecall">\n数学建模协会 电子商务协会 创新创业协会</text>
+    </view>
+  </view>
+  
+  <view class="infotitle">
+    <functbg class="infofunct" title="文化类" bindtap="gotowechatminipeogram" />
+  </view>
+  <view class="fixcall">
+    <view class="bus">
+      <text class="phonecall">羽毛球协会 瑜伽协会 网球协会</text>
+      <text class="phonecall">\n 甄曦跆拳道协会 格斗协会 乒乓球协会</text> 
+      <text class="phonecall">\n HH轮滑协会 足球协会 跃力排球协会</text>
+      <text class="phonecall">\n 台球协会 长跑协会 \n</text> 
+      <text class="phonecall">\n 长风书画协会 棋艺社 夏风跨文化社</text> 
+      <text class="phonecall">\n 电子竞技协会 魔术协会 幻漫之城协会</text> 
+      <text class="phonecall">\n  极限街舞协会 模特协会 左岸音乐协会</text> 
+      <text class="phonecall">\n  体育舞蹈协会\n</text> 
+      <text class="phonecall">\n 零距离戏剧社 炫舞流协会</text> 
+      <text class="phonecall">\n  借口原声音乐协会</text> 
+    </view>
+  </view>
+
+  <view class="infotitle">
+    <functbg class="infofunct" title="其他类" bindtap="gotowechatminipeogram" />
+  </view>
+  <view class="fixcall">
+    <view class="bus">
+      <text class="phonecall">从思文学社 辩论协会 汽车爱好者协会</text>
+      <text class="phonecall">\n 艺轩手工坊协会 摄影协会 职航协会</text> 
+      <text class="phonecall">\n 旅行协会 图书馆读者协会 勤工俭学协会</text> 
+    </view>
+  </view>
+
+</view>
+
+</view>
+
