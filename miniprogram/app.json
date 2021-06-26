@@ -10,9 +10,6 @@
     "pages/download/download",
     "pages/mytalk/mytalk"
   ],
-  "navigateToMiniProgramAppIdList": [
-    "wx1129fc27588b7898"
-  ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",

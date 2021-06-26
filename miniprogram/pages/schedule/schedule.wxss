@@ -1,14 +1,6 @@
 page{
   background-color: rgb(241, 241, 241);
 }
-.bar{
-  z-index: 10;
-  position: fixed;
-  top: 0;
-  height: 180rpx;
-  background-color: white;
-  width: 100%;
-}
 .bar-set{
   margin-top: 95rpx;
   margin-left: 40rpx;
@@ -19,11 +11,7 @@ page{
   text-align: center;
   line-height: 60rpx;
   font-size: small;
-}
-.bar-title{
-  margin-top: -50rpx;
-  text-align: center;
-  font-weight: 600;
+  z-index: 999999;
 }
 
 .schedule{
@@ -140,72 +128,4 @@ page{
   color: #808080;
   text-align: center;
   z-index: 9;
-}
-
-.class-mask{
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  background-color: rgba(59, 59, 59,0.6);
-  z-index: 7;
-}
-
-.class-massage{
-  background-color: white;
-  border-radius: 30rpx;
-  width: 80%;
-  position: fixed;
-  bottom: 500rpx;
-  left: 70rpx;
-  padding-top: 50rpx;
-  padding-bottom: 50rpx;
-  z-index: 8;
-}
-
-.class-title{
-  margin-left: 20rpx;
-  font-size: larger;
-  font-weight: 600;
-  margin-bottom: 20rpx;
-}
-
-.class-info{
-  margin-left: 50rpx;
-}
-
-.class-detail{
-  word-break:break-all;
-  margin-bottom: 10rpx;
-}
-
-.login{
-  margin-top: 40rpx;
-  margin-left: 25rpx;
-}
-
-.login-title{
-  font-weight: 500;
-}
-
-.login-input{
-  width: 345rpx;
-  padding-left: 10rpx;
-  margin-top: -44rpx;
-  margin-left: 90rpx;
-  border: 1px solid #cccccc;
-  border-radius: 15rpx;
-}
-
-.login-button{
-  text-align: center;
-  line-height: 70rpx;
-  height: 70rpx;
-  width: 250rpx;
-  border-radius: 15rpx;
-  margin-left:178rpx;
-  font-weight: 500;
-  font-size:medium;
-  background-color: #85d86c;
-  color: white;
-  font-weight: 600;
 }

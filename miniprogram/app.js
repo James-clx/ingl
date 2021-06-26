@@ -1,13 +1,13 @@
-//app.js
 App({
-  data:{
+  data: {
+
     // 图片云存储下载地址
-    cloud_downlode_image_url : "",//主页图片
-    cloud_downlode_userpost_image_url : ""//user发布图片
+    cloud_downlode_image_url: "", //主页图片
+    cloud_downlode_userpost_image_url: "" //user发布图片
   },
   onLaunch: function () {
     wx.cloud.init({
-      evn:"user-1go7hmfiae35dce5"
+      evn: "user-1go7hmfiae35dce5"
     })
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
@@ -24,9 +24,12 @@ App({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        
+
       }
     })
-    this.globalData = {}
+    this.globalData = {
+      base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
+      open_date: "2021-03-01",
+    }
   }
 })

@@ -1,0 +1,4 @@
+<view class="bar">
+  <slot name="left"></slot>
+  <view class="bar-title">{{title}}</view>
+</view>

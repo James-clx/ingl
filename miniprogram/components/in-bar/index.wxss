@@ -1,0 +1,13 @@
+.bar{
+  z-index: 9999999;
+  position: fixed;
+  top: 0;
+  height: 180rpx;
+  background-color: white;
+  width: 100%;
+}
+.bar-title{
+  margin-top: -50rpx;
+  text-align: center;
+  font-weight: 600;
+}
