@@ -1,5 +1,5 @@
 var util=require('../../utils/utils.js')
-var gettimes=require('../../utils/times.js')
+var gettimes=require('../../utils/utils.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()

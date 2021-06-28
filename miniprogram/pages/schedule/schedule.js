@@ -1,106 +1,44 @@
-import {showLoading} from "../../utils/inside_api.js"
 import {get_term_today_week} from "../../utils/times.js"
+import {get_cache_sync} from "../../utils/cache.js"
 
 const app = getApp()
 
 Page({
   data: {
-    hidelogin: '', // 是否显示登录界面
-    hideweekend: true, // 是否显示周末
-
-
-
-    showclassmassage: 'none',
-    course_name: '',
-    course_type: '',
-    class_location: '',
-    teacher_name: '',
-    swiperHeight: 0,
-    day: '', //星期几
-    termstart: '', //学期开始周次
-    todayweek: '', //选择周次
-    backweek: '', //今日周次
-    
-    weekarray: [],
-    date7: ['1', '2', '3', '4', '5', '6', '7'],
-    date5: ['1', '2', '3', '4', '5'],
-    time: [{
-        time: "1",
-        start: "8:20",
-        finish: "9:05"
-      },
-      {
-        time: "2",
-        start: "9:15",
-        finish: "10:00"
-      },
-      {
-        time: "3",
-        start: "10:20",
-        finish: "11:05"
-      },
-      {
-        time: "4",
-        start: "11:15",
-        finish: "12:00"
-      },
-      {
-        time: "5",
-        start: "14:00",
-        finish: "14:45"
-      },
-      {
-        time: "6",
-        start: "14:55",
-        finish: "15:40"
-      },
-      {
-        time: "7",
-        start: "16:00",
-        finish: "16:45"
-      },
-      {
-        time: "8",
-        start: "16:55",
-        finish: "17:40"
-      },
-      {
-        time: "9",
-        start: "19:00",
-        finish: "19:45"
-      },
-      {
-        time: "10",
-        start: "19:55",
-        finish: "20:40"
-      }
-    ]
+    hidelogin: 'none', // 是否显示登录界面
+    hideweekend: true, // 是否隐藏周末
+    ban_hide: true, // 是否禁用显示周末这个按钮
   },
 
-  onLoad: function (options) {
-    showLoading('加载中')
-    // 判断有无登录教务系统
-    // can_in_educational_system = this.check_cache()
-    if (false) {
-      // 已登录教务系统的逻辑
-      this.hidelogin = 'none'
-    } else {
-      //没有登录教务系统的逻辑
-      let term_today_week = get_term_today_week() //这周是第几周
-      this.hidelogin = 'block'
+  onLoad() {
+    // 有登录缓存的逻辑,这里要做个判断有无登录缓存
+    let edlogin_cache = get_cache_sync('student_number') // 判断有无登录信息的缓存
+    if(!edlogin_cache){ //无缓存
     }
+
+
+
+    let hidelogin = this.data.hidelogin
+    let hideweekend = this.data.hideweekend
+    let ban_hide = this.data.ban_hide
+    if (edlogin_cache) {
+      // 已登录教务系统的逻辑
+      hidelogin = 'none'
+      hideweekend = true
+      ban_hide = false
+    } else {
+      // 没有登录教务系统的逻辑
+      // let term_today_week = get_term_today_week() //这周是第几周
+      hidelogin = 'block'
+      hideweekend = true
+      ban_hide = true
+    }
+
     // 数据初始化
     this.setData({
-      hidelogin: this.hidelogin
-    })
-    wx.hideLoading()
-  },
-
-  // 周末是否隐藏
-  hideweekend: function () {
-    let hideweekend = !this.data.hideweekend
-    this.setData({
-      hideweekend: hideweekend,
+      hidelogin: hidelogin,
+      hideweekend:hideweekend,
+      ban_hide:ban_hide
     })
   },
 
@@ -129,17 +67,15 @@ Page({
     })
   },
 
-  //选择器事件
-  bindPickerChange: function (e) {
-    this.setData({
-      todayweek: e.detail.value
-    })
+  // 周末是否隐藏
+  hideweekend() {
+    // 如果没有登录的话，这里的显示周末按钮是按不了的
+    const ban_hide = this.data.ban_hide
+    if(!ban_hide){
+      let hideweekend = !this.data.hideweekend
+      this.setData({
+        hideweekend: hideweekend,
+      })
+    }
   },
-
-  //回到当前周次
-  backweek: function () {
-    this.setData({
-      todayweek: this.data.backweek
-    })
-  }
 })

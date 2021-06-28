@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "in-week_select":"/components/in-week_select/index"
+  }
+}

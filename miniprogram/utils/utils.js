@@ -1,19 +1,19 @@
-const formatTime = date => {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  // const second = date.getSeconds()
+function verify_form_is_null(object) {
+  // 验证信息是否为空
+  for (let i in object['input']) {
+    if (object['input'][i] == "") {
+      wx.showToast({
+        title: object['title'] + '为空',
+        icon: 'error',
+        duration: 2000
+      })
+      return true
+    }
+  }
+  return false
 
-  return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
-const formatNumber = n => {
-  n = n.toString()
-  return n[1] ? n : '0' + n
-}
-
-module.exports = {
-  formatTime: formatTime
+export {
+  verify_form_is_null
 }
