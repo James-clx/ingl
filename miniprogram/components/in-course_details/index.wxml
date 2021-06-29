@@ -1,0 +1,11 @@
+<view class="class-mask" style="height:{{swiperHeight}}rpx;display:{{show_class_message}}" bindtap="hideMask"></view>
+
+<view class="class-massage" style="display:{{show_class_message}};z-index:9999;">
+  <view class="class-title">课程信息：</view>
+  <view class="class-info">
+    <view class="class-detail">课程名称：{{course_info_target.course_name}}</view>
+    <view class="class-detail">课程性质：{{course_info_target.course_type}}</view>
+    <view class="class-detail">上课地点：{{course_info_target.class_location}}</view>
+    <view class="class-detail">授课教师：{{course_info_target.teacher_name}}</view>
+  </view>
+</view>

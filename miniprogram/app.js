@@ -5,43 +5,62 @@ App({
     cloud_downlode_image_url: "", //主页图片
     cloud_downlode_userpost_image_url: "" //user发布图片
   },
-  // onHide(){
-  //   // 判断有无浏览器缓存，如果有则后台关闭浏览器，并清空浏览器缓存
-  //   const browser_cache = wx.getStorageSync('browser_cache') == {}?false:wx.getStorageSync
-  //   ('browser_cache')
-  //   let openid = wx.getStorageSync('openid')
-  //   // 获取用户的openid,判断缓存有没有openid，没有则保存到缓存中
-  //   if(!openid){
-  //     wx.login({
-  //       async success(res){
-  //         // 发送 res.code 到后台换取 openId,并存入缓存
-  //         wx.request({
-  //           url:"https://www.inguangli.cn/ingl/api/get_openid",
-  //           method:'POST',
-  //           data:{'code':res.code}
-  //         })
-  //         wx.setStorageSync('openid', openid)
-  //       }
-  //     })
-  //     openid = wx.getStorageSync('openid')
-  //   }
-
-  //   if(browser_cache){
-  //     const url = "https://www.inguangli.cn/ingl/api/quit_browser"
-  //     wx.request({
-  //       url:url,
-  //       method:'POST',
-  //       data:{'executor_url':browser_cache['executor_url'],'session_id':browser_cache['session_id']
-  //     ,'openid':openid}
-  //     })
-  //     wx.removeStorageSync('browser_cache')
-  //   }
-  // },
 
   onLaunch: function () {
     this.globalData = {
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
       open_date: "2021-03-01",
+      schedule_go_class_time: [{
+        time: "1",
+        start: "8:20",
+        finish: "9:05"
+      },
+      {
+        time: "2",
+        start: "9:15",
+        finish: "10:00"
+      },
+      {
+        time: "3",
+        start: "10:20",
+        finish: "11:05"
+      },
+      {
+        time: "4",
+        start: "11:15",
+        finish: "12:00"
+      },
+      {
+        time: "5",
+        start: "14:00",
+        finish: "14:45"
+      },
+      {
+        time: "6",
+        start: "14:55",
+        finish: "15:40"
+      },
+      {
+        time: "7",
+        start: "16:00",
+        finish: "16:45"
+      },
+      {
+        time: "8",
+        start: "16:55",
+        finish: "17:40"
+      },
+      {
+        time: "9",
+        start: "19:00",
+        finish: "19:45"
+      },
+      {
+        time: "10",
+        start: "19:55",
+        finish: "20:40"
+      }
+    ]
     }
     wx.cloud.init({
       evn: "user-1go7hmfiae35dce5"

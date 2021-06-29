@@ -1,4 +1,4 @@
-import {set_cache_sync,get_cache_sync} from "cache.js"
+import {setCacheSync,getCacheSync} from "cache.js"
 import {htmlRequest} from "html.js"
 
 function showLoading(title) {
@@ -8,8 +8,8 @@ function showLoading(title) {
   })
 }
 
-function get_openid() {
-  let openid = get_cache_sync('openid')
+function getOpenid() {
+  let openid = getCacheSync('openid')
   if (!openid) {
     wx.login({
       async success(res) {
@@ -17,15 +17,15 @@ function get_openid() {
         const openid = await htmlRequest(['get_openid', 'POST', {
           'code': res.code
         }])
-        set_cache_sync('openid', openid)
+        setCacheSync('openid', openid)
       }
     })
   }
-  openid = get_cache_sync('openid')
+  openid = getCacheSync('openid')
   return openid
 }
 
 export {
   showLoading,
-  get_openid
+  getOpenid
 }

@@ -1,35 +1,23 @@
-// components/in-week_select/index.js
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
-
+    weekarray: Array,
+    selected_week: Number,
+    today_week :Number
   },
 
-  /**
-   * 组件的初始数据
-   */
-  data: {
-    weekarray: [],
+  data: {},
 
-  },
-
-  /**
-   * 组件的方法列表
-   */
   methods: {
     //周次选择器
-    bindPickerChange(e) {
-      this.setData({
-        todayweek: e.detail.value
-      })
+    pickerChange(e) {
+      // 传递给外部的数据
+      let selected_week = e.detail.value
+      this.triggerEvent('pickerchange',selected_week)
     },
     //回到当前周次
-    backweek() {
-      this.setData({
-        todayweek: this.data.backweek
-      })
+    backWeek() {
+      let today_week = this.data.today_week
+      this.triggerEvent('backweek',today_week)
     },
   }
 })

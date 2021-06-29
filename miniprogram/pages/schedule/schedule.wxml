@@ -1,10 +1,14 @@
+<!-- 标题 -->
 <in-bar title="课程表">
-  <view slot="left" class="bar-set" wx:if="{{hideweekend}}" bindtap="hideweekend">显示周末</view>
-  <view slot="left" class="bar-set" wx:if="{{!hideweekend}}" bindtap="hideweekend">隐藏周末</view>
+  <view slot="left" class="bar-set" wx:if="{{hideweekend}}" bindtap="hideWeekend">显示周末</view>
+  <view slot="left" class="bar-set" wx:if="{{!hideweekend}}" bindtap="hideWeekend">隐藏周末</view>
 </in-bar>
 
+<!-- 周次选择器 -->
+<in-week_select weekarray="{{weekarray}}" selected_week="{{selected_week}}" today_week="{{today_week}}" bindpickerchange="pickerChange" bindbackweek="backWeek"/>
+
 <!-- 课程表 -->
-<in-schedule hideweekend="{{hideweekend}}" />
+<in-schedule hideweekend="{{hideweekend}}" selected_week_data="{{selected_week_data}}" point_day="{{point_day}}" selected_week_date="{{selected_week_date}}" />
 
 <!-- 教务系统登录界面 -->
 <in-edlogin swiperHeight="{{swiperHeight}}" hidelogin="{{hidelogin}}" />

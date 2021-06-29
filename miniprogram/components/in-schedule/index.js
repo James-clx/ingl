@@ -1,87 +1,49 @@
+const app = getApp()
+
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
-    hideweekend: Boolean,
+    hideweekend: Boolean,  // 是否隐藏周末
+    selected_week_data: Array,  // 课表的数据
+    point_day:Number,  // 指向今天的周次的星期数
+    selected_week_date:Array
   },
 
-  /**
-   * 组件的初始数据
-   */
   data: {
-    can_in_guangli:false, //能否进入教务系统的文字显示控制
+    // 课程详细信息相关数据
+    show_class_message: 'none', // 控制课程详细信息的显示隐藏
+    ccourse_info_target: {}, // 保存课程的详细信息
 
-    todayweek: '', //选择周次
-    showclassmassage: 'none',
-    course_name: '',
-    course_type: '',
-    class_location: '',
-    teacher_name: '',
-    swiperHeight: 0,
-    day: '', //星期几
-    termstart: '', //学期开始周次
-    backweek: '', //今日周次
-    
-    date7: ['1', '2', '3', '4', '5', '6', '7'],
-    date5: ['1', '2', '3', '4', '5'],
-    time: [{
-        time: "1",
-        start: "8:20",
-        finish: "9:05"
-      },
-      {
-        time: "2",
-        start: "9:15",
-        finish: "10:00"
-      },
-      {
-        time: "3",
-        start: "10:20",
-        finish: "11:05"
-      },
-      {
-        time: "4",
-        start: "11:15",
-        finish: "12:00"
-      },
-      {
-        time: "5",
-        start: "14:00",
-        finish: "14:45"
-      },
-      {
-        time: "6",
-        start: "14:55",
-        finish: "15:40"
-      },
-      {
-        time: "7",
-        start: "16:00",
-        finish: "16:45"
-      },
-      {
-        time: "8",
-        start: "16:55",
-        finish: "17:40"
-      },
-      {
-        time: "9",
-        start: "19:00",
-        finish: "19:45"
-      },
-      {
-        time: "10",
-        start: "19:55",
-        finish: "20:40"
-      }
-    ]
+    schedule_go_class_time:[], // 上课节数和上课时间
   },
-
-  /**
-   * 组件的方法列表
-   */
+  attached(){
+    let schedule_go_class_time = app.globalData.schedule_go_class_time
+    this.setData({
+      schedule_go_class_time:schedule_go_class_time
+    })
+  },
   methods: {
+    showCardView(e){
+      let course_info_all = e.currentTarget.dataset.info // 点击的课程的所有详细信息
+      // 获取要显示的目标数据
+      let course_target_data = this.getTargetCourseData(course_info_all)
+
+      // 显示课程信息框
+      let show_class_message = 'block'
+
+      //初始化数据
+      this.setData({
+        show_class_message:show_class_message,
+        course_info_target:course_target_data
+      })  
+    },
+    getTargetCourseData(course_info_all){
+      let course_target_data = {}
+      course_target_data['course_name'] = course_info_all.course_name
+      course_target_data['course_type'] = course_info_all.course_type
+      course_target_data['class_location'] = course_info_all.class_location
+      course_target_data['teacher_name'] = course_info_all.teacher_name
+      return course_target_data
+    }
   },
   pageLifetimes:{
   },

@@ -1,4 +1,4 @@
-function set_cache_sync(key, value) {
+function setCacheSync(key, value) {
   // 判断是否有该缓存
   let exist_storage = wx.getStorageSync(key) == ""?false:wx.getStorageSync(key)
   if (exist_storage) {
@@ -13,16 +13,16 @@ function set_cache_sync(key, value) {
   }
 }
 
-function get_cache_sync(key) {
+function getCacheSync(key) {
   return wx.getStorageSync(key)
 }
 
-function clear_cache_single(key){
+function clearCacheSingle(key){
   wx.removeStorageSync(key)
 }
 
 export {
-  set_cache_sync,
-  get_cache_sync,
-  clear_cache_single,
+  setCacheSync,
+  getCacheSync,
+  clearCacheSingle,
 }

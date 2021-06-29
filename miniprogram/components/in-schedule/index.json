@@ -1,6 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "in-week_select":"/components/in-week_select/index"
+    "in-course_details":"/components/in-course_details/index"
   }
 }

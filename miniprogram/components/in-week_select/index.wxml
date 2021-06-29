@@ -1,8 +1,8 @@
 <view class="section">
-  <picker bindchange="bindPickerChange" value="{{todayweek}}" range="{{weekarray}}">
+  <picker bindchange="pickerChange" value="{{selected_week-1}}" range="{{weekarray}}">
     <view class="picker week">
-      {{weekarray[todayweek]}}周
+      <p wx:if="{{selected_week != 0}}">第{{selected_week}}</p>周
     </view>
   </picker>
 </view>
-<view class="week backweek" wx:if="{{todayweek != backweek}}" bindtap="backweek">回到本周</view>
+<view class="week backweek" wx:if="{{selected_week != today_week}}" bindtap="backWeek">回到本周</view>

@@ -1,7 +1,8 @@
 import {htmlRequest} from "../../utils/html.js"
-import {showLoading,get_openid} from "../../utils/inside_api.js"
-import {verify_form_is_null} from "../../utils/utils.js"
-import {set_cache_sync} from "../../utils/cache.js"
+import {showLoading,getOpenid} from "../../utils/inside_api.js"
+import {verifyFormIsNull} from "../../utils/utils.js"
+import {setCacheSync} from "../../utils/cache.js"
+import {screenHeight} from "../../utils/utils.js"
 
 Component({
   properties: {
@@ -11,51 +12,58 @@ Component({
 
   data: {
     student_number: "",
-    password: 0
+    password: 0,
+    swiperHeight:0,
   },
-
+  async attached(){
+    // 框高
+    let screen_height = await screenHeight()
+    // 初始化数据
+    this.setData({
+      swiperHeight: screen_height,
+    })
+  },
   methods: {
     // 教务系统登录
     async login(e) {
       const can_in_edbrowser = await htmlRequest(['can_in_browser', 'GET']) // 判断能否进入教务系统
       if(can_in_edbrowser['error']){ // 不能进入教务系统的处理
-        this.can_not_in_edbrowser_handler('教务系统驾崩啦')
+        this.canNotInEdbrowserHandler('教务系统驾崩啦')
         return
       }
       // 能进入教务系统的处理
-      this.can_in_edbrowser_handler()
+      this.canInEdbrowserHandler()
     },
 
-    async can_in_edbrowser_handler(){
+    async canInEdbrowserHandler(){
       // 获取表单信息
       let student_number = this.data.student_number
       let password = this.data.password
 
       // 验证学号密码是否为空
-      let input_error = verify_form_is_null({'input':[student_number,password],'title':'学号或密码'})
+      let input_error = verifyFormIsNull({'input':[student_number,password],'title':'学号或密码'})
       if(input_error){return}
 
       // 获取用户的openid
-      let openid = get_openid()
+      let openid = getOpenid()
 
-      //发送登录的网络数据请求
       showLoading("请稍等...")
+      //发送登录的网络数据请求
       const result = await htmlRequest(['login', 'POST', {"account": student_number,"password": password,"openid":openid}]) 
-      
 
       // 登录失败
       if(!result['status']){
         wx.hideLoading()
-        this.login_fail('登录失败',result['message'])
+        this.loginFail('登录失败',result['message'])
         return
       }
 
       // 登录成功
-      this.login_success(student_number,password,result['cookies'])
+      this.loginSuccess(student_number,password,result['cookies'])
     },
 
     // 不能进入教务系统
-    can_not_in_edbrowser_handler(title){
+    canNotInEdbrowserHandler(title){
       wx.showToast({
         title: title,
         icon:'error'
@@ -63,16 +71,17 @@ Component({
     },
     
     // 登录成功
-    async login_success(student_number,password,cookies){
+    async loginSuccess(student_number,password,cookies){
+      showLoading('登录成功！')
       // 缓存用户的cookies信息、教务系统的学号、密码
-      set_cache_sync('cookies',cookies)
-      set_cache_sync('student_number',student_number)
-      set_cache_sync('password',password)
+      setCacheSync('cookies',cookies)
+      setCacheSync('student_number',student_number)
+      setCacheSync('password',password)
 
       // 用cookies获取课表,并存入缓存
       const data = [{"account": student_number,"password": password},cookies]
-      const schedule_data = await htmlRequest(['schedule', 'POST', data])
-      set_cache_sync('schedule_data',schedule_data)
+      const schedule_cache = await htmlRequest(['schedule', 'POST', data])
+      setCacheSync('schedule_cache',schedule_cache)
 
       // 刷新页面
       wx.switchTab({
@@ -87,7 +96,7 @@ Component({
     },
 
     // 登录失败
-    login_fail(title,message){
+    loginFail(title,message){
       wx.showModal({
         title: title,
         content: message,

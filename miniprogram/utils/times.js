@@ -16,7 +16,7 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
-function get_term_today_week() {
+function getTermTodayWeek() {
   let today_date = new Date()
   let open_date = new Date(app.globalData.open_date)
   let day = parseInt((today_date - open_date) / (1000 * 60 * 60 * 24))
@@ -25,7 +25,7 @@ function get_term_today_week() {
 }
 
 export{
-  get_term_today_week,
+  getTermTodayWeek,
   formatTime
 }
 
