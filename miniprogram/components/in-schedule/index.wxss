@@ -94,7 +94,7 @@
 }
 
 .noclass{
-  position: fixed;
+  position: absolute;
   bottom: 620rpx;
   left: 195rpx;
   z-index: 8;
@@ -105,4 +105,17 @@
   color: #808080;
   text-align: center;
   z-index: 9;
+}
+
+.bar-set{
+  margin-top: 95rpx;
+  margin-left: 40rpx;
+  width: 150rpx;
+  height: 60rpx;
+  border: 1rpx solid rgb(201, 199, 199);
+  border-radius: 30rpx;
+  text-align: center;
+  line-height: 60rpx;
+  font-size: small;
+  z-index: 999999;
 }

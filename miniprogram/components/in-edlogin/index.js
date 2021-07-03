@@ -1,18 +1,17 @@
 import {htmlRequest} from "../../utils/html.js"
-import {showLoading,getOpenid} from "../../utils/inside_api.js"
+import {showLoading,getOpenid,refreshPage} from "../../utils/inside_api.js"
 import {verifyFormIsNull} from "../../utils/utils.js"
 import {setCacheSync} from "../../utils/cache.js"
 import {screenHeight} from "../../utils/utils.js"
 
 Component({
   properties: {
-    swiperHeight: String,
     hidelogin: String,
   },
 
   data: {
     student_number: "",
-    password: 0,
+    password: "",
     swiperHeight:0,
   },
   async attached(){
@@ -49,7 +48,7 @@ Component({
 
       showLoading("请稍等...")
       //发送登录的网络数据请求
-      const result = await htmlRequest(['login', 'POST', {"account": student_number,"password": password,"openid":openid}]) 
+      const result = await htmlRequest(['login', 'POST', {"student_number": student_number,"password": password,"openid":openid}]) 
 
       // 登录失败
       if(!result['status']){
@@ -59,7 +58,7 @@ Component({
       }
 
       // 登录成功
-      this.loginSuccess(student_number,password,result['cookies'])
+      this.loginSuccess(student_number,password,result['cookies'],openid)
     },
 
     // 不能进入教务系统
@@ -71,27 +70,24 @@ Component({
     },
     
     // 登录成功
-    async loginSuccess(student_number,password,cookies){
+    async loginSuccess(student_number,password,cookies,openid){
       showLoading('登录成功！')
-      // 缓存用户的cookies信息、教务系统的学号、密码
-      setCacheSync('cookies',cookies)
-      setCacheSync('student_number',student_number)
-      setCacheSync('password',password)
-
-      // 用cookies获取课表,并存入缓存
-      const data = [{"account": student_number,"password": password},cookies]
+      // 用cookies获取课表
+      const data = [{"student_number": student_number,"password": password,"openid":openid},cookies]
       const schedule_cache = await htmlRequest(['schedule', 'POST', data])
-      setCacheSync('schedule_cache',schedule_cache)
+
+      // 缓存用户的cookies信息、教务系统的学号、密码和课表
+      setCacheSync({'cookies':cookies,'student_number':student_number,'password':password,'schedule_cache':schedule_cache['data']})
+
+      // 清空表单
+      this.setData({
+        student_number:"",
+        password:""
+      })
 
       // 刷新页面
-      wx.switchTab({
-        url: '../../pages/schedule/schedule',
-        success: function(e) {
-          var page = getCurrentPages().pop();
-          if (page == undefined || page == null) return;
-          page.onLoad();
-        }
-      })
+      refreshPage('../../pages/schedule/schedule')
+      
       wx.hideLoading()
     },
 
@@ -101,6 +97,11 @@ Component({
         title: title,
         content: message,
         showCancel: false
+      })
+
+      // 清空表单
+      this.setData({
+        password:""
       })
     },
 

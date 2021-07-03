@@ -1,5 +1,5 @@
 <view class="section">
-  <picker bindchange="pickerChange" value="{{selected_week-1}}" range="{{weekarray}}">
+  <picker bindchange="onPickerChange" value="{{selected_week - 1}}" range="{{weekarray}}">
     <view class="picker week">
       <p wx:if="{{selected_week != 0}}">第{{selected_week}}</p>周
     </view>

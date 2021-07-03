@@ -8,7 +8,8 @@
     "pages/schooltraffic/schooltraffic",
     "pages/schoollife/schoollife",
     "pages/download/download",
-    "pages/mytalk/mytalk"
+    "pages/mytalk/mytalk",
+    "pages/user/user"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -41,7 +42,7 @@
       },
       {
         "text": "我的",
-        "pagePath": "pages/mytalk/mytalk",
+        "pagePath": "pages/user/user",
         "iconPath": "images/user.png",
         "selectedIconPath": "images/user1.png"
       }

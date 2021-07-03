@@ -1,0 +1,90 @@
+.header-user{
+  z-index: 10;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 200rpx;
+  border-bottom: 1px solid rgb(236, 236, 236);
+  margin-bottom: 50rpx;
+  display: flex;
+  flex-direction: row;
+}
+.header-userinfo{
+  padding-left: 50rpx;
+  flex: 2;
+  display: flex;
+  flex-direction: row;
+}
+.header-avatarurl{
+  width: 150rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  flex: 1;
+}
+.header-name{
+  padding-left: 20rpx;
+  flex: 2;
+}
+.header-sex{
+  font-size: x-large;
+  font-weight: 600;
+}
+.header-sex>image{
+  width: 30rpx;
+  height: 30rpx;
+}
+.header-country{
+  font-size: smaller;
+
+}
+.header-postinfo{
+  padding-right: 50rpx;
+  margin-top: 60rpx;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 50rpx;
+}
+.header-like{
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+  border-right: 1px solid gray;
+}
+.header-post{
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+/* 下方设置按钮 */
+.setting{
+  margin-top: 240rpx;
+}
+
+.setting-item{
+  background-color: white;
+  border-top: 1px solid rgb(233, 233, 233);
+  border-bottom: 1px solid rgb(233, 233, 233);
+  padding: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.setting-info{
+  font-weight: 600;
+  padding-left: 20rpx;
+}
+
+.logout{
+  color: red;
+  text-align: center;
+  padding-left: 0;
+}
+
+.logout-info{
+  font-size: small;
+  font-weight: 500;
+  color: lightgray;
+  padding-top: 5rpx;
+}

@@ -35,8 +35,13 @@
 }
 
 .login{
-  margin-top: 40rpx;
+  margin-top: 20rpx;
   margin-left: 25rpx;
+  padding-left: 20rpx;
+  padding-top: 20rpx;
+  width: 435rpx;
+  border-top: 1px solid #e0e0e0;
+
 }
 
 .login-title{
@@ -48,8 +53,6 @@
   padding-left: 10rpx;
   margin-top: -44rpx;
   margin-left: 90rpx;
-  border: 1px solid #cccccc;
-  border-radius: 15rpx;
 }
 
 .login-button{
@@ -64,4 +67,6 @@
   background-color: #85d86c;
   color: white;
   font-weight: 600;
+  padding-left: 0;
+  padding-top: 0;
 }

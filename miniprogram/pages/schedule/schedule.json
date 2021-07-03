@@ -2,8 +2,6 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "in-edlogin":"/components/in-edlogin/index",
-    "in-bar":"/components/in-bar/index",
-    "in-schedule":"/components/in-schedule/index",
-    "in-week_select":"/components/in-week_select/index"
+    "in-schedule":"/components/in-schedule/index"
   }
 }

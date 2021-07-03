@@ -1,0 +1,45 @@
+<view class="header-user">
+
+  <view class="header-userinfo">
+    <image class="header-avatarurl" src="{{userInfo.avatarUrl}}"></image>
+    <view class="header-name">
+      <view class="header-sex">{{userInfo.nickName}}
+        <image wx:if="{{userInfo.gender == 1}}" src="/images/male.png"></image>
+        <image wx:if="{{userInfo.gender == 2}}" src="/images/female.png"></image>
+      </view>
+      <view class="header-country">{{userInfo.country}}</view>
+      <view class="header-country">{{userInfo.city}}</view>
+    </view>
+  </view>
+
+  <view class="header-postinfo">
+    <view class="header-like">
+      <text>点赞\n</text>
+      <text>{{likecount}}</text>
+    </view>
+    <view class="header-post">
+      <text>发帖\n</text>
+      <text>{{iforumlength}}</text>
+    </view>
+  </view>
+
+</view>
+
+<view class="setting">
+  <view class="setting-item" bindtap="tomytalk">
+    <view class="setting-info">我的说说</view>
+  </view>
+
+  <view class="setting-item"   bindtap="cleanSchedule">
+    <view class="setting-info">清除课表缓存</view>
+  </view>
+  <!-- <view class="setting-item" style="margin-bottom:0rpx;border-bottom:0px" bindtap="cleanAllCache">
+    <view class="setting-info">清除全部缓存</view>
+  </view> -->
+
+  <view class="setting-item" bindtap="logoutEdlogin">
+    <view class="setting-info logout">注销教务系统</view>
+    <!-- <view class="setting-info logout logout-info">（清除所有缓存）</view> -->
+  </view>
+
+</view>

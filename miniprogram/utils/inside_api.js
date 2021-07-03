@@ -1,5 +1,10 @@
-import {setCacheSync,getCacheSync} from "cache.js"
-import {htmlRequest} from "html.js"
+import {
+  setCacheSync,
+  getCacheSync
+} from "cache.js"
+import {
+  htmlRequest
+} from "html.js"
 
 function showLoading(title) {
   wx.showLoading({
@@ -17,15 +22,28 @@ function getOpenid() {
         const openid = await htmlRequest(['get_openid', 'POST', {
           'code': res.code
         }])
-        setCacheSync('openid', openid)
+        setCacheSync({
+          'openid': openid
+        })
       }
     })
   }
   openid = getCacheSync('openid')
   return openid
 }
+function refreshPage(url){
+  wx.switchTab({
+    url,
+    success: function(e) {
+      var page = getCurrentPages().pop();
+      if (page == undefined || page == null) return;
+      page.onLoad();
+    }
+  })
+}
 
 export {
   showLoading,
-  getOpenid
+  getOpenid,
+  refreshPage,
 }
