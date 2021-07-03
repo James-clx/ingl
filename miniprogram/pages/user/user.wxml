@@ -30,12 +30,12 @@
     <view class="setting-info">我的说说</view>
   </view>
 
-  <view class="setting-item"   bindtap="cleanSchedule">
+  <view class="setting-item" style="margin-bottom:0rpx;border-bottom:0px"  bindtap="cleanSchedule">
     <view class="setting-info">清除课表缓存</view>
   </view>
-  <!-- <view class="setting-item" style="margin-bottom:0rpx;border-bottom:0px" bindtap="cleanAllCache">
-    <view class="setting-info">清除全部缓存</view>
-  </view> -->
+  <view class="setting-item" bindtap="cleanAllCache">
+    <view class="setting-info">清除全部缓存<text class="logout-info" style="padding-top:0">(需要重新登录)</text></view>
+  </view>
 
   <view class="setting-item" bindtap="logoutEdlogin">
     <view class="setting-info logout">注销教务系统</view>
