@@ -1,5 +1,5 @@
 var util=require('../../utils/utils.js')
-var gettimes=require('../../utils/utils.js')
+var gettime=require('../../utils/times.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
@@ -406,7 +406,7 @@ Page({
 
   openinputpage:function(){//打开上传信息页面
     this.setData({
-      times:gettimes.formatTime(new Date()),
+      times:gettime.formatTimes(new Date()),
       filter:'5rpx',
       showinputpage:'none',//隐藏打开页面按钮
       showinputinfo:'block',//打开上传信息页面
@@ -501,7 +501,7 @@ Page({
               data:{
                 info:info,
                 imgurl:posturl,
-                pushtime:util.formatTime(new Date()),
+                pushtime:gettime.formatTime(new Date()),
                 avatarurl:avatarurl,
                 nickname:nickname,
                 gender:gender,
@@ -531,7 +531,7 @@ Page({
         db.collection("iforum").add({//添加到数据库
           data:{
             info:info,
-            pushtime:util.formatTime(new Date()),
+            pushtime:gettime.formatTime(new Date()),
             avatarurl:avatarurl,
             nickname:nickname,
             gender:gender,
