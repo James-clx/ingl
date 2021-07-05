@@ -27,12 +27,13 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
-function getTermTodayWeek() {
-  let today_date = new Date()
-  let open_date = new Date(app.globalData.open_date)
-  let day = parseInt((today_date - open_date) / (1000 * 60 * 60 * 24))
-  let result = Math.ceil(day/7)
-  return result
+function getTermTodayWeek() {
+  let today_date = new Date()
+  let open_date = new Date(app.globalData.open_date)
+  let day = parseInt((today_date - open_date) / (1000 * 60 * 60 * 24))
+  let day_num = (day+7) / 7
+  let result = day_num % 1 == 0 ? Math.ceil(day_num+=1) : Math.ceil(day_num)
+  return result
 }
 
 export{
