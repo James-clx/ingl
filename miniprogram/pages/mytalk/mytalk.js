@@ -313,6 +313,13 @@ Page({
     })
   },
 
+  totalkinfo:function(e){
+    var postid = e.currentTarget.dataset.postid
+    wx.navigateTo({
+      url:'../talkinfo/talkinfo?postid='+postid
+    })
+  },
+
   //点击图片放大
   async tapimg(e){
     //设置点击事件不刷新页面

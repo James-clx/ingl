@@ -273,6 +273,14 @@ Page({
         })
       }
     })
+    console.log(that.data)
+  },
+
+  totalkinfo:function(e){
+    var postid = e.currentTarget.dataset.postid
+    wx.navigateTo({
+      url:'../talkinfo/talkinfo?postid='+postid
+    })
   },
 
   //点击图片放大

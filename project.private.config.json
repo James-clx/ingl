@@ -65,6 +65,12 @@
           "pathName": "pages/mytalk/mytalk",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/talkinfo/talkinfo",
+          "pathName": "pages/talkinfo/talkinfo",
+          "query": "",
+          "scene": null
         }
       ]
     }

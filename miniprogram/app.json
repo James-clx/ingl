@@ -9,7 +9,8 @@
     "pages/schoollife/schoollife",
     "pages/download/download",
     "pages/mytalk/mytalk",
-    "pages/user/user"
+    "pages/user/user",
+    "pages/talkinfo/talkinfo"
   ],
   "window": {
     "backgroundTextStyle": "light",
