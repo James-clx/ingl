@@ -39,7 +39,6 @@
 
   <view class="setting-item" bindtap="logoutEdlogin">
     <view class="setting-info logout">注销教务系统</view>
-    <!-- <view class="setting-info logout logout-info">（清除所有缓存）</view> -->
   </view>
 
 </view>
