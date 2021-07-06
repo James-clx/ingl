@@ -291,6 +291,11 @@ Page({
           postuser:nickname,
         }
       })
+      db.collection("iforum").doc(e.currentTarget.dataset.id).update({
+        data:{
+          commentcount:e.currentTarget.dataset.count+1
+        }
+      })
       //发布评论后重新抓取评论列表
       this.onShow()
     }

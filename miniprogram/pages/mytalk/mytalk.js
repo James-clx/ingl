@@ -14,7 +14,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    getcommentlist:[],//获取评论列表
     postlist:[],//推文数组
     likelist:[],//点赞数组
     mylikelist:[],//用户点赞数组
@@ -33,7 +32,11 @@ Page({
     inputclean:'',
     shownothing:'none',
     dbhasuser:'',
-    userblock:''
+    userblock:'',
+    touchStartTime: 0,// 触摸开始时间
+    touchEndTime: 0,  // 触摸结束时间
+    lastTapTime: 0, // 最后一次单击事件点击发生时间
+    lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
   },
 
  /**
@@ -49,22 +52,11 @@ Page({
   onShow() {
     let that = this;//将this另存为
     var canIUseGetUserProfile
-    var getcommentlist
-    var likecount
-    var likelist
-    var isPreview
     //设置点击事件不刷新页面
     if (wx.getUserProfile) {//修改后台用户数据为真
       canIUseGetUserProfile= true
     }
-    //获取评论列表
-    wx.cloud.callFunction({
-      name: 'getallcomment',
-      key: 'getcommentlist',
-      complete: res => {
-        getcommentlist=res.result.data
-      }
-    })
+
     //获取点赞列表
     wx.cloud.callFunction({
       name: 'getlike',
@@ -313,29 +305,46 @@ Page({
     })
   },
 
-  totalkinfo:function(e){
-    var postid = e.currentTarget.dataset.postid
-    wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid
-    })
+  touchStart: function(e) {
+    this.touchStartTime = e.timeStamp
   },
 
-  //点击图片放大
-  async tapimg(e){
-    //设置点击事件不刷新页面
-    this.setData({
-      isPreview:true
-    })
-    let imgurl=e.currentTarget.dataset.id+''
-    for(var i=0;i<this.data.postlist.length;i++){
-      if(imgurl==this.data.postlist[i].imgurl){
-        console.log(this.data.postlist[i].imgurl)
-        const userpostimg = await cloudDownLoad('',[this.data.postlist[i].imgurl])//调用缓存app.js
-        wx.previewImage({
-          current: '', // 当前显示图片的http链接
-          urls: userpostimg // 需要预览的图片http链接列表
-        })
+  touchEnd: function(e) {
+    this.touchEndTime = e.timeStamp
+  },
+
+  totalkinfo:function(e){
+    var that = this
+    // 当前点击的时间
+    var currentTime = e.timeStamp
+    var lastTapTime = that.lastTapTime
+    // 更新最后一次点击时间
+    that.lastTapTime = currentTime
+    
+    // 如果两次点击时间在300毫秒内，则认为是双击事件
+    if (currentTime - lastTapTime < 300) {
+      // 成功触发双击事件时，取消单击事件的执行
+      clearTimeout(that.lastTapTimeoutFunc);
+      // 判断说说的点赞状态
+      if(e.currentTarget.dataset.likestate == true){
+        that.likeadd(e)
+      }else{
+        that.likeminuus(e)
       }
+      
+    } else {
+      // 单击事件延时300毫秒执行，这和最初的浏览器的点击300ms延时有点像。
+      that.lastTapTimeoutFunc = setTimeout(function () {
+        var postid = e.currentTarget.dataset.id
+        wx.navigateTo({
+          url:'../talkinfo/talkinfo?postid='+postid
+        })
+      }, 300);
+      db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+        data:{
+          hot:e.currentTarget.dataset.hot+1
+        }
+      })
     }
   },
 
@@ -347,22 +356,35 @@ Page({
 
   //点赞功能
   likeadd:function(e){
+    console.log(e)
     console.log(e.currentTarget.dataset.id)
     console.log(this.data.openid)
-    db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+    //获取用户点赞列表
+    wx.cloud.callFunction({
+      name: 'getlikecount',
       data:{
-        likecount:e.currentTarget.dataset.like+1
+        likeid:e.currentTarget.dataset.id
+      },
+      complete: res => {
+        console.log(res)
+        db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+          data:{
+            likecount:res.result.data.length+1
+          }
+        })
+        db.collection("ilike").add({//添加到数据库
+          data:{
+            postuser:e.currentTarget.dataset.openid,
+            likeid:e.currentTarget.dataset.id,
+            userid:this.data.openid
+          }
+        })
+        var that = this
+        //重新抓取推文列表
+        that.onShow()
       }
     })
-    db.collection("ilike").add({//添加到数据库
-      data:{
-        postuser:e.currentTarget.dataset.openid,
-        likeid:e.currentTarget.dataset.id,
-        userid:this.data.openid
-      }
-    })
-    //重新抓取推文列表
-    this.onShow()
+    
     wx.showToast({
       title:"点赞成功",
       image: '/images/like.png',
@@ -392,43 +414,6 @@ Page({
         image: '/images/like.png',
       })
     },
-
-  //获取输入框数据
-  pushinput:function(event){
-    pushinput=event.detail.value
-  },
-
-  //评论上传到数据库
-  uploadcomment:function(e){
-    if (this.data.userblock == 'true') {
-      wx.showToast({
-        title:"用户已被封禁",
-        image: '/images/fail.png',
-      })
-      return;
-    }else{
-      wx.showLoading({
-        title: '上传中',
-      })
-      if(pushinput == ''){
-        wx.hideLoading()
-        wx.showToast({
-          title:"不能什么都不写哦",
-          image: '/images/fail.png',
-        })
-        return;
-      }
-      db.collection("icomment").add({//添加到数据库
-        data:{
-          commit:pushinput,
-          postid:e.currentTarget.dataset.id,//获取前端推文的id
-          postuser:nickname,
-        }
-      })
-      //发布评论后重新抓取评论列表
-      this.onShow()
-    }
-  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

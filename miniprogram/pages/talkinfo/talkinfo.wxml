@@ -69,7 +69,7 @@
     <view class="pushinput">
       <input class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}"/>
     </view>
-    <text class="postsend" data-id="{{item._id}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
+    <text class="postsend" data-id="{{item._id}}" data-count="{{item.commentcount}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
   </view>
 
 </view>
