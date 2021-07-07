@@ -391,29 +391,42 @@ Page({
     })
   },
 
-    //取消点赞功能
-    likeminuus:function(e){
-      console.log(e.currentTarget.dataset.id+'delete')
-      console.log(this.data.openid)
-      db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-        data:{
-          likecount:e.currentTarget.dataset.like-1
-        }
-      })
-      db.collection("ilike")//添加到数据库
-      .where({
-        postuser:e.currentTarget.dataset.openid,
-        likeid:e.currentTarget.dataset.id,
-        userid:this.data.openid
-      })
-      .remove()
-      //重新抓取推文列表
-      this.onShow()
-      wx.showToast({
-        title:"取消点赞",
-        image: '/images/like.png',
-      })
-    },
+  //取消点赞功能
+  likeminuus:function(e){
+    console.log(e.currentTarget.dataset.id+'delete')
+    console.log(this.data.openid)
+    //获取用户点赞列表
+    wx.cloud.callFunction({
+      name: 'getlikecount',
+      data:{
+        likeid:e.currentTarget.dataset.id
+      },
+      complete: res => {
+        console.log(res)
+        db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+          data:{
+            likecount:res.result.data.length-1
+          }
+        })
+        db.collection("ilike")//添加到数据库
+        .where({
+          postuser:e.currentTarget.dataset.openid,
+          likeid:e.currentTarget.dataset.id,
+          userid:this.data.openid
+        })
+        .remove()
+        .then(res => {
+          var that = this
+          //重新抓取推文列表
+          that.onShow()
+        })
+      }
+    })
+    wx.showToast({
+      title:"取消点赞",
+      image: '/images/like.png',
+    })
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

@@ -1,48 +1,3 @@
-<!-- <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" data-postid="{{item._id}}" bindtap="totalkinfo">
-  <view class="user">
-    <view>
-      <image src="{{item.avatarurl}}" class="userinfoimg"></image>
-    </view>
-    <view class="userinfotext">
-      <view class="nickname">{{item.nickname}}</view>
-      <view class="userpushtime">{{item.pushtime}}</view>
-    </view> 
-  </view>
-  <view class="userpush">
-    <text class="userpushtext">{{item.info}}</text>
-    <view class="userpushimg" wx:if="{{item.imgurl}}">
-      <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill" bindtap="tapimg"></image>
-    </view>
-  </view>
-
-  <view class="pushinfo" bindtap="inputcomment">
-
-    <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
-      <image class="likeimg " src="/images/liked.png"></image>
-      <text class="likes">{{item.likecount}}</text>
-    </view>
-
-    <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd">
-      <image class="likeimg" src="/images/like.png"></image>
-      <text class="likes">{{item.likecount}}</text>
-    </view>
-
-    <view class="commentimg">
-      <image class="commentimg" src="/images/comment.png"></image>
-    </view>
-    <view class="pushinput">
-      <input class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}"/>
-    </view>
-    <text class="postsend" data-id="{{item._id}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
-  </view>
-
-  <view class="commentlist" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique">
-    <text wx:if="{{post.postid == item._id}}">{{post.postuser}}:</text>
-    <text class="commit" wx:if="{{post.postid == item._id}}">{{post.commit}}</text>
-  </view>
-  <view class="line"></view>
-</view> -->
-
 <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">
   <form data-id="{{item._id}}" data-openid="{{item._openid}}" data-likestate="{{showlikelist[index]}}" data-hot="{{item.hot}}" bindtap="totalkinfo" bindtouchstart="touchStart" bindtouchend="touchEnd">
     <view class="user">
@@ -66,17 +21,17 @@
   </form>
   <view class="pushinfo" bindtap="inputcomment">
 
-    <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
+    <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
       <image class="likeimg " src="/images/liked.png"></image>
       <text class="likes">{{item.likecount}}</text>
     </view>
 
-    <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd">
+    <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd" style="width:30%;margin-right:40%">
       <image class="likeimg" src="/images/like.png"></image>
       <text class="likes">{{item.likecount}}</text>
     </view>
 
-    <view class="text-gray text-sub" style="position:absolute;right:75rpx;bottom:26rpx">
+    <view class="text-gray text-sub" style="margin-left:20rpx;margin-top:10rpx">
       <text class="cuIcon-hotfill margin-lr-xs"></text> {{item.hot}}
       <text class="cuIcon-messagefill margin-lr-xs"></text> {{item.commentcount}}
     </view>
@@ -107,15 +62,19 @@
         </view>
       </view>
     </view>
-    <!-- <view class="cu-bar margin-top bg-white" style="margin-bottom:10rpx;width:90%;margin-left:5%">
+    <view class="cu-bar margin-top bg-white" style="margin-bottom:10rpx;margin-top:-10rpx;width:95%;margin-left:2%">
       <view class="action">
-        <text class="cuIcon-title text-blue"></text>
+        <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
+        <text wx:if="{{setunname}}" class="cuIcon-title text-blue"></text>
+        <input value="{{info}}" placeholder="点这里起个名字" maxlength="10" disabled="{{!setunname}}" bindinput="changename"></input>
+        <!-- <text >太长啦！塞不下啦！</text> -->
       </view>
       <view class="action">
         <text class="text-df margin-right-sm">匿名发布</text>
-        <switch class="sm" bindchange="SetShadow"></switch>
+        <switch class="sm" bindchange="setunname"></switch>
       </view>
-    </view> -->
+    </view>
+    <view class="line"></view>
     <!-- 底部提交按钮 -->
     <view class='tips'>
       <text>发文请遵守国家法律法规\n</text>

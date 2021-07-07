@@ -52,6 +52,20 @@
     <view style="text-align:center;color:rgb(223, 222, 222)">还不赶紧说点什么！</view>
   </view>
 
+  <view style="display:{{chooseunname}}">
+    <view class="cu-bar margin-top bg-white" style="width:95%;margin-left:2%;position:absolute;bottom:130rpx;border-top: 1px solid rgb(216, 216, 216)">
+      <view class="action">
+        <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
+        <text wx:if="{{setunname}}" class="cuIcon-title text-blue"></text>
+        <input value="{{info}}" placeholder="点这里起个名字" maxlength="10" disabled="{{!setunname}}" cursor-spacing="70" bindinput="changename"></input>
+        <!-- <text >太长啦！塞不下啦！</text> -->
+      </view>
+      <view class="action">
+        <text class="text-df margin-right-sm">匿名发布</text>
+        <switch class="sm" bindchange="setunname"></switch>
+      </view>
+    </view>
+  </view>
   <view class="pushinfo" bindtap="inputcomment">
     <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
       <image class="likeimg" src="/images/liked.png"></image>
@@ -67,7 +81,7 @@
       <image class="commentimg" src="/images/comment.png"></image>
     </view>
     <view class="pushinput">
-      <input class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}"/>
+      <input class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}" cursor-spacing="15" bindfocus="focuscomment"/>
     </view>
     <text class="postsend" data-id="{{item._id}}" data-count="{{item.commentcount}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
   </view>

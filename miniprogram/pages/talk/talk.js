@@ -43,6 +43,8 @@ Page({
     touchEndTime: 0,  // 触摸结束时间
     lastTapTime: 0, // 最后一次单击事件点击发生时间
     lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
+    setunname: false,//匿名发布
+    changename: ''
   },
 
   /**
@@ -446,6 +448,20 @@ Page({
     })
   },
 
+  //设置是否匿名
+  setunname(e) {
+    this.setData({
+      setunname : e.detail.value
+    })
+  },
+
+  //改名
+  changename:function(event){
+    this.setData({
+      changename:event.detail.value
+    })
+  },
+
   //确认按钮，上传数据库
   upload:function(){
     console.log(this.data.userblock)
@@ -469,6 +485,12 @@ Page({
       }
       //上传图片文件到数据库(有图片)
       var times = this.data.times
+      var name = nickname
+      var userurl = avatarurl
+      if(this.data.setunname == true){
+        name = this.data.changename
+        userurl = "cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/unname.png"
+      }
       console.log(imgurl)
       if(imgurl){
         wx.cloud.uploadFile({
@@ -483,8 +505,8 @@ Page({
                 info:info,
                 imgurl:posturl,
                 pushtime:gettime.formatTime(new Date()),
-                avatarurl:avatarurl,
-                nickname:nickname,
+                avatarurl:userurl,
+                nickname:name,
                 gender:gender,
                 likecount:0,
                 hot:0,
@@ -515,8 +537,8 @@ Page({
           data:{
             info:info,
             pushtime:gettime.formatTime(new Date()),
-            avatarurl:avatarurl,
-            nickname:nickname,
+            avatarurl:userurl,
+            nickname:name,
             gender:gender,
             likecount:0,
             hot:0,

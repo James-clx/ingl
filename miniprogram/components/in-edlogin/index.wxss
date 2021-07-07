@@ -1,3 +1,5 @@
+@import "/main.wxss";
+@import "/icon.wxss";
 .class-mask{
   width: 100%;
   position: fixed;
@@ -26,7 +28,7 @@
 }
 
 .class-info{
-  margin-left: 50rpx;
+  margin-left: 80rpx;
 }
 
 .class-detail{
@@ -41,18 +43,19 @@
   padding-top: 20rpx;
   width: 435rpx;
   border-top: 1px solid #e0e0e0;
-
 }
 
 .login-title{
   font-weight: 500;
+  margin-left: -290rpx;
 }
 
 .login-input{
   width: 345rpx;
   padding-left: 10rpx;
-  margin-top: -44rpx;
-  margin-left: 90rpx;
+  margin-top: -40rpx;
+  margin-left: 130rpx;
+  text-align: left;
 }
 
 .login-button{
@@ -61,7 +64,7 @@
   height: 70rpx;
   width: 250rpx;
   border-radius: 15rpx;
-  margin-left:178rpx;
+  margin-left:200rpx;
   font-weight: 500;
   font-size:medium;
   background-color: #85d86c;

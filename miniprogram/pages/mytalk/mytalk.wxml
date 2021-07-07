@@ -49,17 +49,17 @@
     </form>
     <view class="pushinfo" bindtap="inputcomment">
 
-      <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
+      <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
         <image class="likeimg " src="/images/liked.png"></image>
         <text class="likes">{{item.likecount}}</text>
       </view>
 
-      <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd">
+      <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd" style="width:30%;margin-right:40%">
         <image class="likeimg" src="/images/like.png"></image>
         <text class="likes">{{item.likecount}}</text>
       </view>
 
-      <view class="text-gray text-sub" style="position:absolute;right:75rpx;bottom:26rpx">
+      <view class="text-gray text-sub" style="margin-left:20rpx;margin-top:10rpx">
         <text class="cuIcon-hotfill margin-lr-xs"></text> {{item.hot}}
         <text class="cuIcon-messagefill margin-lr-xs"></text> {{item.commentcount}}
       </view>

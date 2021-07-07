@@ -22,7 +22,10 @@ Page({
     openid:'',//用户openid
     inputclean:'',//清空评论框数据
     userblock: '',//全局变量
-    postid:''
+    postid:'',
+    chooseunname: 'none',
+    setunname: false,//匿名发布
+    changename: ''
   },
 
   /**
@@ -222,50 +225,78 @@ Page({
     })
   },
 
-    //取消点赞功能
-    likeminuus:function(e){
-      console.log(e.currentTarget.dataset.id+'delete')
-      console.log(this.data.openid)
-      //获取用户点赞列表
-      wx.cloud.callFunction({
-        name: 'getlikecount',
-        data:{
-          likeid:e.currentTarget.dataset.id
-        },
-        complete: res => {
-          console.log(res)
-          db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-            data:{
-              likecount:res.result.data.length-1
-            }
-          })
-          db.collection("ilike")//添加到数据库
-          .where({
-            postuser:e.currentTarget.dataset.openid,
-            likeid:e.currentTarget.dataset.id,
-            userid:this.data.openid
-          })
-          .remove()
-          .then(res => {
-            var that = this
-            //重新抓取推文列表
-            that.onShow()
-          })
-        }
-      })
-      wx.showToast({
-        title:"取消点赞",
-        image: '/images/like.png',
-      })
-    },
+  //取消点赞功能
+  likeminuus:function(e){
+    console.log(e.currentTarget.dataset.id+'delete')
+    console.log(this.data.openid)
+    //获取用户点赞列表
+    wx.cloud.callFunction({
+      name: 'getlikecount',
+      data:{
+        likeid:e.currentTarget.dataset.id
+      },
+      complete: res => {
+        console.log(res)
+        db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+          data:{
+            likecount:res.result.data.length-1
+          }
+        })
+        db.collection("ilike")//添加到数据库
+        .where({
+          postuser:e.currentTarget.dataset.openid,
+          likeid:e.currentTarget.dataset.id,
+          userid:this.data.openid
+        })
+        .remove()
+        .then(res => {
+          var that = this
+          //重新抓取推文列表
+          that.onShow()
+        })
+      }
+    })
+    wx.showToast({
+      title:"取消点赞",
+      image: '/images/like.png',
+    })
+  },
+
+  //输入框聚焦事件
+  focuscomment:function(){
+    this.setData({
+      chooseunname:'block'
+    })
+  },
 
   //获取输入框数据
   pushinput:function(event){
     pushinput=event.detail.value
   },
 
+  //设置是否匿名
+  setunname(e) {
+    this.setData({
+      setunname : e.detail.value
+    })
+  },
+
+  //改名
+  changename:function(event){
+    this.setData({
+      changename:event.detail.value
+    })
+  },
+
+  outinputcomment:function(){
+    this.setData({
+      chooseunname:'none'
+    })
+  },
+
   //评论上传到数据库
   uploadcomment:function(e){
+    var name = nickname
     if (this.data.userblock == 'true') {
       wx.showToast({
         title:"用户已被封禁",
@@ -284,11 +315,14 @@ Page({
         })
         return;
       }
+      if(this.data.setunname == true){
+        name = this.data.changename
+      }
       db.collection("icomment").add({//添加到数据库
         data:{
           commit:pushinput,
           postid:e.currentTarget.dataset.id,//获取前端推文的id
-          postuser:nickname,
+          postuser:name,
         }
       })
       db.collection("iforum").doc(e.currentTarget.dataset.id).update({
@@ -296,6 +330,8 @@ Page({
           commentcount:e.currentTarget.dataset.count+1
         }
       })
+      //发布后关闭匿名选择框
+      this.outinputcomment()
       //发布评论后重新抓取评论列表
       this.onShow()
     }
