@@ -116,5 +116,14 @@ Page({
 
       wx.hideLoading()
     }
+  },
+
+  // 转发
+  onShareAppMessage: function () {
+    return {
+      title: '广州理工课程表',
+      path: '/pages/schedule/schedule', // 点击访问的页面
+      imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
+    }
   }
 })

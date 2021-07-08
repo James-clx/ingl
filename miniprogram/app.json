@@ -10,7 +10,8 @@
     "pages/download/download",
     "pages/mytalk/mytalk",
     "pages/user/user",
-    "pages/talkinfo/talkinfo"
+    "pages/talkinfo/talkinfo",
+    "pages/share/share"
   ],
   "window": {
     "backgroundTextStyle": "light",

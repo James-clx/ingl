@@ -49,6 +49,11 @@ Page({
     var isPreview
     var history
     nickname = wx.getStorageSync('nickname',nickname)
+    // 在右上角菜单 "...”中显示分享，menus可以单写转发shareAppMessage，分享朋友圈必须写shareAppMessage和shareTimeline
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline']
+    });
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
@@ -58,8 +63,11 @@ Page({
         })
         //获取评论列表
         wx.cloud.callFunction({
-          name: 'getallcomment',
+          name: 'getcomment',
           key: 'getcommentlist',
+          data:{
+            postid:that.data.postid
+          },
           complete: res => {
             getcommentlist=res.result.data
           }
@@ -262,6 +270,15 @@ Page({
     })
   },
 
+  share:function(e){
+    var postlist = JSON.stringify(this.data.postlist)
+    var getcommentlist = JSON.stringify(this.data.getcommentlist)
+    var postid = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url:'../share/share?postid='+postid+'&postlist='+postlist+'&getcommentlist='+getcommentlist
+    })
+  },
+
   //输入框聚焦事件
   focuscomment:function(){
     this.setData({
@@ -353,12 +370,24 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    
+    console.log(this.data.postlist[0].imgurl)
   },
 
-  /**
-   * 用户点击右上角分享
-   */
+  // 转发
   onShareAppMessage: function () {
+    return {
+      title: this.data.postlist[0].info,
+      path: '/pages/talk/talk', // 点击访问的页面
+      imageUrl: this.data.postlist[0].imgurl,     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
+    }
+  },
+  // 分享朋友圈，前提是必须有转发onShareAppMessage
+  onShareTimeline:function(){
+    return{
+      imageUrl:this.data.postlist[0].imgurl,
+      title: this.data.postlist[0].info,
+      //path: '/pages/index/index', // 点击访问的页面
+      //query: '' //页面参数 如： ？title='123'
+    }
   }
 })

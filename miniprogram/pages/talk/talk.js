@@ -631,5 +631,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    return {
+      title: '理工说说',
+      path: '/pages/talk/talk', // 点击访问的页面
+      imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
+    }
   }
 })

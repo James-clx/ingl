@@ -42,31 +42,32 @@
   </view> -->
   <view class="line"></view>
 
-  <view class="cu-timeline" style="margin-bottom:100rpx">
+  <view class="cu-timeline" style="margin-bottom:180rpx">
     <view class="cu-time">最新</view>
     <view class="cu-item cur cuIcon-noticefill" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique" wx:if="{{post.postid == item._id}}">
       <view class="content bg-grey shadow-blur">
         <text>{{post.postuser}}:</text> {{post.commit}}
       </view>
     </view>
-    <view style="text-align:center;color:rgb(223, 222, 222)">还不赶紧说点什么！</view>
+    <view style="text-align:center;color:rgb(223, 222, 222)" data-id="{{item._id}}" bindtap="share">还不赶紧说点什么！</view>
   </view>
 
-  <view style="display:{{chooseunname}}">
-    <view class="cu-bar margin-top bg-white" style="width:95%;margin-left:2%;position:absolute;bottom:130rpx;border-top: 1px solid rgb(216, 216, 216)">
-      <view class="action">
-        <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
-        <text wx:if="{{setunname}}" class="cuIcon-title text-blue"></text>
-        <input value="{{info}}" placeholder="点这里起个名字" maxlength="10" disabled="{{!setunname}}" cursor-spacing="70" bindinput="changename"></input>
-        <!-- <text >太长啦！塞不下啦！</text> -->
-      </view>
-      <view class="action">
-        <text class="text-df margin-right-sm">匿名发布</text>
-        <switch class="sm" bindchange="setunname"></switch>
+  
+  <view class="pushinfo" bindtap="inputcomment">
+    <view style="display:{{chooseunname}}">
+      <view class="cu-bar margin-top bg-white" style="width:100%;position:absolute;bottom:130rpx;border-top: 1px solid rgb(216, 216, 216)">
+        <view class="action" style="margin-left:40rpx">
+          <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
+          <text wx:if="{{setunname}}" class="cuIcon-title text-blue"></text>
+          <input value="{{info}}" placeholder="点这里起个名字" maxlength="10" disabled="{{!setunname}}" cursor-spacing="70" bindinput="changename"></input>
+          <!-- <text >太长啦！塞不下啦！</text> -->
+        </view>
+        <view class="action">
+          <text class="text-df margin-right-sm">匿名发布</text>
+          <switch class="sm" bindchange="setunname"></switch>
+        </view>
       </view>
     </view>
-  </view>
-  <view class="pushinfo" bindtap="inputcomment">
     <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
       <image class="likeimg" src="/images/liked.png"></image>
       <text class="likes">{{item.likecount}}</text>
