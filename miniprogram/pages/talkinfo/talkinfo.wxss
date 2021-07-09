@@ -123,3 +123,21 @@ page{
   width: 100%;
   border-bottom: 1px solid rgb(240, 240, 240);
 }
+/* 打开上传页面悬浮按钮 */
+.pushbutton{
+  border: 1px solid gray;
+  border-radius: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  position: fixed;
+  bottom: 200rpx;
+  right: 20rpx;
+  background-color: white;
+}
+/* 悬浮按钮图片 */
+.pushbuttonimg{
+  margin-top: 8rpx;
+  margin-left: 8rpx;
+  width: 80rpx;
+  height: 80rpx;
+}

@@ -37,12 +37,15 @@
 }
 
 .login{
+  height: 70rpx;
   margin-top: 20rpx;
-  margin-left: 25rpx;
+  margin-left: 0rpx;
   padding-left: 20rpx;
   padding-top: 20rpx;
-  width: 435rpx;
+  width: 500rpx;
   border-top: 1px solid #e0e0e0;
+  background-color: #e0e0e0;
+  border-radius: 15rpx;
 }
 
 .login-title{
@@ -51,11 +54,11 @@
 }
 
 .login-input{
-  width: 345rpx;
-  padding-left: 10rpx;
-  margin-top: -40rpx;
-  margin-left: 130rpx;
-  text-align: left;
+  width: 365rpx;
+  padding-left: 60rpx;
+  margin-top: -10rpx;
+  margin-left: 15rpx;
+  text-align: center;
 }
 
 .login-button{

@@ -49,7 +49,7 @@
         <text>{{post.postuser}}:</text> {{post.commit}}
       </view>
     </view>
-    <view style="text-align:center;color:rgb(223, 222, 222)" data-id="{{item._id}}" bindtap="share">还不赶紧说点什么！</view>
+    <view style="text-align:center;color:rgb(223, 222, 222)">还不赶紧说点什么！</view>
   </view>
 
   
@@ -87,4 +87,12 @@
     <text class="postsend" data-id="{{item._id}}" data-count="{{item.commentcount}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
   </view>
 
+  <!-- 打开上传信息页面悬浮按钮 -->
+  <view bindtap="share">
+    <view class="pushbutton">
+      <image class="pushbuttonimg" src="/images/pyq.png"></image>
+    </view>
+  </view>
+
 </view>
+
