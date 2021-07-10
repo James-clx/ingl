@@ -130,7 +130,7 @@ page{
   width: 100rpx;
   height: 100rpx;
   position: fixed;
-  bottom: 200rpx;
+  bottom: 250rpx;
   right: 20rpx;
   background-color: white;
 }

@@ -18,6 +18,7 @@ Page({
    */
   data: {
     history:[],
+    toppostlist:[],
     postlist:[],//推文数组
     likelist:[],//点赞数组
     mylikelist:[],//用户点赞数组
@@ -43,7 +44,8 @@ Page({
     touchEndTime: 0,  // 触摸结束时间
     lastTapTime: 0, // 最后一次单击事件点击发生时间
     lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
-    setunname: false,//匿名发布
+    //匿名发布
+    setunname: false,
     changename: ''
   },
 
@@ -75,6 +77,17 @@ Page({
         that.setData({
           openid:openid,
         })
+        //获取置顶说说
+        wx.cloud.callFunction({
+          name: 'gettoppost',
+          key: 'toppostlist',
+          complete: res => {
+            that.setData({
+              toppostlist:res.result.data
+            })
+          }
+        })
+
         //获取点赞列表
         wx.cloud.callFunction({
           name: 'getlike',

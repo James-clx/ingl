@@ -60,10 +60,9 @@
           <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
           <text wx:if="{{setunname}}" class="cuIcon-title text-blue"></text>
           <input value="{{info}}" placeholder="点这里起个名字" maxlength="10" disabled="{{!setunname}}" cursor-spacing="70" bindinput="changename"></input>
-          <!-- <text >太长啦！塞不下啦！</text> -->
         </view>
         <view class="action">
-          <text class="text-df margin-right-sm">匿名发布</text>
+          <text class="text-df margin-right-sm">个性发送</text>
           <switch class="sm" bindchange="setunname"></switch>
         </view>
       </view>
@@ -88,7 +87,7 @@
   </view>
 
   <!-- 打开上传信息页面悬浮按钮 -->
-  <view bindtap="share">
+  <view data-id="{{item._id}}" bindtap="share">
     <view class="pushbutton">
       <image class="pushbuttonimg" src="/images/pyq.png"></image>
     </view>

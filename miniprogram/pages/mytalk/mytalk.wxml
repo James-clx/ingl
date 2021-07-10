@@ -64,6 +64,13 @@
         <text class="cuIcon-messagefill margin-lr-xs"></text> {{item.commentcount}}
       </view>
     </view>
+    <!-- 管理员显示置顶按钮 -->
+    <view wx:if="{{isadmin}}" class="text-gray text-sub" style="margin-left:490rpx;margin-top:10rpx">
+      <view class="action" style="z-index:50">
+        <text class="text-df margin-right-sm">置顶</text>
+        <switch class="sm" checked="{{item.settop}}" data-id="{{item._id}}" bindchange="settop"></switch>
+      </view>
+    </view>
 
   </view>
 </view>

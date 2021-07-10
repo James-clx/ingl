@@ -37,6 +37,7 @@ Page({
     touchEndTime: 0,  // 触摸结束时间
     lastTapTime: 0, // 最后一次单击事件点击发生时间
     lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
+    isadmin:false
   },
 
  /**
@@ -89,6 +90,24 @@ Page({
           isPreview:false,
           openid:openid
         })
+        //查看是否管理员
+        wx.cloud.callFunction({
+          name: 'getadmin',
+          key: 'isadmin',
+          complete: res => {
+            var isadmin = false
+            for(var i=0;i<res.result.data.length;i++){
+              if(that.data.openid == res.result.data[i].useropenid){
+                isadmin = true
+                break;
+              }
+            }
+            that.setData({
+              isadmin:isadmin
+            })
+          }
+        })
+
         //获取用户点赞列表
         wx.cloud.callFunction({
           name: 'getmylike',
@@ -278,6 +297,17 @@ Page({
     })
   },
 
+  //置顶推文
+  settop:function(e){
+    console.log(e.detail.value)
+    console.log(e.currentTarget.dataset.id)
+    db.collection("iforum").doc(e.currentTarget.dataset.id).update({
+      data:{
+        settop:e.detail.value
+      }
+    })
+  },
+
   //删除推文
   deletepost:function(e){
     let that = this;//将this另存为
@@ -428,26 +458,7 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
 
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
 
   onPullDownRefresh:function(){
     wx.showNavigationBarLoading() //在标题栏中显示加载

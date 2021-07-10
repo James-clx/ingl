@@ -62,9 +62,9 @@
     </view>
     <view class="fixcall">
       <view class="bus">
-        <text class="phonecall">秘书处 舞台工作部 设计部 外联部 技术部</text>
-        <text class="phonecall">\n礼仪队 主持表演队 光音歌唱队 舞蹈队</text>
-        <text class="phonecall">\n化妆队</text>
+        <text class="phonecall">秘书处 光音歌唱队 舞蹈队 礼仪队</text>
+        <text class="phonecall">\n 舞台幕后部 网络宣传部 主持表演队</text>
+        <text class="phonecall">\n 礼仪队 主持表演队 外联部</text>
       </view>
     </view>
 

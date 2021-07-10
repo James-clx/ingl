@@ -43,8 +43,8 @@
   padding-left: 20rpx;
   padding-top: 20rpx;
   width: 500rpx;
-  border-top: 1px solid #e0e0e0;
-  background-color: #e0e0e0;
+  background-color: #F9F9F9;
+  border: 1px solid rgba(0 ,0 , 0, 0.1);
   border-radius: 15rpx;
 }
 
@@ -54,23 +54,23 @@
 }
 
 .login-input{
-  width: 365rpx;
-  padding-left: 60rpx;
+  width: 400rpx;
+  padding-left: 0rpx;
   margin-top: -10rpx;
   margin-left: 15rpx;
-  text-align: center;
+  text-align: left;
 }
 
 .login-button{
   text-align: center;
   line-height: 70rpx;
   height: 70rpx;
-  width: 250rpx;
+  width: 500rpx;
   border-radius: 15rpx;
-  margin-left:200rpx;
+  margin-left:80rpx;
   font-weight: 500;
   font-size:medium;
-  background-color: #85d86c;
+  background-color: #0091ff;
   color: white;
   font-weight: 600;
   padding-left: 0;

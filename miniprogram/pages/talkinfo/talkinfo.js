@@ -24,7 +24,8 @@ Page({
     userblock: '',//全局变量
     postid:'',
     chooseunname: 'none',
-    setunname: false,//匿名发布
+    //匿名发布(暂不可用)
+    setunname: false,
     changename: ''
   },
 
@@ -286,12 +287,19 @@ Page({
     })
   },
 
+  //输入失聚焦事件
+  outinputcomment:function(){
+    this.setData({
+      chooseunname:'none'
+    })
+  },
+
   //获取输入框数据
   pushinput:function(event){
     pushinput=event.detail.value
   },
 
-  //设置是否匿名
+  //设置是否匿名(暂不可用)
   setunname(e) {
     this.setData({
       setunname : e.detail.value
@@ -302,12 +310,6 @@ Page({
   changename:function(event){
     this.setData({
       changename:event.detail.value
-    })
-  },
-
-  outinputcomment:function(){
-    this.setData({
-      chooseunname:'none'
     })
   },
 
@@ -381,13 +383,13 @@ Page({
       imageUrl: this.data.postlist[0].imgurl,     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
     }
   },
-  // 分享朋友圈，前提是必须有转发onShareAppMessage
-  onShareTimeline:function(){
-    return{
-      imageUrl:this.data.postlist[0].imgurl,
-      title: this.data.postlist[0].info,
-      //path: '/pages/index/index', // 点击访问的页面
-      //query: '' //页面参数 如： ？title='123'
-    }
-  }
+  // // 分享朋友圈，前提是必须有转发onShareAppMessage
+  // onShareTimeline:function(){
+  //   return{
+  //     imageUrl:this.data.postlist[0].imgurl,
+  //     title: this.data.postlist[0].info,
+  //     //path: '/pages/index/index', // 点击访问的页面
+  //     //query: '' //页面参数 如： ？title='123'
+  //   }
+  // }
 })

@@ -19,19 +19,19 @@
 </view> -->
 
 
-<view class="cu-modal bottom-modal {{hidelogin=='none'?'':'show'}}">
+<view class="cu-modal bottom-modal {{hidelogin=='none'?'':'show'}}"> 
   <view class="cu-dialog">
-    <view class="padding-xl">
+    <view class="padding-xl" style="background-color:#FFF">
       <view class="class-title" style="font-weight: 500;">教务系统登录</view>
       <view class="class-title" style="font-size:small;color:#808080;font-weight: 500;">请使用教务系统账号登录</view>
       <view class="class-info">
         <view class="login">
           <!-- <view class="login-title">学号:</view> -->
-          <input class="login-input" type="number" placeholder="请输入你的学号" value="{{student_number}}" bindinput="getStudentNumber"></input>
+          <input class="login-input" type="number" placeholder="学号" value="{{student_number}}" bindinput="getStudentNumber"></input>
         </view>
         <view class="login">
           <!-- <view class="login-title">密码:</view> -->
-          <input class="login-input" type="password" placeholder="请输入你的密码" value="{{password}}" bindinput="getPassword"></input>
+          <input class="login-input" type="password" placeholder="密码" value="{{password}}" bindinput="getPassword"></input>
         </view>
       </view>
       <view class="class-title login login-button" bindtap="login">登录</view>
