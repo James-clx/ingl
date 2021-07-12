@@ -36,11 +36,11 @@
     <view class="liantongstap">
       <view class="jrxyinfo">
         <text>进出校园需通过今日校园APP扫描校门的二维码或刷脸</text>
-        <text class="goto" data-id="http://tmp/w7sVYcl422jl5bec7a133aa66a16cf02e296e7c18285.png" bindtap="tapimg">\n>>扫描二维码下载今日校园</text>
+        <text class="goto" data-id="0" bindtap="tapimg">\n>>扫描二维码下载今日校园</text>
       </view>
       <view class="jrxyallimg">
         <image class="jrxyimg" src="/images/jrxy.jpg"></image>
-        <image class="jrxyimg" data-id="http://tmp/w7sVYcl422jl5bec7a133aa66a16cf02e296e7c18285.png" src="/images/jrxydl.png" bindtap="tapimg"></image>
+        <image class="jrxyimg" data-id="0" src="/images/jrxydl.png" bindtap="tapimg"></image>
       </view>
     </view>
 
@@ -56,7 +56,7 @@
   <view class="info">
 
     <view class="map">
-      <image class="mapinfo" bindtap="tapimg" data-id="http://tmp/rVoeW8o9Ls8Dbe90395eaeb0ac46258b86ff6076ba20.jpg" src="/images/map.jpg"></image>
+      <image class="mapinfo" bindtap="tapimg" data-id="1" src="/images/map.jpg"></image>
     </view>
 
   </view>

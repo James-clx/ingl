@@ -73,8 +73,6 @@
   font-size: medium;
   font-weight: 600;
 }
-.bus{
-}
 .pinche{
   font-size: medium;
 }

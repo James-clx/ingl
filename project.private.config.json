@@ -71,6 +71,12 @@
           "pathName": "pages/talkinfo/talkinfo",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/user/user",
+          "pathName": "pages/user/user",
+          "query": "",
+          "scene": null
         }
       ]
     }

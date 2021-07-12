@@ -37,8 +37,68 @@
     <view class="setting-info">清除全部缓存<text class="logout-info" style="padding-top:0">(需要重新登录)</text></view>
   </view>
 
+  <view class="setting-item" style="margin-bottom:0rpx;border-bottom:0px" bindtap="showModal" data-target="cooperate">
+    <view class="setting-info">商务合作</view>
+  </view>
+
+  <view class="setting-item" bindtap="showModal" data-target="relief">
+    <view class="setting-info">免责声明</view>
+  </view>
+
   <view class="setting-item" bindtap="logoutEdlogin">
     <view class="setting-info logout">注销教务系统</view>
   </view>
 
+</view>
+
+<view class="cu-modal {{modalName=='cooperate'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content relief-text">商务合作</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      <text>
+      我们是校内领先的校园信息平台运营团队，欢迎各项目操盘手、核心领导人、团队长合作\n
+      (长按保存下方二维码，添加好友即可)
+      </text>
+      <image class="cooperate-img" show-menu-by-longpress="true" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/cooperate-qrcode.jpg"></image>
+    </view>
+  </view>
+</view>
+
+<view class="cu-modal {{modalName=='relief'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content relief-text">免责声明</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl relief">
+      
+      <text class="relief-text">尊敬的用户，欢迎使用IN广理生活小程序，你可通过IN广理生活了解平台提供的信息，上传图片、说说等服务，要成为IN广理生活小程序使用者，请务必仔细阅读同意并接受以下条款。</text>
+
+      <text class="relief-text">\n一、协议条款的确认和接受\n</text>
+      <text>
+        1、本平台在此特别提醒您，在您使用上传图片、文章、视频前请确实仔细阅读本协议，如果对本协议的任何条款和/或将来随时可能修改、补充的条款有异议，您可选择放弃使用本平台。
+        2、本平台有权在必要时修改本协议条款，协议条款一旦发生变动，将会在重要页面上提示修改内容。如果不同意所改动的内容，用户可以主动撤销在本平台上所发布的内容，将不再事用本平台所提供的网络服务。如果用户继续用本平台所提供的网络服务，则视为接受服务条款的变动。
+        3、本平台保留在任何时候自行决定对本平台及其相关功能的变更、升级、修改、转移的权利。本平台进一步保留在本平台中开发新的功能或其它语种服务的权利。上述所有新的功能、软件服务的提供，除非本平台另有说明，否则仍适用本协议。
+      </text>
+      <text class="relief-text">\n二、使用规则</text>
+      <text>
+        1、用户在IN广理生活小程序中所发布的任何言论、信息等涉嫌虚假或侵权，只代表用户个人观点，与本平台无关。用户因使用虚假注册信息给任何第三方造成的损失，IN广理生活小程序不承担任何法律责任，同时本平台经发现用户注册信息涉嫌虚假或侵权的，有权利在任何时间予以删除并不予恢复用户信息，由此造成的损失由虚假信息使用者自行承担。
+        2、用户在使用本平台所提供网络服务过程中，必须遵循以下原则: (1)遵守中国有关的法律和法规; (2)不得为任何非法目的而使用本平台所提供网络服务系統; (3)遵守所有与网络服务有关的网络协议、规定和程序; (4)禁止基于商业目的模仿IN广理生活小程序信息和服务; (5)禁止复制和模仿IN广理生活小程序的设计理念、界面、功能、图表、文档资料、软件、商标、 FLASH、设计、图案、音像、摄影、动画等; (6)禁止末经IN广理生活小程序许可，基于本平台所提供的网络服务或其内容进行修改或制造派生其他产品; (7)禁止发送违反法律、法规、信息产业行业或智客推平台相关规定的信息，禁止发送和储存带有病毒的、蠕虫的、木马的和其他有害的计算机代码、文件、脚本和程序; (8)不得利用本平台进行任何可能对互联网的正常运转造成不利影响的行为; (9)不得利用本平台传输任何非法、有害、肋迫、强扰、侵害、中伤、粗俗、猥亵、诽谤、淫秽、侵害他人隐私、种族岐视或其他令人不快的包括但不限于文字、照片、图形、视频或其他内容; (10)不得以任何方式危害未成年人; (11)不得冒充任何人或机构，或以虚伪不实的方式谎称而使人误认为与任何人或任何机构有关。
+        3、用户承诺其通过本平台服务进行活动引发的一切后果，由其承担全部责任，与IN广理生活小程序无关。因用户使用本平台的行为，导致IN广理生活小程序或任何第三方为此承担了相关的责任，用户需全额赔IN广理生活小程序或任何第三方的相关支出及损失，包括但不限于律师费用、诉讼费等。
+      </text>
+      <text class="relief-text">\n三、隐私保护</text>
+      <text>
+        1、本平台保证不对外公开或向第三方提供用户资料及用户在使用网络服务时存储在本平台上的非公开内容，但下列情況除外: (1)事先获得用户的明确授权; (2)根据有关的法律法规要求; (3)按照相关政府主管部门的要求; (4)为维护社会公众的利益; (5)为维护本平台或用户的合法权益; (6)不可抗力所导致的用户信息公开; (7)不能归咎于本站的客观情况，所导致的个人料的公开; (8)由于本平台的硬件和软件的能力限制，所导致用户信息的公开; (9)本平台有充分理由相信用户信息的公开，符合本站和用户利益要求的。
+        2、在不透惑单个用户信息的前提下，本平台有权对整个用户数据库进行分析并对用户数据库进行利用。
+        3、本平台应在其网络系统内建立合理的安全体系,包括身份识别体系、内部安全防范体系,以使用户数据完整，并且保密。但用户了解并同意技术手段在不断更新,本平台无法杜绝全部的非安全因素,但本平台会及时更新体系,妥善维护网络及相关数据。
+      </text>
+    </view>
+  </view>
 </view>

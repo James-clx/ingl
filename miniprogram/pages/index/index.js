@@ -92,6 +92,20 @@ Page({
     })
   },
 
+  async tapimg(e){
+    //e.currentTarget.dataset.id
+    var map = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg'
+    const images = await cloudDownLoad('',[map])
+    console.log(images)
+    this.setData({
+      img:images
+    })
+    wx.previewImage({
+      current: e.currentTarget.dataset.id, // 当前显示图片的http链接
+      urls: this.data.img, // 需要预览的图片http链接列表
+    })
+  },
+
   more:function(){
     wx.showToast({
       title:"敬请期待",

@@ -88,3 +88,18 @@
   color: lightgray;
   padding-top: 5rpx;
 }
+
+.cooperate-img{
+  height: 750rpx;
+}
+
+.relief{
+  height: 1000rpx;
+  overflow-y: scroll;
+  text-align: left;
+  -webkit-overflow-scrolling: touch;
+}
+
+.relief-text{
+  font-weight: 600;
+}

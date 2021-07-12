@@ -15,7 +15,8 @@ Page({
     nickName : '',//用户名称
     avatarUrl : '',//用户头像
     dbhasuser:'',
-    userblock:''
+    userblock:'',
+    modalName:null
   },
 
   /**
@@ -168,9 +169,24 @@ Page({
     })
   },
 
+  //跳转到我的说说
   tomytalk:function(){
     wx.navigateTo({
       url: '../mytalk/mytalk',
+    })
+  },
+
+  //打开模态框
+  showModal(e) {
+    this.setData({
+      modalName: e.currentTarget.dataset.target
+    })
+  },
+
+  //关闭模态框
+  hideModal(e) {
+    this.setData({
+      modalName: null
     })
   },
   

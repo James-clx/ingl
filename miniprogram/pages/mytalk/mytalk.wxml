@@ -36,7 +36,7 @@
           <view class="nickname">{{item.nickname}}</view>
           <view class="userpushtime">{{item.pushtime}}</view>
         </view> 
-        <view class="text-gray text-sub" style="padding-left:80rpx;margin-top:10rpx">
+        <view class="text-gray text-sub look-info">
           <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
         </view>
       </view>
@@ -49,26 +49,33 @@
     </form>
     <view class="pushinfo" bindtap="inputcomment">
 
-      <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
+      <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
         <image class="likeimg " src="/images/liked.png"></image>
         <text class="likes">{{item.likecount}}</text>
       </view>
 
-      <view wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd" style="width:30%;margin-right:40%">
+      <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd">
         <image class="likeimg" src="/images/like.png"></image>
         <text class="likes">{{item.likecount}}</text>
       </view>
 
-      <view class="text-gray text-sub" style="margin-left:20rpx;margin-top:10rpx">
+      <view class="text-gray text-sub hot-info">
         <text class="cuIcon-hotfill margin-lr-xs"></text> {{item.hot}}
         <text class="cuIcon-messagefill margin-lr-xs"></text> {{item.commentcount}}
       </view>
     </view>
+    
     <!-- 管理员显示置顶按钮 -->
-    <view wx:if="{{isadmin}}" class="text-gray text-sub" style="margin-left:490rpx;margin-top:10rpx">
-      <view class="action" style="z-index:50">
-        <text class="text-df margin-right-sm">置顶</text>
-        <switch class="sm" checked="{{item.settop}}" data-id="{{item._id}}" bindchange="settop"></switch>
+    <view class="delete">
+      <view wx:if="{{isadmin}}" class="text-gray text-sub admin-top">
+        <view class="action" style="z-index:50">
+          <text class="text-df margin-right-sm">置顶</text>
+          <switch class="sm" checked="{{item.settop}}" data-id="{{item._id}}" bindchange="settop"></switch>
+        </view>
+      </view>
+
+      <view class="text-gray text-sub delete-post" data-id="{{item._id}}" bindtap="deletepost">
+        <text class="cuIcon-deletefill margin-lr-md"></text> 删除说说
       </view>
     </view>
 
@@ -80,3 +87,8 @@
   <text>去说说发表点什么吧！</text>
 </view>
 
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <!-- <view class='cuIcon-emojifill text-orange'></view> -->
+  <image src='/images/logo.jpg' class='png' mode='aspectFit'></image>
+  <view class='gray-text'>加载中...</view>
+</view>

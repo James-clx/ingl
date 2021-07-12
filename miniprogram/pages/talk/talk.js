@@ -44,6 +44,7 @@ Page({
     touchEndTime: 0,  // 触摸结束时间
     lastTapTime: 0, // 最后一次单击事件点击发生时间
     lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
+    loadModal:false,
     //匿名发布
     setunname: false,
     changename: ''
@@ -70,12 +71,14 @@ Page({
     let that = this;//将this另存为
     var isPreview
     var history
+    wx.hideLoading()
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
         var openid = res.result.openid
         that.setData({
           openid:openid,
+          loadModal: true,
         })
         //获取置顶说说
         wx.cloud.callFunction({
@@ -126,9 +129,6 @@ Page({
           },
         })
         var userpostimglist = new Array();
-        wx.showLoading({
-          title: '刷新中',
-        })
         //获取数据条数
         db.collection('iforum').count({
           success(res) {
@@ -168,7 +168,6 @@ Page({
                   postlist:res.result.data.reverse()
                 });
                 pushinput=''
-                wx.hideLoading()
                 
                 var showlikelist = new Array()
                 for(var i=0;i<that.data.postlist.length;i++){
@@ -184,7 +183,8 @@ Page({
                   showlikelist.push(showlike)
                 }
                 that.setData({
-                  showlikelist:showlikelist
+                  showlikelist:showlikelist,
+                  loadModal: false
                 })
               }
             })
@@ -258,7 +258,7 @@ Page({
                           userInfo: res.userInfo,
                           hasUserInfo: true,
                           showTalklogin : 'none',
-                          canIUseGetUserProfile: true,
+                          canIUseGetUserProfile: true
                         })
                         wx.setStorageSync('userInfo', that.data.userInfo)
                         wx.setStorageSync('hasUserInfo', that.data.hasUserInfo)
@@ -299,8 +299,8 @@ Page({
     // 更新最后一次点击时间
     that.lastTapTime = currentTime
     
-    // 如果两次点击时间在300毫秒内，则认为是双击事件
-    if (currentTime - lastTapTime < 300) {
+    // 如果两次点击时间在250毫秒内，则认为是双击事件
+    if (currentTime - lastTapTime < 250) {
       // 成功触发双击事件时，取消单击事件的执行
       clearTimeout(that.lastTapTimeoutFunc);
       // 判断说说的点赞状态
@@ -311,13 +311,13 @@ Page({
       }
       
     } else {
-      // 单击事件延时300毫秒执行，这和最初的浏览器的点击300ms延时有点像。
+      // 单击事件延时250毫秒执行，这和最初的浏览器的点击250ms延时有点像。
       that.lastTapTimeoutFunc = setTimeout(function () {
         var postid = e.currentTarget.dataset.id
         wx.navigateTo({
           url:'../talkinfo/talkinfo?postid='+postid
         })
-      }, 300);
+      }, 250);
       db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
         data:{
           hot:e.currentTarget.dataset.hot+1

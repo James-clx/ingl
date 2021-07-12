@@ -51,6 +51,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onShow() {
+    wx.hideLoading()
     let that = this;//将this另存为
     var canIUseGetUserProfile
     //设置点击事件不刷新页面
@@ -103,7 +104,8 @@ Page({
               }
             }
             that.setData({
-              isadmin:isadmin
+              isadmin:isadmin,
+              loadModal: true,
             })
           }
         })
@@ -123,9 +125,6 @@ Page({
         })
       
         var userpostimglist = new Array();
-        wx.showLoading({
-          title: '刷新中',
-        })
         db.collection('iforum')
         .where({
           _openid:that.data.openid
@@ -148,7 +147,6 @@ Page({
               that.setData({
                 shownothing:'block'
               })
-              wx.hideLoading()
               return;
             }
             //调用云函数从数据库获取论坛数据
@@ -181,7 +179,6 @@ Page({
                   //倒序存入数组
                   postlist:res.result.data.reverse()
                 });
-                wx.hideLoading()
 
                 var showlikelist = new Array()
                 for(var i=0;i<that.data.postlist.length;i++){
@@ -197,7 +194,8 @@ Page({
                   showlikelist.push(showlike)
                 }
                 that.setData({
-                  showlikelist:showlikelist
+                  showlikelist:showlikelist,
+                  loadModal: false
                 })
               }
             })
@@ -352,7 +350,7 @@ Page({
     that.lastTapTime = currentTime
     
     // 如果两次点击时间在300毫秒内，则认为是双击事件
-    if (currentTime - lastTapTime < 300) {
+    if (currentTime - lastTapTime < 250) {
       // 成功触发双击事件时，取消单击事件的执行
       clearTimeout(that.lastTapTimeoutFunc);
       // 判断说说的点赞状态
@@ -363,13 +361,13 @@ Page({
       }
       
     } else {
-      // 单击事件延时300毫秒执行，这和最初的浏览器的点击300ms延时有点像。
+      // 单击事件延时250毫秒执行，这和最初的浏览器的点击250ms延时有点像。
       that.lastTapTimeoutFunc = setTimeout(function () {
         var postid = e.currentTarget.dataset.id
         wx.navigateTo({
           url:'../talkinfo/talkinfo?postid='+postid
         })
-      }, 300);
+      }, 250);
       db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
         data:{
           hot:e.currentTarget.dataset.hot+1

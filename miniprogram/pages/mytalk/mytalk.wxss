@@ -96,6 +96,10 @@ page{
   width: 300rpx;
   margin-left: 20rpx;
 }
+.look-info{
+  padding-left:80rpx;
+  margin-top:10rpx;
+}
 .userpushtext{
   font-weight: 500;
   word-break:break-all;
@@ -103,15 +107,6 @@ page{
   width: 600rpx;
   margin-left: 30rpx;
   margin-top: 10rpx;
-}
-.delete{
-  position: absolute;
-  right:60rpx;
-  margin-top: 20rpx;
-}
-.deletepost{
-  width: 50rpx;
-  height: 50rpx;
 }
 .userpushimg{
   margin-top: 20rpx;
@@ -132,6 +127,10 @@ page{
   font-size: small;
   font-weight: 600;
 }
+.likebutton{
+  width:30%;
+  margin-right:40%;
+}
 .likeimg{
   margin-left: 50rpx;
   flex: 2;
@@ -141,48 +140,25 @@ page{
 .likes{
   padding-left: 5rpx;
 }
-.commentimg{
-  margin-left: 20rpx;
-  flex: 2;
-  width: 40rpx;
-  height: 40rpx;
+.hot-info{
+  margin-left:20rpx;
+  margin-top:10rpx;
 }
-.commentimg{
-  width: 45rpx;
-  height: 45rpx;
+.delete{
+  display: flex;
+  flex-direction: row;
+}
+.admin-top{
   flex: 1;
-}
-.pushinput{
-  /* padding: 10rpx; */
-  /* border: 1px solid gray; */
-  flex: 4;
-}
-.inputpost{
-  border-radius: 10rpx;
-  padding-left: 10rpx;
-  border: 1px solid rgb(223, 222, 222);
-  min-height: 30rpx;
-}
-.postsend{
-  border-radius: 10rpx;
-  text-align: center;
-  line-height: 48rpx;
-  background-color: rgb(223, 222, 222);
-  margin-left: 10rpx;
-  flex: 2;
-  font-size: small;
-}
-.commentlist{
-  margin-top: 0rpx;
-  font-size: small;
+  text-align: left;
   margin-left: 30rpx;
-  width: 500rpx;
+  margin-top: 20rpx;
 }
-.commit{
-  word-break:break-all;
-}
-.comment{
-  margin-top: -20rpx;
+.delete-post{
+  flex: 1;
+  text-align: right;
+  margin-top: 30rpx;
+  margin-right: 45rpx;
 }
 .line{
   padding: 20rpx;

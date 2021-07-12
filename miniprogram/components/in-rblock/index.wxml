@@ -1,1 +1,1 @@
-<image src="{{src}}" class="fo-img"></image>
+<image src="{{src}}" class="fo-img" mode="aspectFill"></image>

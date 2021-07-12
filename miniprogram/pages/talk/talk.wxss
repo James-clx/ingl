@@ -73,49 +73,7 @@ page{
 .likes{
   padding-left: 5rpx;
 }
-.commentimg{
-  margin-left: 20rpx;
-  flex: 2;
-  width: 40rpx;
-  height: 40rpx;
-}
-.commentimg{
-  width: 45rpx;
-  height: 45rpx;
-  flex: 1;
-}
-.pushinput{
-  /* padding: 10rpx; */
-  /* border: 1px solid gray; */
-  flex: 4;
-}
-.inputpost{
-  border-radius: 10rpx;
-  padding-left: 10rpx;
-  border: 1px solid rgb(223, 222, 222);
-  min-height: 30rpx;
-}
-.postsend{
-  border-radius: 10rpx;
-  text-align: center;
-  line-height: 48rpx;
-  background-color: rgb(223, 222, 222);
-  margin-left: 10rpx;
-  flex: 2;
-  font-size: small;
-}
-.commentlist{
-  margin-top: 0rpx;
-  font-size: small;
-  margin-left: 30rpx;
-  width: 500rpx;
-}
-.commit{
-  word-break:break-all;
-}
-.comment{
-  margin-top: -20rpx;
-}
+
 .line{
   width: 88%;
   margin-left: 6%;
