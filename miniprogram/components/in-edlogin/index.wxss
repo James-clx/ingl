@@ -1,24 +1,5 @@
 @import "/main.wxss";
 @import "/icon.wxss";
-.class-mask{
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  background-color: rgba(59, 59, 59,0.6);
-  z-index: 7;
-}
-
-.class-massage{
-  background-color: white;
-  border-radius: 30rpx;
-  width: 80%;
-  position: fixed;
-  bottom: 500rpx;
-  left: 70rpx;
-  padding-top: 50rpx;
-  padding-bottom: 50rpx;
-  z-index: 8;
-}
 
 .class-title{
   margin-left: 20rpx;
@@ -31,11 +12,6 @@
   margin-left: 80rpx;
 }
 
-.class-detail{
-  word-break:break-all;
-  margin-bottom: 10rpx;
-}
-
 .login{
   height: 70rpx;
   margin-top: 20rpx;
@@ -46,11 +22,6 @@
   background-color: #F9F9F9;
   border: 1px solid rgba(0 ,0 , 0, 0.1);
   border-radius: 15rpx;
-}
-
-.login-title{
-  font-weight: 500;
-  margin-left: -290rpx;
 }
 
 .login-input{

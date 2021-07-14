@@ -1,5 +1,6 @@
 var util=require('../../utils/utils.js')
 var gettime=require('../../utils/times.js')
+var check = require('../../utils/check.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
@@ -7,6 +8,8 @@ const _ = db.command
 let nickname=''
 let pushinput=''//评论内容
 var isPreview
+let checkname = true
+let checkinput = true
 
 Page({
   /**
@@ -26,7 +29,8 @@ Page({
     chooseunname: 'none',
     //匿名发布(暂不可用)
     setunname: false,
-    changename: ''
+    changename: '',
+    loadModal: false,
   },
 
   /**
@@ -49,6 +53,7 @@ Page({
     var likelist
     var isPreview
     var history
+    wx.hideLoading()
     nickname = wx.getStorageSync('nickname',nickname)
     // 在右上角菜单 "...”中显示分享，menus可以单写转发shareAppMessage，分享朋友圈必须写shareAppMessage和shareTimeline
     wx.showShareMenu({
@@ -61,6 +66,7 @@ Page({
         var openid = res.result.openid
         that.setData({
           openid:openid,
+          loadModal: true,
         })
         //获取评论列表
         wx.cloud.callFunction({
@@ -111,9 +117,6 @@ Page({
           },
         })
         var userpostimglist = new Array();
-        wx.showLoading({
-          title: '刷新中',
-        })
         //获取数据条数
         db.collection('iforum').count({
           success(res) {
@@ -153,7 +156,6 @@ Page({
                   postlist:res.result.data.reverse()
                 });
                 pushinput=''
-                wx.hideLoading()
                 
                 var showlikelist = new Array()
                 for(var i=0;i<that.data.postlist.length;i++){
@@ -169,7 +171,8 @@ Page({
                   showlikelist.push(showlike)
                 }
                 that.setData({
-                  showlikelist:showlikelist
+                  showlikelist:showlikelist,
+                  loadModal: false,
                 })
               }
             })
@@ -271,6 +274,7 @@ Page({
     })
   },
 
+  //分享朋友圈
   share:function(e){
     var postlist = JSON.stringify(this.data.postlist)
     var getcommentlist = JSON.stringify(this.data.getcommentlist)
@@ -297,9 +301,14 @@ Page({
   //获取输入框数据
   pushinput:function(event){
     pushinput=event.detail.value
+    check.checktext(event.detail.value)
+    .then(res => {
+      console.log(res)
+      checkinput = res
+    })
   },
 
-  //设置是否匿名(暂不可用)
+  //设置是否匿名
   setunname(e) {
     this.setData({
       setunname : e.detail.value
@@ -310,6 +319,11 @@ Page({
   changename:function(event){
     this.setData({
       changename:event.detail.value
+    })
+    check.checktext(event.detail.value)
+    .then(res => {
+      console.log(res)
+      checkname = res
     })
   },
 
@@ -331,6 +345,13 @@ Page({
         wx.showToast({
           title:"不能什么都不写哦",
           image: '/images/fail.png',
+        })
+        return;
+      }
+      if(checkname == false || checkinput == false){
+        wx.showToast({
+          icon: 'none',
+          title: '文字违规',
         })
         return;
       }
@@ -372,7 +393,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    console.log(this.data.postlist[0].imgurl)
   },
 
   // 转发
@@ -382,14 +402,5 @@ Page({
       path: '/pages/talk/talk', // 点击访问的页面
       imageUrl: this.data.postlist[0].imgurl,     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
     }
-  },
-  // // 分享朋友圈，前提是必须有转发onShareAppMessage
-  // onShareTimeline:function(){
-  //   return{
-  //     imageUrl:this.data.postlist[0].imgurl,
-  //     title: this.data.postlist[0].info,
-  //     //path: '/pages/index/index', // 点击访问的页面
-  //     //query: '' //页面参数 如： ？title='123'
-  //   }
-  // }
+  }
 })

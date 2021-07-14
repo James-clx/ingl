@@ -1,5 +1,6 @@
 var util=require('../../utils/utils.js')
 var gettime=require('../../utils/times.js')
+var check = require('../../utils/check.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
@@ -11,6 +12,8 @@ let nickname=''
 let gender=''
 let pushinput=''//评论内容
 var isPreview
+let checkname = true
+let checkinput = true
 
 Page({
   /**
@@ -440,15 +443,20 @@ Page({
   },
 
   //发布推文页面输入框数据
-  handleinfo(event){
+  handleinfo:function(event){
     info=event.detail.value
+    check.checktext(event.detail.value)
+    .then(res => {
+      console.log(res)
+      checkinput = res
+    })
   },
   
   //上传图片
   chooseImage:function(){
     var that=this;
     wx.chooseImage({
-      count: 2,
+      count: 1,
       success:function(res) {
         console.log(res.tempFilePaths[0])
         imgurl = res.tempFilePaths[0]
@@ -473,6 +481,11 @@ Page({
     this.setData({
       changename:event.detail.value
     })
+    check.checktext(event.detail.value)
+    .then(res => {
+      console.log(res)
+      checkname = res
+    })
   },
 
   //确认按钮，上传数据库
@@ -493,6 +506,13 @@ Page({
         wx.showToast({
           title:"不能什么都不写哦",
           image: '/images/fail.png',
+        })
+        return;
+      }
+      if(checkname == false || checkinput == false){
+        wx.showToast({
+          icon: 'none',
+          title: '文字违规',
         })
         return;
       }
@@ -618,9 +638,6 @@ Page({
    */
   onReachBottom: function () {
     if(this.data.iforumlength<this.data.iforumcount+7 && this.data.iforumlength>this.data.iforumcount){
-      wx.showLoading({
-        title: '刷新中',
-      })
       this.setData({
         iforumcount:this.data.iforumlength
       })
@@ -630,9 +647,6 @@ Page({
         title:"到底啦",
       })
     }else{
-      wx.showLoading({
-        title: '刷新中',
-      })
       this.setData({
         iforumcount:this.data.iforumcount+7
       })

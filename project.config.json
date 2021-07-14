@@ -39,6 +39,7 @@
   "appid": "wx0a26c925af23000f",
   "projectname": "ingl",
   "libVersion": "2.14.1",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
   "condition": {
     "search": {
       "list": []

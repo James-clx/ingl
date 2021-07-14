@@ -9,7 +9,7 @@ App({
   onLaunch: function () {
     this.globalData = {
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
-      open_date: "2021-08-30",
+      open_date: "2021-03-01",
       schedule_go_class_time: [{
         time: "1",
         start: "8:20",
@@ -74,6 +74,7 @@ App({
         //   此处请填入环境 ID, 环境 ID 可打开云控制台查看
         //   如不填则使用默认环境（第一个创建的环境）
         // env: 'my-env-id',
+        evn:'user-1go7hmfiae35dce5',
         traceUser: true,
       })
     }

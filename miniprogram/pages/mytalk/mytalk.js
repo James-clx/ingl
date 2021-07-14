@@ -37,7 +37,8 @@ Page({
     touchEndTime: 0,  // 触摸结束时间
     lastTapTime: 0, // 最后一次单击事件点击发生时间
     lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
-    isadmin:false
+    isadmin:false,
+    loadModal: false
   },
 
  /**
@@ -72,7 +73,8 @@ Page({
         }
         that.setData({
           likecount:likecount,
-          likelist:res.result.data
+          likelist:res.result.data,
+          loadModal: true,
         })
       }
     })    
@@ -104,8 +106,7 @@ Page({
               }
             }
             that.setData({
-              isadmin:isadmin,
-              loadModal: true,
+              isadmin:isadmin
             })
           }
         })
@@ -471,9 +472,6 @@ Page({
    */
   onReachBottom: function () {
     if(this.data.iforumlength<this.data.iforumcount+7 && this.data.iforumlength>this.data.iforumcount){
-      wx.showLoading({
-        title: '刷新中',
-      })
       this.setData({
         iforumcount:this.data.iforumlength
       })
@@ -483,9 +481,6 @@ Page({
         title:"到底啦",
       })
     }else{
-      wx.showLoading({
-        title: '刷新中',
-      })
       this.setData({
         iforumcount:this.data.iforumcount+7
       })
