@@ -1,0 +1,79 @@
+page{
+  background-color: rgb(241, 241, 241);
+  height: 100%;
+}
+/* 用户推文组件 */
+.push{
+  background-color: rgb(255, 255, 255);
+  border-radius: 15rpx;
+  width: 94%;
+  padding-top: 20rpx;
+  margin-left: 3%;
+  padding-bottom: 20rpx;
+  margin-top: 10rpx;
+  margin-bottom: 10rpx;
+  display: flex;
+  flex-direction:column;
+}
+.user{
+  display: flex;
+  flex-direction:row;
+}
+.userinfoimg{
+  margin-left: 20rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+.nickname{
+  font-weight: 600;
+}
+.userpushtime{
+  color: gray;
+  font-size: x-small;
+}
+.userinfotext{
+  margin-top: 5rpx;
+  width: 300rpx;
+  margin-left: 20rpx;
+}
+.userpushtext{
+  font-weight: 500;
+  word-break:break-all;
+  display: inline-block;
+  width: 93%;
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+.userpushimg{
+  margin-top: 20rpx;
+  margin-left: 2%;
+  width: 96%;
+  height: 300rpx;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+.itemimg{
+  height: 100%;
+}
+.pushinfo{
+  margin-top: 20rpx;
+  display: flex;
+  margin-right: 50rpx;
+  font-size: small;
+  font-weight: 600;
+}
+.line{
+  width: 88%;
+  margin-left: 6%;
+  border-bottom: 1px solid rgb(216, 216, 216);
+  margin-bottom: 20rpx;
+}
+.shownothing{
+  text-align: center;
+  padding-top: 500rpx;
+  color: rgb(68, 177, 240);
+  font-weight: 600;
+  font-size: medium;
+}

@@ -1,0 +1,37 @@
+<view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{!item.reject}}">
+  <form>
+    <view class="user">
+      <view>
+        <image src="{{item.avatarurl}}" class="userinfoimg"></image>
+      </view>
+      <view class="userinfotext">
+        <view class="nickname">{{item.nickname}}</view>
+        <view class="userpushtime">{{item.pushtime}}</view>
+      </view> 
+      <view class="text-gray text-sub" style="padding-left:80rpx;margin-top:10rpx">
+        <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
+      </view>
+    </view>
+    <view class="userpush">
+      <text class="userpushtext">{{item.info}}</text>
+      <view class="userpushimg" wx:if="{{item.imgurl}}">
+        <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill"></image>
+      </view>
+    </view>
+  </form>
+
+  <view class="padding flex flex-direction">
+    <button class="cu-btn bg-blue lg" style="width:100%" data-info="{{item}}" bindtap="uploadpost">通过审核</button>
+    <button class="cu-btn bg-red margin-tb-sm lg" style="width:100%" data-info="{{item}}" bindtap="rejectpost">驳回</button>
+  </view>
+
+</view>
+
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <image src='/images/logo.jpg' class='png' mode='aspectFit'></image>
+  <view class='gray-text'>加载中...</view>
+</view>
+
+<view wx:if="{{iforumlength-rejectcount == 0}}">
+  <view class="shownothing">什么都没有</view>
+</view>

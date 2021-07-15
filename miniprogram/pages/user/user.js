@@ -16,20 +16,15 @@ Page({
     avatarUrl : '',//用户头像
     dbhasuser:'',
     userblock:'',
-    modalName:null
+    modalName:null,
+    isadmin:false,
+    rejectcount:0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
 
   },
 
@@ -46,35 +41,35 @@ Page({
           canIUseGetUserProfile: true,
           openid:openid
         })
-        //用户获取点赞数量
+        //是否管理员
         wx.cloud.callFunction({
-          name: 'getlike',
-          key: 'likelist',
+          name: 'getadmin',
+          key: 'isadmin',
           complete: res => {
-            var likecount = 0
-            for (var i=0;i<res.result.data.length;i++) {
-              if(res.result.data[i].postuser == that.data.openid){
-                likecount = likecount+1
+            var isadmin = false
+            for(var i=0;i<res.result.data.length;i++){
+              if(that.data.openid == res.result.data[i].useropenid){
+                isadmin = true
+                break;
               }
             }
             that.setData({
-              likecount:likecount,
-              likelist:res.result.data
+              isadmin:isadmin
             })
           }
-        })    
-        //用户推文数量
-        db.collection('iforum')
+        })
+        //未审核数量
+        db.collection('iaudit')
         .where({
-          _openid:that.data.openid
+          reject:false
         })
         .count({
-          success(res) {
+          success(res){
             that.setData({
-              iforumlength:res.total,
+              rejectcount:res.total
             })
           }
-        })
+        }) 
         //检查后台有无用户信息，下次进入时继续调用此判断
         that.setData({
           userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
@@ -173,6 +168,12 @@ Page({
   tomytalk:function(){
     wx.navigateTo({
       url: '../mytalk/mytalk',
+    })
+  },
+
+  toauditpost:function(){
+    wx.navigateTo({
+      url: '../auditpost/auditpost',
     })
   },
 

@@ -152,7 +152,7 @@ page{
   flex: 1;
   text-align: left;
   margin-left: 30rpx;
-  margin-top: 20rpx;
+  margin-top: 30rpx;
 }
 .delete-post{
   flex: 1;

@@ -23,9 +23,45 @@
     </view>
   </view>
   
-</view>
+</view> 
 
 <view style="margin-top:220rpx">
+  <view class="push" wx:for="{{auditpostlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">
+    <form>
+      <view class="user">
+        <view>
+          <image src="{{item.avatarurl}}" class="userinfoimg"></image>
+        </view>
+        <view class="userinfotext">
+          <view class="nickname">{{item.nickname}}</view>
+          <view class="userpushtime">{{item.pushtime}}</view>
+        </view> 
+        <view class="text-gray text-sub look-info">
+          <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
+        </view>
+      </view>
+      <view class="userpush">
+        <text class="userpushtext">{{item.info}}</text>
+        <view class="userpushimg" wx:if="{{item.imgurl}}">
+          <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill"></image>
+        </view>
+      </view>
+    </form>
+
+    <view class="delete">
+      <view wx:if="{{isadmin}}" class="text-gray text-sub admin-top">
+        <view wx:if="{{!item.reject}}"><text class="cuIcon-titles text-blue"></text> 审核中</view>
+        <view wx:if="{{item.reject}}"><text class="cuIcon-titles text-red"></text> 审核驳回</view>
+      </view>
+
+      <view class="text-gray text-sub delete-post" data-id="{{item._id}}" bindtap="deletepost">
+        <text class="cuIcon-deletefill margin-lr-md"></text> 删除说说
+      </view>
+    </view>
+
+  </view>
+
+
   <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">
     <form data-id="{{item._id}}" data-openid="{{item._openid}}" data-likestate="{{showlikelist[index]}}" data-hot="{{item.hot}}" bindtap="totalkinfo" bindtouchstart="touchStart" bindtouchend="touchEnd">
       <view class="user">

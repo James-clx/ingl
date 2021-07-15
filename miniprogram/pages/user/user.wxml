@@ -30,6 +30,11 @@
     <view class="setting-info">我的说说</view>
   </view>
 
+  <view wx:if="{{isadmin}}" class="setting-item" bindtap="toauditpost">
+    <text class="setting-info">说说审核</text>
+    <view wx:if="{{rejectcount > 0}}" class="cu-btn icon bg-red sm" style="margin-left:500rpx">{{rejectcount}}</view>
+  </view>
+
   <view class="setting-item" style="margin-bottom:0rpx;border-bottom:0px"  bindtap="cleanSchedule">
     <view class="setting-info">清除课表缓存</view>
   </view>

@@ -113,7 +113,6 @@ Page({
             userid:that.data.openid
           },
           complete: res => {
-            console.log(res)
             that.setData({
               mylikelist:res.result.data
             })
@@ -533,7 +532,7 @@ Page({
             // 返回文件 ID
             console.log(res.fileID+'success')
             var posturl = res.fileID
-            db.collection("iforum").add({//添加到数据库
+            db.collection("iaudit").add({//添加到数据库
               data:{
                 info:info,
                 imgurl:posturl,
@@ -543,7 +542,8 @@ Page({
                 gender:gender,
                 likecount:0,
                 hot:0,
-                commentcount:0
+                commentcount:0,
+                reject:false
               }
             })
             wx.hideLoading()
@@ -562,11 +562,14 @@ Page({
               showinputpage:'block',//隐藏打开页面按钮
             });
             imgurl=''
+            wx.showToast({
+              title:"投稿成功，已提交审核",
+            })
           },
           fail: console.error//执行失败报错
         })
       }else{//没有上传图片
-        db.collection("iforum").add({//添加到数据库
+        db.collection("iaudit").add({//添加到数据库
           data:{
             info:info,
             pushtime:gettime.formatTime(new Date()),
@@ -575,7 +578,8 @@ Page({
             gender:gender,
             likecount:0,
             hot:0,
-            commentcount:0
+            commentcount:0,
+            reject:false
           }
         })
         //重新抓取推文列表
@@ -592,7 +596,7 @@ Page({
         //清空图片数组
         imgurl='',
         wx.showToast({
-          title:"发布成功",
+          title:"投稿成功，已提交审核",
         })
       }
     }

@@ -18,6 +18,7 @@ Page({
     likelist:[],//点赞数组
     mylikelist:[],//用户点赞数组
     showlikelist:[],//是否显示已点赞
+    auditpostlist:[],//审核中推文数组
     likecount:0,
     userInfo: {},//用户信息
     getuser:[],//数据库账号信息
@@ -77,7 +78,7 @@ Page({
           loadModal: true,
         })
       }
-    })    
+    })     
 
     if(that.data.isPreview){
       isPreview=false
@@ -124,6 +125,21 @@ Page({
             })
           }
         })
+
+        //获取审核中的说说
+        wx.cloud.callFunction({
+          name: 'getmyauditpost',
+          key: 'auditpostlist',
+          data:{
+            openid:that.data.openid
+          },
+          complete: res => {
+            console.log(res.result.data)
+            that.setData({
+              auditpostlist:res.result.data
+            })
+          }
+        })   
       
         var userpostimglist = new Array();
         db.collection('iforum')
@@ -307,7 +323,7 @@ Page({
     })
   },
 
-  //删除推文
+  //删除已发布推文
   deletepost:function(e){
     let that = this;//将this另存为
     wx.showModal({
@@ -333,6 +349,33 @@ Page({
       }
     })
   },
+
+    //删除审核中推文
+    deletepost:function(e){
+      let that = this;//将this另存为
+      wx.showModal({
+        title: '确认删除',
+        content: '确认删除后不能恢复',
+        success: function (res) {
+          if (res.confirm) {
+            db.collection('iaudit')
+            .where({
+              _id:e.currentTarget.dataset.id
+            })
+            .remove()
+            wx.showToast({
+              title:"删除成功",
+            })
+            //重新抓取推文列表
+            that.onShow()
+          }
+          
+          else if (res.cancel) {
+            return false;    
+          }
+        }
+      })
+    },
 
   touchStart: function(e) {
     this.touchStartTime = e.timeStamp
@@ -497,5 +540,18 @@ Page({
       path: '/pages/mytalk/mytalk', // 点击访问的页面
       imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
     }
+  },
+
+  onHide: function() {
+    db.collection('iaudit')
+    .where({
+      reject:true,
+      _openid:this.data.openid
+    })
+    .remove()
+  },
+
+  onUnload: function(){
+    this.onHide()
   }
 })

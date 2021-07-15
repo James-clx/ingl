@@ -77,6 +77,12 @@
           "pathName": "pages/user/user",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/auditpost/auditpost",
+          "pathName": "pages/auditpost/auditpost",
+          "query": "",
+          "scene": null
         }
       ]
     }

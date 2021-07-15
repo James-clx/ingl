@@ -12,7 +12,7 @@ page{
   padding-bottom: 20rpx;
   margin-top: 10rpx;
   margin-bottom: 10rpx;
-  display: flex;
+  display: inline-flex;
   flex-direction:column;
 }
 .user{
