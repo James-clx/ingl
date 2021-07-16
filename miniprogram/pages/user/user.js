@@ -18,7 +18,9 @@ Page({
     userblock:'',
     modalName:null,
     isadmin:false,
-    rejectcount:0
+    rejectcount:0,
+    iforumlength:'',//推文集合长度
+    iforumcount:7,//推文显示条数
   },
 
   /**
@@ -55,6 +57,38 @@ Page({
             }
             that.setData({
               isadmin:isadmin
+            })
+          }
+        })
+        //获取点赞列表
+        wx.cloud.callFunction({
+          name: 'getlike',
+          key: 'likelist',
+          complete: res => {
+            var likecount = 0
+            for (var i=0;i<res.result.data.length;i++) {
+              if(res.result.data[i].postuser == that.data.openid){
+                likecount = likecount+1
+              }
+            }
+            that.setData({
+              likecount:likecount,
+              likelist:res.result.data,
+              loadModal: true,
+            })
+          }
+        })     
+
+        db.collection('iforum')
+        .where({
+          _openid:that.data.openid
+        })
+        .count({
+          success(res) {
+            that.setData({
+              iforumlength:res.total,
+              iforumcount:res.total,
+              shownothing:'none'
             })
           }
         })
