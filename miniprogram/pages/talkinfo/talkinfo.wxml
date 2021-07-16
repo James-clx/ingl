@@ -63,7 +63,7 @@
   </view>
 
   <!-- 打开上传信息页面悬浮按钮 -->
-  <view data-id="{{item._id}}" bindtap="share">
+  <view wx:if="{{!isios}}" data-id="{{item._id}}" bindtap="share">
     <view class="pushbutton">
       <image class="pushbuttonimg" src="/images/pyq.png"></image>
     </view>

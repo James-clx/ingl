@@ -31,7 +31,8 @@ Page({
     setunname: false,
     changename: '',
     loadModal: false,
-    showallinput:true
+    showallinput:true,
+    isios: false
   },
 
   /**
@@ -69,6 +70,16 @@ Page({
           openid:openid,
           showallinput:app.globalData.showallinput,
           loadModal: true,
+        })
+        //获取终端机型
+        wx.getSystemInfo({
+          success: (res) => {
+            if(res.platform=="ios"){
+              that.setData({
+                isios : true
+              })
+            }
+          }
         })
         //获取评论列表
         wx.cloud.callFunction({
