@@ -51,7 +51,7 @@
     <view class="delete">
       <view wx:if="{{isadmin}}" class="text-gray text-sub admin-top">
         <view wx:if="{{!item.reject}}"><text class="cuIcon-titles text-blue"></text> 审核中</view>
-        <view wx:if="{{item.reject}}"><text class="cuIcon-titles text-red"></text> 审核驳回</view>
+        <view wx:if="{{item.reject}}"><text class="cuIcon-titles text-red"></text> 审核驳回{{item.rejectinfo}}</view>
       </view>
 
       <view class="text-gray text-sub delete-post" data-id="{{item._id}}" bindtap="deletepost">

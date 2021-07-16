@@ -8,6 +8,7 @@ App({
 
   onLaunch: function () {
     this.globalData = {
+      showallinput:true,
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
       open_date: "2021-03-01",
       schedule_go_class_time: [{

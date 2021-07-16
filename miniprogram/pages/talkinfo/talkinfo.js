@@ -31,6 +31,7 @@ Page({
     setunname: false,
     changename: '',
     loadModal: false,
+    showallinput:true
   },
 
   /**
@@ -66,6 +67,7 @@ Page({
         var openid = res.result.openid
         that.setData({
           openid:openid,
+          showallinput:app.globalData.showallinput,
           loadModal: true,
         })
         //获取评论列表
@@ -303,7 +305,6 @@ Page({
     pushinput=event.detail.value
     check.checktext(event.detail.value)
     .then(res => {
-      console.log(res)
       checkinput = res
     })
   },
@@ -322,7 +323,6 @@ Page({
     })
     check.checktext(event.detail.value)
     .then(res => {
-      console.log(res)
       checkname = res
     })
   },
@@ -349,6 +349,7 @@ Page({
         return;
       }
       if(checkname == false || checkinput == false){
+        wx.hideLoading()
         wx.showToast({
           icon: 'none',
           title: '文字违规',

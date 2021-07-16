@@ -106,6 +106,26 @@ Page({
     })
   },
 
+  //饿了么
+  eClick: function(e) {
+    wx.navigateToMiniProgram({
+      appId: 'wxece3a9a4c82f58c9',
+      path: 'taoke/pages/shopping-guide/index?scene=YwrAVku',
+      success(res) {
+      }
+    })
+  },
+
+  //美团外卖
+  mClick: function(e) {
+    wx.navigateToMiniProgram({
+      appId: 'wx2c348cf579062e56',
+      path: 'outer_packages/r2xinvite/coupon/coupon?inviteCode=NnOIp-QOs8SiYF1dcSlL5r8phPrCf6qkH7evMyjIoureqol0OXXaopfjjblE0yPgNw22r_NFexLpR3Cn-sECbi0ZXVsL3DN_CNStnH5Vxh41_KCmzND6LdIM05GaAmDZ_RO_U0QVty_ySCWtajlGei8NAOoWtwninoYsthKaUlE',
+      success(res) {
+      }
+    })
+   },
+
   more:function(){
     wx.showToast({
       title:"敬请期待",

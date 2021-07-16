@@ -40,7 +40,7 @@
       </view>
       <view class="jrxyallimg">
         <image class="jrxyimg" src="/images/jrxy.jpg"></image>
-        <image class="jrxyimg" data-id="0" src="/images/jrxydl.png" bindtap="tapimg"></image>
+        <image class="jrxyimg" data-id="0" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/jrxydl.png" bindtap="tapimg"></image>
       </view>
     </view>
 
@@ -56,7 +56,7 @@
   <view class="info">
 
     <view class="map">
-      <image class="mapinfo" bindtap="tapimg" data-id="1" src="/images/map.jpg"></image>
+      <image class="mapinfo" bindtap="tapimg" data-id="1" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg"></image>
     </view>
 
   </view>

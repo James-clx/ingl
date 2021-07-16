@@ -103,7 +103,8 @@
         </view>
       </view>
     </view>
-    <view class="cu-bar margin-top bg-white" style="margin-bottom:10rpx;margin-top:-10rpx;width:95%;margin-left:2%">
+    <!-- 匿名功能（后端代码未删） -->
+    <!-- <view class="cu-bar margin-top bg-white" style="margin-bottom:10rpx;margin-top:-10rpx;width:95%;margin-left:2%">
       <view class="action">
         <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
         <text wx:if="{{setunname}}" class="cuIcon-title text-blue"></text>
@@ -113,20 +114,21 @@
         <text class="text-df margin-right-sm">个性发送</text>
         <switch class="sm" bindchange="setunname"></switch>
       </view>
-    </view>
-    <view class="line"></view>
+    </view> 
+    <view class="line"></view>-->
+
     <!-- 底部提交按钮 -->
     <view class='tips'>
       <text>发文请遵守国家法律法规\n</text>
       <text>一经发现立即封禁</text>
-      <button type='primary' bindtap='upload' style='margin-top:8px;'>立即发布</button>
+      <button type='primary' bindtap='upload' style='margin-top:8px;'>提交审核</button>
       <button type='warn' bindtap='close' style='margin-top:8px;'>取消</button>
     </view>
   </view>
 </view>
 
 <!-- 打开上传信息页面悬浮按钮 -->
-<view style="display:{{showinputpage}}" bindtap="openinputpage">
+<view style="display:{{showinputpage}}" bindtap="openinputpage" wx:if="{{showallinput}}">
   <view class="pushbutton">
     <image class="pushbuttonimg" src="/images/note.png"></image>
   </view>

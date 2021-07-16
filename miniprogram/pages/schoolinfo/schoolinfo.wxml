@@ -24,7 +24,7 @@
       <image class="wmxy" src="/images/wmxy.png"></image>
     </view>
     <view class="liantong">
-      <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="0" src="/images/wmxycz.png"></image>
+      <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="0" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/wmxycz.png"></image>
     </view>
 
     <view class="infotitle">
@@ -38,7 +38,7 @@
         <text class="goto" bindtap="gowechatminipeogram">>>点击跳转小程序</text>
       </view>
       <view class="liantong">
-        <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="1" src="/images/liantong.png"></image>
+        <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="1" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png"></image>
       </view>
     </view>
 

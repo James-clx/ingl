@@ -50,7 +50,8 @@ Page({
     loadModal:false,
     //匿名发布
     setunname: false,
-    changename: ''
+    changename: '',
+    showallinput:true
   },
 
   /**
@@ -81,6 +82,7 @@ Page({
         var openid = res.result.openid
         that.setData({
           openid:openid,
+          showallinput:app.globalData.showallinput,
           loadModal: true,
         })
         //获取置顶说说
@@ -446,7 +448,6 @@ Page({
     info=event.detail.value
     check.checktext(event.detail.value)
     .then(res => {
-      console.log(res)
       checkinput = res
     })
   },
@@ -482,7 +483,6 @@ Page({
     })
     check.checktext(event.detail.value)
     .then(res => {
-      console.log(res)
       checkname = res
     })
   },
@@ -509,6 +509,7 @@ Page({
         return;
       }
       if(checkname == false || checkinput == false){
+        wx.hideLoading()
         wx.showToast({
           icon: 'none',
           title: '文字违规',
@@ -563,7 +564,7 @@ Page({
             });
             imgurl=''
             wx.showToast({
-              title:"投稿成功，已提交审核",
+              title:"已提交审核",
             })
           },
           fail: console.error//执行失败报错
@@ -596,7 +597,7 @@ Page({
         //清空图片数组
         imgurl='',
         wx.showToast({
-          title:"投稿成功，已提交审核",
+          title:"已提交审核",
         })
       }
     }

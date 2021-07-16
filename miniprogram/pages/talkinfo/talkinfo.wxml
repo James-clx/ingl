@@ -28,8 +28,9 @@
   </view>
 
   
-  <view class="pushinfo" bindtap="inputcomment">
-    <view style="display:{{chooseunname}}">
+  <view class="pushinfo" bindtap="inputcomment" wx:if="{{showallinput}}">
+    <!-- 匿名功能（后端代码未删） -->
+    <!-- <view style="display:{{chooseunname}}">
       <view class="cu-bar margin-top bg-white" style="width:100%;position:absolute;bottom:130rpx;border-top: 1px solid rgb(216, 216, 216)">
         <view class="action" style="margin-left:40rpx">
           <text wx:if="{{!setunname}}" class="cuIcon-title text-grey"></text>
@@ -41,7 +42,7 @@
           <switch class="sm" bindchange="setunname"></switch>
         </view>
       </view>
-    </view>
+    </view> -->
     <view wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus">
       <image class="likeimg" src="/images/liked.png"></image>
       <text class="likes">{{item.likecount}}</text>

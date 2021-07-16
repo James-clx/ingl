@@ -15,10 +15,8 @@ function checktext(input){
         console.log(info)
         if (res.result.errCode == 87014) {
           check = false
-          console.log(check)
         }else{
           check = true
-          console.log(check)
         }
         resolve(check);
       },
