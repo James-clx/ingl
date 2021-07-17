@@ -351,7 +351,7 @@ Page({
   },
 
     //删除审核中推文
-    deletepost:function(e){
+    deleteauditpost:function(e){
       let that = this;//将this另存为
       wx.showModal({
         title: '确认删除',

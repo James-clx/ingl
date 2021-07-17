@@ -1,3 +1,5 @@
+import {htmlRequest} from "../../utils/html.js"
+
 var util=require('../../utils/utils.js')
 var gettime=require('../../utils/times.js')
 var check = require('../../utils/check.js')
@@ -51,14 +53,17 @@ Page({
     //匿名发布
     setunname: false,
     changename: '',
-    showallinput:true
+    showallinput:false,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
- 
+  async onLoad (options) {
+    const showallinput =await htmlRequest(['showtallinput','get'])
+    this.setData({
+      showallinput:showallinput
+    })
   },
 
   /**
@@ -82,7 +87,6 @@ Page({
         var openid = res.result.openid
         that.setData({
           openid:openid,
-          showallinput:app.globalData.showallinput,
           loadModal: true,
         })
         //获取置顶说说

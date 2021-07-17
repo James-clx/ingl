@@ -54,7 +54,7 @@
         <view wx:if="{{item.reject}}"><text class="cuIcon-titles text-red"></text> 审核驳回{{item.rejectinfo}}</view>
       </view>
 
-      <view class="text-gray text-sub delete-post" data-id="{{item._id}}" bindtap="deletepost">
+      <view class="text-gray text-sub delete-post" data-id="{{item._id}}" bindtap="deleteauditpost">
         <text class="cuIcon-deletefill margin-lr-md"></text> 删除说说
       </view>
     </view>

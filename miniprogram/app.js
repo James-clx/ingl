@@ -6,9 +6,9 @@ App({
     cloud_downlode_userpost_image_url: "" //user发布图片
   },
 
-  onLaunch: function () {
+  onLaunch () {
     this.globalData = {
-      showallinput:true,
+      showallinput:false,
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
       open_date: "2021-03-01",
       schedule_go_class_time: [{
@@ -63,6 +63,7 @@ App({
       }
     ]
     }
+
     wx.cloud.init({
       evn: "user-1go7hmfiae35dce5"
     })
