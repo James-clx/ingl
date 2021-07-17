@@ -26,7 +26,7 @@
 </view> 
 
 <view style="margin-top:220rpx">
-  <view class="push" wx:for="{{auditpostlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">
+  <!-- <view class="push" wx:for="{{auditpostlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">
     <form>
       <view class="user">
         <view>
@@ -59,7 +59,7 @@
       </view>
     </view>
 
-  </view>
+  </view> -->
 
 
   <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">

@@ -18,7 +18,7 @@ Page({
     likelist:[],//点赞数组
     mylikelist:[],//用户点赞数组
     showlikelist:[],//是否显示已点赞
-    auditpostlist:[],//审核中推文数组
+    //auditpostlist:[],//审核中推文数组
     likecount:0,
     userInfo: {},//用户信息
     getuser:[],//数据库账号信息
@@ -127,19 +127,19 @@ Page({
         })
 
         //获取审核中的说说
-        wx.cloud.callFunction({
-          name: 'getmyauditpost',
-          key: 'auditpostlist',
-          data:{
-            openid:that.data.openid
-          },
-          complete: res => {
-            console.log(res.result.data)
-            that.setData({
-              auditpostlist:res.result.data
-            })
-          }
-        })   
+        // wx.cloud.callFunction({
+        //   name: 'getmyauditpost',
+        //   key: 'auditpostlist',
+        //   data:{
+        //     openid:that.data.openid
+        //   },
+        //   complete: res => {
+        //     console.log(res.result.data)
+        //     that.setData({
+        //       auditpostlist:res.result.data
+        //     })
+        //   }
+        // })   
       
         var userpostimglist = new Array();
         db.collection('iforum')
@@ -534,13 +534,13 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-    return {
-      title: '我的说说',
-      path: '/pages/mytalk/mytalk', // 点击访问的页面
-      imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
-    }
-  },
+  // onShareAppMessage: function () {
+  //   return {
+  //     title: '我的说说',
+  //     path: '/pages/mytalk/mytalk', // 点击访问的页面
+  //     imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
+  //   }
+  // },
 
   onHide: function() {
     db.collection('iaudit')

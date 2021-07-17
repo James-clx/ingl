@@ -93,17 +93,16 @@ Page({
           }
         })
         //未审核数量
-        db.collection('iaudit')
-        .where({
-          reject:false
-        })
-        .count({
-          success(res){
+        wx.cloud.callFunction({
+          name: 'getfalseaudit',
+          key: 'rejectcount',
+          complete: res => {
+            console.log(res.result.total)
             that.setData({
-              rejectcount:res.total
+              rejectcount:res.result.total
             })
           }
-        }) 
+        })     
         //检查后台有无用户信息，下次进入时继续调用此判断
         that.setData({
           userInfo : wx.getStorageSync('userInfo',that.data.userInfo),

@@ -288,7 +288,6 @@ Page({
         })
       }
     })
-    console.log(that.data)
   },
 
   touchStart: function(e) {
@@ -537,7 +536,7 @@ Page({
             // 返回文件 ID
             console.log(res.fileID+'success')
             var posturl = res.fileID
-            db.collection("iaudit").add({//添加到数据库
+            db.collection("iforum").add({//添加到数据库
               data:{
                 info:info,
                 imgurl:posturl,
@@ -574,7 +573,7 @@ Page({
           fail: console.error//执行失败报错
         })
       }else{//没有上传图片
-        db.collection("iaudit").add({//添加到数据库
+        db.collection("iforum").add({//添加到数据库
           data:{
             info:info,
             pushtime:gettime.formatTime(new Date()),
@@ -601,7 +600,7 @@ Page({
         //清空图片数组
         imgurl='',
         wx.showToast({
-          title:"已提交审核",
+          title:"发布成功",
         })
       }
     }

@@ -65,28 +65,31 @@ Page({
           },
         })
         //驳回说说数量
-        db.collection('iaudit')
-        .where({
-          reject:true
-        })
-        .count({
-          success(res){
-            that.setData({
-              rejectcount:res.total
-            })
-          }
-        })
+        // db.collection('iaudit')
+        // .where({
+        //   reject:true
+        // })
+        // .count({
+        //   success(res){
+        //     that.setData({
+        //       rejectcount:res.total
+        //     })
+        //   }
+        // })
         var userpostimglist = new Array();
         //获取数据条数
-        db.collection('iaudit').count({
+        wx.cloud.callFunction({
+          name: 'getfalseaudit',
+          key: 'iforumlength',
           success(res) {
             that.setData({
-              iforumlength:res.total
+              iforumlength:res.result.total
             })
             console.log(that.data.iforumlength)
             if (that.data.iforumlength<7) {
               that.data.iforumcount = that.data.iforumlength
             }
+
             //调用云函数从数据库获取论坛数据
             wx.cloud.callFunction({
               name: 'getauditpost',//云函数名
@@ -131,11 +134,16 @@ Page({
 
   //拒绝按钮
   rejectpost:function(e){
-    db.collection('iaudit').doc(e.currentTarget.dataset.info._id).update({
+    console.log(e.currentTarget.dataset.id)
+    wx.cloud.callFunction({
+      name: 'changereject',
       data:{
-        reject:true
+        id:e.currentTarget.dataset.id
+      },  
+      complete: res => {
+        console.log('true:'+res)
       }
-    })
+    })     
     this.onShow()
   },
 
@@ -177,7 +185,15 @@ Page({
       wx.hideLoading()
     }
     //重新抓取推文列表
-    db.collection('iaudit').doc(e.currentTarget.dataset.info._id).remove()
+    wx.cloud.callFunction({
+      name: 'removeaudit',
+      data:{
+        id:e.currentTarget.dataset.info._id
+      },  
+      complete: res => {
+        console.log(res)
+      }
+    })     
     this.onShow()
     wx.showToast({
       title:"发布成功",

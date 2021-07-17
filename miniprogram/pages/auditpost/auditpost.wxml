@@ -22,7 +22,7 @@
 
   <view class="padding flex flex-direction">
     <button class="cu-btn bg-blue lg" style="width:100%" data-info="{{item}}" bindtap="uploadpost">通过审核</button>
-    <button class="cu-btn bg-red margin-tb-sm lg" style="width:100%" data-info="{{item}}" bindtap="rejectpost">驳回</button>
+    <button class="cu-btn bg-red margin-tb-sm lg" style="width:100%" data-id="{{item._id}}" bindtap="rejectpost">驳回</button>
   </view>
 
 </view>
@@ -32,6 +32,6 @@
   <view class='gray-text'>加载中...</view>
 </view>
 
-<view wx:if="{{iforumlength-rejectcount == 0}}">
+<view wx:if="{{iforumlength == 0}}">
   <view class="shownothing">什么都没有</view>
 </view>

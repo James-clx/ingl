@@ -121,7 +121,7 @@
     <view class='tips'>
       <text>发文请遵守国家法律法规\n</text>
       <text>一经发现立即封禁</text>
-      <button type='primary' bindtap='upload' style='margin-top:8px;'>提交审核</button>
+      <button type='primary' bindtap='upload' style='margin-top:8px;'>发布</button>
       <button type='warn' bindtap='close' style='margin-top:8px;'>取消</button>
     </view>
   </view>

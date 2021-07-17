@@ -63,7 +63,7 @@
 
           <view class="footer">
             <text>饿了么红包</text>
-            <view class="fo-other">
+            <view class="fo-other" id="elmhb">
               <in-rblock src="/images/elm.jpg" bindtap="eClick" />
             </view>
             
