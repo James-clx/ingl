@@ -28,7 +28,7 @@
   </view>
 
   
-  <view class="pushinfo" bindtap="inputcomment" wx:if="{{showallinput}}">
+  <view class="pushinfo" bindtap="inputcomment" wx:if="{{!showinput}}">
     <!-- 匿名功能（后端代码未删） -->
     <!-- <view style="display:{{chooseunname}}">
       <view class="cu-bar margin-top bg-white" style="width:100%;position:absolute;bottom:130rpx;border-top: 1px solid rgb(216, 216, 216)">

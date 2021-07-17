@@ -1,3 +1,4 @@
+import {htmlRequest} from "../../utils/html.js"
 var util=require('../../utils/utils.js')
 var gettime=require('../../utils/times.js')
 var check = require('../../utils/check.js')
@@ -31,16 +32,17 @@ Page({
     setunname: false,
     changename: '',
     loadModal: false,
-    showallinput:true,
+    showinput:true,
     isios: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    console.log(options.postid)
+  async onLoad (options) {
+    const showinput =await htmlRequest(['showtallinput','get'])
     this.setData({
+      showallinput:showinput,
       postid:options.postid
     })
   },
