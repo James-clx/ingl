@@ -64,6 +64,7 @@ Page({
     this.setData({
       showallinput:showallinput
     })
+    console.log(this.data.showallinput)
   },
 
   /**

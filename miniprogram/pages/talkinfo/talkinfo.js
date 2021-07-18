@@ -42,9 +42,10 @@ Page({
   async onLoad (options) {
     const showinput =await htmlRequest(['showtallinput','get'])
     this.setData({
-      showallinput:showinput,
+      showinput:showinput,
       postid:options.postid
     })
+    console.log(this.data.showinput)
   },
 
 
