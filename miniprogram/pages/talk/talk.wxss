@@ -64,6 +64,9 @@ page{
   font-size: small;
   font-weight: 600;
 }
+.likebutton{
+  width:30%;
+}
 .likeimg{
   margin-left: 50rpx;
   flex: 2;
@@ -72,6 +75,11 @@ page{
 }
 .likes{
   padding-left: 5rpx;
+}
+.hot-info{
+  width: 50%;
+  text-align: right;  
+  margin-top:10rpx;
 }
 
 .line{

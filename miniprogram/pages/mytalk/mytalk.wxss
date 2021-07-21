@@ -129,7 +129,6 @@ page{
 }
 .likebutton{
   width:30%;
-  margin-right:40%;
 }
 .likeimg{
   margin-left: 50rpx;
@@ -141,7 +140,8 @@ page{
   padding-left: 5rpx;
 }
 .hot-info{
-  margin-left:20rpx;
+  width: 50%;
+  text-align: right;  
   margin-top:10rpx;
 }
 .delete{
