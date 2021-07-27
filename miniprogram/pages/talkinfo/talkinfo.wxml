@@ -57,7 +57,8 @@
       <image class="commentimg" src="/images/comment.png"></image>
     </view>
     <view class="pushinput">
-      <input class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}" cursor-spacing="15" bindfocus="focuscomment"/>
+      <textarea wx:if="{{!isios}}" class="inputpost" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}" cursor-spacing="15" bindfocus="focuscomment" auto-height="true"/>
+      <textarea wx:if="{{isios}}" class="inputpost" style="padding:0" adjust-position="true" placeholder="发表回复" bindinput="pushinput" value="{{inputclean}}" cursor-spacing="15" bindfocus="focuscomment" auto-height="true"/>
     </view>
     <text class="postsend" data-id="{{item._id}}" data-count="{{item.commentcount}}" type="default" size="mini" bindtap="uploadcomment">发表</text>
   </view>

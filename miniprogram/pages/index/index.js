@@ -52,20 +52,48 @@ Page({
   },
 
   async onLoad (option){
-    // 获取云存储下的图片，返回数组
-    var pula01 = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/pula01.jpg'
-    var pula02 = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/pula02.jpg'
-    var pula03 = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/pula03.jpg'
-    const images = await cloudDownLoad('',[pula01,pula02,pula03])
+    var that = this
+    var img=new Array()
+    var botTitle=[]
+    var botText=[]
+    //var images=[]
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/tweetswiper',
+      success (res) {
+        console.log(res.data)
+        var i = 0
+        //按sortnum排序
+        while(!!res.data[i]){
+          img[res.data[i].sortnum]=(res.data[i])
+          i++;
+        }
+        //给每个字段赋值
+        for(var k = 0 ; k < img.length-1 ;k++){
+          botTitle[k]=(img[k+1].title)
+          botText[k]=(img[k+1].compendium)
+          images[k]=(img[k+1].image)
+        }
+        that.setData({
+          images:images,
+          botTitle :botTitle,
+          botText :botText,
+          animation : "text",
+          opacity:100,
+        })
+        console.log(that.data.images)
+        console.log(that.data.botTitle)
+        console.log(that.data.botText)
+      }
+    })
+    
+    //获取云存储下的图片，返回数组(有这段代码才能显示base64位图片，暂不知道原因)
+    const images = await cloudDownLoad('',[])
     console.log(images)
     this.catchScreenHeight()
     this.setData({
       images:images,
-      botTitle : ["什么是IN广理","我们源于热爱","精彩等待探索"],
-      botText : ["我同你讲","你们也是","惊喜连连"],
-      animation : "text",
-      opacity:100,
     })
+
   },
 
   toschoolinfo:function(){

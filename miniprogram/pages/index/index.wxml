@@ -9,25 +9,11 @@
         bindtransition="toChange"
         bindanimationfinish="toChangeEnd"
         >
-        <swiper-item>
-          <image bindtap="toIndex" src="{{images[0]}}"></image>
+        <swiper-item wx:for="{{images}}" wx:data-item="item" wx:key="key">
+          <image bindtap="toIndex" src="{{item}}"></image>
           <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
-              <view class="v-title">{{botTitle[0]}}</view>
-              <view class="v-text">{{botText[0]}}</view>
-          </view>
-        </swiper-item>
-        <swiper-item>
-          <image bindtap="toIndex" src='{{images[1]}}'></image>
-          <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
-              <view class="v-title">{{botTitle[1]}}</view>
-              <view class="v-text">{{botText[1]}}</view>
-          </view>
-        </swiper-item>
-        <swiper-item>
-          <image bindtap="toIndex" src='{{images[2]}}'></image>
-          <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
-              <view class="v-title">{{botTitle[2]}}</view>
-              <view class="v-text">{{botText[2]}}</view>
+              <view class="v-title">{{botTitle[index]}}</view>
+              <view class="v-text">{{botText[index]}}</view>
           </view>
         </swiper-item>
       </swiper> 
