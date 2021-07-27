@@ -53,14 +53,13 @@ Page({
 
   async onLoad (option){
     var that = this
-    var img=new Array()
+    var img = []
     var botTitle=[]
     var botText=[]
-    //var images=[]
+    that.catchScreenHeight()
     wx.request({
       url: 'https://www.inguangli.cn/ingl/api/tweetswiper',
       success (res) {
-        console.log(res.data)
         var i = 0
         //按sortnum排序
         while(!!res.data[i]){
@@ -69,31 +68,23 @@ Page({
         }
         //给每个字段赋值
         for(var k = 0 ; k < img.length-1 ;k++){
-          botTitle[k]=(img[k+1].title)
-          botText[k]=(img[k+1].compendium)
-          images[k]=(img[k+1].image)
+          botTitle[k]=img[k+1].title
+          botText[k]=img[k+1].compendium
+          //循环存入data，防止setdata数据过长
+          var index = "images[" + k + "]"
+          that.setData({
+            [index]:{src:img[k+1].image}
+          })
         }
         that.setData({
-          images:images,
-          botTitle :botTitle,
-          botText :botText,
-          animation : "text",
+          botTitle:botTitle,
+          botText:botText,
+          animation:"text",
           opacity:100,
         })
-        console.log(that.data.images)
-        console.log(that.data.botTitle)
-        console.log(that.data.botText)
       }
     })
-    
-    //获取云存储下的图片，返回数组(有这段代码才能显示base64位图片，暂不知道原因)
-    const images = await cloudDownLoad('',[])
-    console.log(images)
-    this.catchScreenHeight()
-    this.setData({
-      images:images,
-    })
-
+  
   },
 
   toschoolinfo:function(){

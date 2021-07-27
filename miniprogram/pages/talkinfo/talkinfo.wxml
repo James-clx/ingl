@@ -19,7 +19,7 @@
 
   <view class="cu-timeline" style="margin-bottom:180rpx">
     <view class="cu-time">最新</view>
-    <view class="cu-item cur cuIcon-noticefill" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique" wx:if="{{post.postid == item._id}}">
+    <view class="cu-item text-grey" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique" wx:if="{{post.postid == item._id}}">
       <view class="content bg-grey shadow-blur">
         <text>{{post.postuser}}:</text> {{post.commit}}
       </view>

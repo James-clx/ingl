@@ -13,6 +13,9 @@ Component({
     hideweekend: true, // 控制显示和隐藏周末
     weekarray: [], // 周次控制器的总数
 
+    startX:0,
+    slider:false,
+
     // 课程表的相关数据
     point_day: 0, // 指向今天星期几
     selected_week_data: {}, // 用户选择的周次的数据
@@ -35,10 +38,14 @@ Component({
     // 指向今天星期几
     let today = new Date();
     let point_day = today.getDay() == 0 ? 7 : today.getDay()
-
+    var hideweekend = wx.getStorageSync('hideweekend')
+    if (hideweekend != false) {
+      hideweekend = true
+    }
     // 数据初始化
     this.setData({
       point_day: point_day,
+      hideweekend:hideweekend
     })
   },
 
@@ -69,8 +76,12 @@ Component({
 
         // 处理日的数据
         let selected_week_date = this.getDateHandler(schedule_data, temp)
-
+        var hideweekend = wx.getStorageSync('hideweekend')
+        if (hideweekend != false) {
+          hideweekend = true
+        }
         this.setData({
+          hideweekend:hideweekend,
           today_week:today_week,
           selected_week:selected_week,
           selected_week_data:selected_week_data,
@@ -80,7 +91,12 @@ Component({
         return
       }
       // 如果schedule_data没有数据，也要初始化值
+      var hideweekend = wx.getStorageSync('hideweekend')
+      if (hideweekend != false) {
+        hideweekend = true
+      }
       this.setData({
+        hideweekend:hideweekend,
         today_week:0,
         selected_week:[],
         selected_week_data:{},
@@ -104,13 +120,51 @@ Component({
   },
 
   methods: {
+
+    //监听左右滑动事件
+    touchstart(e){
+      this.setData({
+          startX: e.changedTouches[0].clientX,
+      })
+    },
+    touchend(e) {
+      let startX = this.data.startX;
+      let endX = e.changedTouches[0].clientX;
+      //if (this.data.slider)return;
+
+      // 下一页(左滑距离大于80)
+      if (startX - endX > 50 && this.data.weekarray.length > this.data.selected_week){
+        var selected_week=this.data.selected_week
+        let options={detail:selected_week+1}
+        this.onPickerOrBackWeek(options)
+        this.setData({
+            slider: true,
+            selected_week:selected_week+1
+        });
+      }
+
+      // 上一页
+      if (endX-startX  > 75 && this.data.selected_week > 1){
+        var selected_week=this.data.selected_week
+        let options={detail:selected_week-1}
+        this.onPickerOrBackWeek(options)
+        this.setData({
+            slider: true,
+            selected_week:selected_week-1
+        })
+      }
+    },
     
     // 周末是否隐藏
     onHideWeekend() {
       let hideweekend = !this.data.hideweekend
-        this.setData({
-          hideweekend: hideweekend,
-        })
+      wx.setStorage({
+        key:"hideweekend",
+        data:hideweekend
+      })
+      this.setData({
+        hideweekend: hideweekend,
+      })
     },
 
     // 周次选择或回到本周后的数据重新绑定

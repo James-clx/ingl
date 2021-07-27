@@ -10,7 +10,7 @@
         bindanimationfinish="toChangeEnd"
         >
         <swiper-item wx:for="{{images}}" wx:data-item="item" wx:key="key">
-          <image bindtap="toIndex" src="{{item}}"></image>
+          <image bindtap="toIndex" src="{{item.src}}" style="background-color:black"></image>
           <view style="opacity:{{opacity}};animation-name: {{animation}};" class="v-t">
               <view class="v-title">{{botTitle[index]}}</view>
               <view class="v-text">{{botText[index]}}</view>

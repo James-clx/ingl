@@ -366,7 +366,7 @@ Page({
         data:{
           commit:pushinput,
           postid:e.currentTarget.dataset.id,//获取前端推文的id
-          postuser:name,
+          postuser:name
         }
       })
       db.collection("iforum").doc(e.currentTarget.dataset.id).update({
