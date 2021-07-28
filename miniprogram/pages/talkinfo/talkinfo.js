@@ -193,6 +193,7 @@ Page({
     this.setData({
       isPreview:true
     })
+    wx.vibrateShort({type:"heavy"})
     let imgurl=e.currentTarget.dataset.id+''
     for(var i=0;i<this.data.postlist.length;i++){
       if(imgurl==this.data.postlist[i].imgurl){
@@ -208,6 +209,7 @@ Page({
 
   //点赞功能
   likeadd:function(e){
+    wx.vibrateShort({type:"heavy"})
     console.log(e.currentTarget.dataset.id)
     console.log(this.data.openid)
     //获取用户点赞列表
@@ -237,6 +239,7 @@ Page({
     })
     
     wx.showToast({
+      mask:true,
       title:"点赞成功",
       image: '/images/like.png',
     })
@@ -244,6 +247,7 @@ Page({
 
   //取消点赞功能
   likeminuus:function(e){
+    wx.vibrateShort({type:"heavy"})
     console.log(e.currentTarget.dataset.id+'delete')
     console.log(this.data.openid)
     //获取用户点赞列表
@@ -274,6 +278,7 @@ Page({
       }
     })
     wx.showToast({
+      mask:true,
       title:"取消点赞",
       image: '/images/like.png',
     })
@@ -386,6 +391,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh:function(){
+    wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
     this.onShow()
   //模拟加载

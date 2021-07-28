@@ -9,7 +9,7 @@
     </view> 
   </view>
   <view class="userpush">
-    <text class="userpushtext">{{item.info}}</text>
+    <text class="userpushtext" user-select="true">{{item.info}}</text>
     <view class="userpushimg" wx:if="{{item.imgurl}}">
       <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill" bindtap="tapimg"></image>
     </view>
@@ -21,7 +21,8 @@
     <view class="cu-time">最新</view>
     <view class="cu-item text-grey" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique" wx:if="{{post.postid == item._id}}">
       <view class="content bg-grey shadow-blur">
-        <text>{{post.postuser}}:</text> {{post.commit}}
+        <text>{{post.postuser}}:</text>
+        <text user-select="true">{{post.commit}}</text>
       </view>
     </view>
     <view style="text-align:center;color:rgb(223, 222, 222)">还不赶紧说点什么！</view>

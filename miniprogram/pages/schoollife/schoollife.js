@@ -23,6 +23,7 @@ Page({
   
   //点击图片放大
   async tapimg(e){
+    wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
     const images = await cloudDownLoad(app.data.cloud_downlode_image_url,['liantong.png'])
     this.setData({

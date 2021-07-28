@@ -54,7 +54,7 @@
       </view>
     </view>
     <view class="userpush">
-      <text class="userpushtext">{{item.info}}</text>
+      <text class="userpushtext ellipsis">{{item.info}}</text>
       <view class="userpushimg" wx:if="{{item.imgurl}}">
         <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill"></image>
       </view>

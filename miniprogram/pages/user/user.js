@@ -183,7 +183,7 @@ Page({
                       fail: (res) =>{//拒绝后返回功能页面
                         console.log('false')
                         wx.switchTab({
-                          url: '/pages/funct/funct'
+                          url: '/pages/index/index'
                         })
                       }
                     })

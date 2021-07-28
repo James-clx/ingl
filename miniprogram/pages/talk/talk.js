@@ -53,7 +53,7 @@ Page({
     //匿名发布
     setunname: false,
     changename: '',
-    showallinput:false,
+    showallinput:false
   },
 
   /**
@@ -276,7 +276,7 @@ Page({
                       fail: (res) =>{//拒绝后返回功能页面
                         console.log('false')
                         wx.switchTab({
-                          url: '/pages/funct/funct'
+                          url: '/pages/index/index'
                         })
                       }
                     })
@@ -299,42 +299,51 @@ Page({
   },
 
   totalkinfo:function(e){
-    var that = this
-    // 当前点击的时间
-    var currentTime = e.timeStamp
-    var lastTapTime = that.lastTapTime
-    // 更新最后一次点击时间
-    that.lastTapTime = currentTime
-    
-    // 如果两次点击时间在250毫秒内，则认为是双击事件
-    if (currentTime - lastTapTime < 250) {
-      // 成功触发双击事件时，取消单击事件的执行
-      clearTimeout(that.lastTapTimeoutFunc);
-      // 判断说说的点赞状态
-      if(e.currentTarget.dataset.likestate == true){
-        that.likeadd(e)
-      }else{
-        that.likeminuus(e)
-      }
-      
-    } else {
-      // 单击事件延时250毫秒执行，这和最初的浏览器的点击250ms延时有点像。
-      that.lastTapTimeoutFunc = setTimeout(function () {
-        var postid = e.currentTarget.dataset.id
-        wx.navigateTo({
-          url:'../talkinfo/talkinfo?postid='+postid
-        })
-      }, 250);
-      db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-        data:{
-          hot:e.currentTarget.dataset.hot+1
-        }
-      })
-    }
+    var postid = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url:'../talkinfo/talkinfo?postid='+postid
+    })
   },
+
+  //双击点赞功能
+  // totalkinfo:function(e){
+  //   var that = this
+  //   // 当前点击的时间
+  //   var currentTime = e.timeStamp
+  //   var lastTapTime = that.lastTapTime
+  //   // 更新最后一次点击时间
+  //   that.lastTapTime = currentTime
+    
+  //   // 如果两次点击时间在20s0毫秒内，则认为是双击事件
+  //   if (currentTime - lastTapTime < 150) {
+  //     // 成功触发双击事件时，取消单击事件的执行
+  //     clearTimeout(that.lastTapTimeoutFunc);
+  //     // 判断说说的点赞状态
+  //     if(e.currentTarget.dataset.likestate == true){
+  //       that.likeadd(e)
+  //     }else{
+  //       that.likeminuus(e)
+  //     }
+      
+  //   } else {
+  //     // 单击事件延时250毫秒执行，这和最初的浏览器的点击250ms延时有点像。
+  //     that.lastTapTimeoutFunc = setTimeout(function () {
+  //       var postid = e.currentTarget.dataset.id
+  //       wx.navigateTo({
+  //         url:'../talkinfo/talkinfo?postid='+postid
+  //       })
+  //     }, 170);
+  //     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+  //       data:{
+  //         hot:e.currentTarget.dataset.hot+1
+  //       }
+  //     })
+  //   }
+  // },
 
   //点赞功能
   likeadd:function(e){
+    wx.vibrateShort({type:"heavy"})
     console.log(e)
     console.log(e.currentTarget.dataset.id)
     console.log(this.data.openid)
@@ -365,6 +374,7 @@ Page({
     })
     
     wx.showToast({
+      mask:true,
       title:"点赞成功",
       image: '/images/like.png',
     })
@@ -372,6 +382,7 @@ Page({
 
     //取消点赞功能
     likeminuus:function(e){
+      wx.vibrateShort({type:"heavy"})
       console.log(e.currentTarget.dataset.id+'delete')
       console.log(this.data.openid)
       //获取用户点赞列表
@@ -402,6 +413,7 @@ Page({
         }
       })
       wx.showToast({
+        mask:true,
         title:"取消点赞",
         image: '/images/like.png',
       })
@@ -492,6 +504,7 @@ Page({
 
   //确认按钮，上传数据库
   upload:function(){
+    wx.vibrateShort({type:"heavy"})
     console.log(this.data.userblock)
     if (this.data.userblock == 'true') {
       wx.showToast({
@@ -530,7 +543,7 @@ Page({
       console.log(imgurl)
       if(imgurl){
         wx.cloud.uploadFile({
-          cloudPath: 'userpost/'+nickname+'/'+times, // 上传至云端的路径
+          cloudPath: 'userpost/'+this.data.openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
           success: res => {//上传云端成功后向数据库添加记录
             // 返回文件 ID
@@ -634,6 +647,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh:function(){
+    wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
     this.onShow()
   //模拟加载

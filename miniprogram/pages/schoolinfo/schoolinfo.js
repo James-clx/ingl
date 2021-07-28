@@ -23,6 +23,7 @@ Page({
   
   //点击图片放大
   async tapimg(e){
+    wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
     var wmxycz = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/wmxycz.png'
     var liantong = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png'
