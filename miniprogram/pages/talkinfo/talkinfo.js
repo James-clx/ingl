@@ -222,7 +222,7 @@ Page({
         console.log(res)
         db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
           data:{
-            likecount:res.result.data.length+1
+            likecount:res.result.data.length+Math.ceil(Math.random()*4)
           }
         })
         db.collection("ilike").add({//添加到数据库

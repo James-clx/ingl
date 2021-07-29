@@ -112,6 +112,9 @@ Page({
         })
         avatarurl = wx.getStorageSync('avatarurl',avatarurl)
         nickname = wx.getStorageSync('nickname',nickname)
+        if (that.data.hasUserInfo) {
+          return;
+        }
         wx.cloud.callFunction({
           name: 'getuser',
           key: 'getuser',

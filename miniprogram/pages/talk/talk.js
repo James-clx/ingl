@@ -22,7 +22,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    history:[],
     toppostlist:[],
     postlist:[],//推文数组
     likelist:[],//点赞数组
@@ -79,7 +78,6 @@ Page({
   onShow() {
     let that = this;//将this另存为
     var isPreview
-    var history
     wx.hideLoading()
     wx.cloud.callFunction({
       name:'getOpenid',
@@ -99,43 +97,11 @@ Page({
             })
           }
         })
-
-        //获取点赞列表
-        wx.cloud.callFunction({
-          name: 'getlike',
-          key: 'likelist',
-          complete: res => {
-            that.setData({
-              likelist:res.result.data
-            })
-          }
-        })
-
-        //获取用户点赞列表
-        wx.cloud.callFunction({
-          name: 'getmylike',
-          key: 'mylikelist',
-          data:{
-            userid:that.data.openid
-          },
-          complete: res => {
-            that.setData({
-              mylikelist:res.result.data
-            })
-          }
-        })
-
         //设置点击事件不刷新页面
         if(that.data.isPreview){
           isPreview=false
           return;
         }
-        //获取全部缓存
-        wx.getStorageInfo({
-          success(res) {
-            history=res.keys
-          },
-        })
         var userpostimglist = new Array();
         //获取数据条数
         db.collection('iforum').count({
@@ -143,56 +109,68 @@ Page({
             that.setData({
               iforumlength:res.total
             })
-            //调用云函数从数据库获取论坛数据
+            //获取用户点赞列表
             wx.cloud.callFunction({
-              name: 'getallpost',//云函数名
-              key: 'postlist',
+              name: 'getmylike',
+              key: 'mylikelist',
               data:{
-                lim:that.data.iforumlength,
-                pass:that.data.iforumcount
+                userid:that.data.openid
               },
-              async complete(res){
-                for(var i=that.data.iforumcount;i<res.result.data.length;i++){
-                  if(res.result.data[i].imgurl) {//判断有无图片信息
-                    const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
-                    userpostimglist.push(userpostimg)//将图片缓存信息存入数组
-                  }else{
-                    continue;
-                  }
-                }
-                for(var i=0;i<res.result.data.length;i++){
-                  if(userpostimglist[i]) {//判断有无图片信息
-                    res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                    // console.log(userpostimglist[i])
-                  }else{
-                    continue;
-                  }
-                }
+              complete: res => {
                 that.setData({
-                  isPreview:isPreview,
-                  history:history,
-                  inputclean: '',
-                  //倒序存入数组
-                  postlist:res.result.data.reverse()
-                });
-                pushinput=''
-                
-                var showlikelist = new Array()
-                for(var i=0;i<that.data.postlist.length;i++){
-                  var showlike
-                  for(var j=0;j<that.data.mylikelist.length;j++){
-                    if(that.data.postlist[i]._id == that.data.mylikelist[j].likeid && that.data.mylikelist[j].userid == that.data.openid){
-                      showlike=false
-                      break;
-                    }else{
-                      showlike=true
+                  mylikelist:res.result.data
+                })
+                //调用云函数从数据库获取论坛数据
+                wx.cloud.callFunction({
+                  name: 'getallpost',//云函数名
+                  key: 'postlist',
+                  data:{
+                    lim:that.data.iforumlength,
+                    pass:that.data.iforumcount
+                  },
+                  async complete(res){
+                    for(var i=that.data.iforumcount;i<res.result.data.length;i++){
+                      if(res.result.data[i].imgurl) {//判断有无图片信息
+                        const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
+                        userpostimglist.push(userpostimg)//将图片缓存信息存入数组
+                      }else{
+                        continue;
+                      }
                     }
+                    for(var i=0;i<res.result.data.length;i++){
+                      if(userpostimglist[i]) {//判断有无图片信息
+                        res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
+                        // console.log(userpostimglist[i])
+                      }else{
+                        continue;
+                      }
+                    }
+                    that.setData({
+                      isPreview:isPreview,
+                      inputclean: '',
+                      //倒序存入数组
+                      postlist:res.result.data.reverse()
+                    });
+                    pushinput=''
+                    
+                    var showlikelist = new Array()
+                    for(var i=0;i<that.data.postlist.length;i++){
+                      var showlike
+                      for(var j=0;j<that.data.mylikelist.length;j++){
+                        if(that.data.postlist[i]._id == that.data.mylikelist[j].likeid && that.data.mylikelist[j].userid == that.data.openid){
+                          showlike=false
+                          break;
+                        }else{
+                          showlike=true
+                        }
+                      }
+                      showlikelist.push(showlike)
+                    }
+                    that.setData({
+                      showlikelist:showlikelist,
+                      loadModal: false
+                    })
                   }
-                  showlikelist.push(showlike)
-                }
-                that.setData({
-                  showlikelist:showlikelist,
-                  loadModal: false
                 })
               }
             })
@@ -207,6 +185,9 @@ Page({
         })
         avatarurl = wx.getStorageSync('avatarurl',avatarurl)
         nickname = wx.getStorageSync('nickname',nickname)
+        if (that.data.hasUserInfo) {
+          return;
+        }
         wx.cloud.callFunction({
           name: 'getuser',
           key: 'getuser',
@@ -303,6 +284,11 @@ Page({
     wx.navigateTo({
       url:'../talkinfo/talkinfo?postid='+postid
     })
+    db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
+      data:{
+        hot:e.currentTarget.dataset.hot+Math.ceil(Math.random()*4)
+      }
+    })
   },
 
   //双击点赞功能
@@ -357,7 +343,7 @@ Page({
         console.log(res)
         db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
           data:{
-            likecount:res.result.data.length+1
+            likecount:res.result.data.length+Math.ceil(Math.random()*4)
           }
         })
         db.collection("ilike").add({//添加到数据库
