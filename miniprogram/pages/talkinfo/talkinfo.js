@@ -1,6 +1,4 @@
 import {htmlRequest} from "../../utils/html.js"
-var util=require('../../utils/utils.js')
-var gettime=require('../../utils/times.js')
 var check = require('../../utils/check.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
@@ -9,7 +7,6 @@ const _ = db.command
 let nickname=''
 let pushinput=''//评论内容
 var isPreview
-let checkname = true
 let checkinput = true
 
 Page({
@@ -26,10 +23,6 @@ Page({
     inputclean:'',//清空评论框数据
     userblock: '',//全局变量
     postid:'',
-    chooseunname: 'none',
-    //匿名发布(暂不可用)
-    setunname: false,
-    changename: '',
     loadModal: false,
     showinput:true,
     isios: false
@@ -42,7 +35,8 @@ Page({
     const showinput =await htmlRequest(['showtallinput','get'])
     this.setData({
       showinput:showinput,
-      postid:options.postid
+      postid:options.postid,
+      userblock:options.userblock
     })
   },
 
@@ -294,20 +288,6 @@ Page({
     })
   },
 
-  //输入框聚焦事件
-  focuscomment:function(){
-    this.setData({
-      chooseunname:'block'
-    })
-  },
-
-  //输入失聚焦事件
-  outinputcomment:function(){
-    this.setData({
-      chooseunname:'none'
-    })
-  },
-
   //获取输入框数据
   pushinput:function(event){
     pushinput=event.detail.value
@@ -317,26 +297,9 @@ Page({
     })
   },
 
-  //设置是否匿名
-  setunname(e) {
-    this.setData({
-      setunname : e.detail.value
-    })
-  },
-
-  //改名
-  changename:function(event){
-    this.setData({
-      changename:event.detail.value
-    })
-    check.checktext(event.detail.value)
-    .then(res => {
-      checkname = res
-    })
-  },
-
   //评论上传到数据库
   uploadcomment:function(e){
+    wx.vibrateShort({type:"heavy"})
     var name = nickname
     if (this.data.userblock == 'true') {
       wx.showToast({
@@ -356,16 +319,13 @@ Page({
         })
         return;
       }
-      if(checkname == false || checkinput == false){
+      if(checkinput == false){
         wx.hideLoading()
         wx.showToast({
           icon: 'none',
           title: '文字违规',
         })
         return;
-      }
-      if(this.data.setunname == true){
-        name = this.data.changename
       }
       db.collection("icomment").add({//添加到数据库
         data:{

@@ -87,12 +87,6 @@ page{
   margin-top:10rpx;
 }
 
-.line{
-  width: 88%;
-  margin-left: 6%;
-  border-bottom: 1px solid rgb(216, 216, 216);
-  margin-bottom: 20rpx;
-}
 /* 打开上传页面悬浮按钮 */
 .pushbutton{
   border: 1px solid gray;

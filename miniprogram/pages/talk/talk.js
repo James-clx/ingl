@@ -1,8 +1,7 @@
 import {htmlRequest} from "../../utils/html.js"
-
-var util=require('../../utils/utils.js')
 var gettime=require('../../utils/times.js')
 var check = require('../../utils/check.js')
+var userlogin = require('../../utils/login.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
@@ -12,9 +11,7 @@ let imgurl=''
 let avatarurl=''
 let nickname=''
 let gender=''
-let pushinput=''//评论内容
 var isPreview
-let checkname = true
 let checkinput = true
 
 Page({
@@ -24,11 +21,9 @@ Page({
   data: {
     toppostlist:[],
     postlist:[],//推文数组
-    likelist:[],//点赞数组
     mylikelist:[],//用户点赞数组
     showlikelist:[],//是否显示已点赞
     userInfo: {},//用户信息
-    getuser:[],//数据库账号信息
     hasUserInfo: false,//缓存是否有用户信息
     canIUseGetUserProfile: false,//是否可以获取用户权限
     showTalklogin :'block',//页面展示信息授权模态框
@@ -44,14 +39,7 @@ Page({
     inputclean:'',//清空评论框数据
     userblock: '',//全局变量
     dbhasuser:'',
-    touchStartTime: 0,// 触摸开始时间
-    touchEndTime: 0,  // 触摸结束时间
-    lastTapTime: 0, // 最后一次单击事件点击发生时间
-    lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
     loadModal:false,
-    //匿名发布
-    setunname: false,
-    changename: '',
     showallinput:false
   },
 
@@ -66,27 +54,31 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    
-  },
-
-  /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
     let that = this;//将this另存为
+    var login = wx.getStorageSync('hasUserInfo',login)
     var isPreview
     wx.hideLoading()
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
+        if(!login){
+          console.log(!login)
+          that.login(res.result.openid)
+        }
         var openid = res.result.openid
         that.setData({
+          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
+          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
+          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
+          nickname : wx.getStorageSync('nickname',nickname),
           openid:openid,
           loadModal: true,
         })
+        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
+        nickname = wx.getStorageSync('nickname',nickname)
         //获取置顶说说
         wx.cloud.callFunction({
           name: 'gettoppost',
@@ -94,6 +86,18 @@ Page({
           complete: res => {
             that.setData({
               toppostlist:res.result.data
+            })
+          }
+        })
+        wx.cloud.callFunction({
+          name: 'getdbuser',
+          key: 'getdbuser',
+          data:{
+            id:openid
+          },
+          complete: res => {
+            that.setData({
+              userblock : res.result.data[0].block,
             })
           }
         })
@@ -151,7 +155,6 @@ Page({
                       //倒序存入数组
                       postlist:res.result.data.reverse()
                     });
-                    pushinput=''
                     
                     var showlikelist = new Array()
                     for(var i=0;i<that.data.postlist.length;i++){
@@ -176,113 +179,64 @@ Page({
             })
           }
         })
-        //检查后台有无用户信息，下次进入时继续调用此判断
-        that.setData({
-          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
-          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
-          nickname : wx.getStorageSync('nickname',nickname)
-        })
-        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
-        nickname = wx.getStorageSync('nickname',nickname)
-        if (that.data.hasUserInfo) {
-          return;
+      }
+    })
+  },
+
+  login:function(openid){
+    var that = this
+    wx.cloud.callFunction({
+      name: 'getdbuser',
+      key: 'getdbuser',
+      data:{
+        id:openid
+      },
+      complete: res => {
+        if (res.result.data) {
+          console.log(res.result.data[0].block)
+          if(res.result.data[0].block == 'true'){
+            that.setData({
+              userblock : 'true',
+              dbhasuser : 'true'
+            })
+          }else{
+            that.setData({
+              userblock : 'false',
+              dbhasuser : 'true'
+            })
+          }
+        }else{
+          that.setData({
+            userblock : 'false',
+            dbhasuser : 'false'
+          })
         }
-        wx.cloud.callFunction({
-          name: 'getuser',
-          key: 'getuser',
-          complete: res => {
-            for(var i=0;i<res.result.data.length;i++){
-              if(this.data.openid == res.result.data[i]._openid && res.result.data[i].block == 'true'){
-                wx.showModal({
-                  title: '用户已被封禁',
-                  content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-                  showCancel:false
-                })
-                that.setData({
-                  userblock : 'true',
-                  dbhasuser : 'true'
-                })
-                break;
-              }else if(this.data.openid == res.result.data[i]._openid && res.result.data[i].block != 'true'){
-                that.setData({
-                  userblock : 'false',
-                  dbhasuser : 'true'
-                })
-                break;
-              }else{
-                that.setData({
-                  userblock : 'false',
-                  dbhasuser : 'false'
-                })
-              }
-            }
-            if(that.data.hasUserInfo == '' || that.data.dbhasuser == 'false'){
-              console.log(that.data.dbhasuser)
-              wx.showModal({//模态框确认获取用户数据
-                showCancel:false,
-                title: '提示',
-                content: 'IOS端手机可能会出现样式错乱 \n如遇到此情况请更新手机系统',
-                success (res) {//确认授权后修改后端数据
-                  if (res.confirm) {
-                    wx.getUserProfile({
-                      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-                      success: (res) => {//获取用户数据
-                        if(that.data.dbhasuser == 'false'){
-                          db.collection("iuser").add({//添加到数据库
-                            data:{
-                              avatarurl:res.userInfo.avatarUrl,
-                              nickname:res.userInfo.nickName,
-                              country:res.userInfo.country,
-                              city:res.userInfo.city,
-                              gender:res.userInfo.gender,
-                              block:that.data.userblock
-                            }
-                          })
-                          console.log('add')
-                        }
-                        avatarurl = res.userInfo.avatarUrl
-                        nickname = res.userInfo.nickName
-                        that.setData({
-                          userInfo: res.userInfo,
-                          hasUserInfo: true,
-                          showTalklogin : 'none',
-                          canIUseGetUserProfile: true
-                        })
-                        wx.setStorageSync('userInfo', that.data.userInfo)
-                        wx.setStorageSync('hasUserInfo', that.data.hasUserInfo)
-                        wx.setStorageSync('avatarurl', avatarurl)
-                        wx.setStorageSync('nickname', nickname)
-                      },
-                      fail: (res) =>{//拒绝后返回功能页面
-                        console.log('false')
-                        wx.switchTab({
-                          url: '/pages/index/index'
-                        })
-                      }
-                    })
-                  }
-                }
-              })
-            }
+        userlogin.userlogin(that.data.dbhasuser)
+        .then(res =>{
+          that.setData({
+            userInfo : res,
+            hasUserInfo : 'true',
+            avatarurl :res.avatarUrl,
+            nickname : res.nickName,
+          })
+          avatarurl = res.avatarUrl
+          nickname = res.nickName
+          if (that.data.userblock == 'true') {
+            wx.showModal({
+              title: '用户已被封禁',
+              content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+              showCancel:false
+            })
           }
         })
       }
     })
   },
 
-  touchStart: function(e) {
-    this.touchStartTime = e.timeStamp
-  },
-
-  touchEnd: function(e) {
-    this.touchEndTime = e.timeStamp
-  },
-
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid
+      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+this.data.userblock
     })
     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
       data:{
@@ -290,42 +244,6 @@ Page({
       }
     })
   },
-
-  //双击点赞功能
-  // totalkinfo:function(e){
-  //   var that = this
-  //   // 当前点击的时间
-  //   var currentTime = e.timeStamp
-  //   var lastTapTime = that.lastTapTime
-  //   // 更新最后一次点击时间
-  //   that.lastTapTime = currentTime
-    
-  //   // 如果两次点击时间在20s0毫秒内，则认为是双击事件
-  //   if (currentTime - lastTapTime < 150) {
-  //     // 成功触发双击事件时，取消单击事件的执行
-  //     clearTimeout(that.lastTapTimeoutFunc);
-  //     // 判断说说的点赞状态
-  //     if(e.currentTarget.dataset.likestate == true){
-  //       that.likeadd(e)
-  //     }else{
-  //       that.likeminuus(e)
-  //     }
-      
-  //   } else {
-  //     // 单击事件延时250毫秒执行，这和最初的浏览器的点击250ms延时有点像。
-  //     that.lastTapTimeoutFunc = setTimeout(function () {
-  //       var postid = e.currentTarget.dataset.id
-  //       wx.navigateTo({
-  //         url:'../talkinfo/talkinfo?postid='+postid
-  //       })
-  //     }, 170);
-  //     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-  //       data:{
-  //         hot:e.currentTarget.dataset.hot+1
-  //       }
-  //     })
-  //   }
-  // },
 
   //点赞功能
   likeadd:function(e){
@@ -470,24 +388,6 @@ Page({
     })
   },
 
-  //设置是否匿名
-  setunname(e) {
-    this.setData({
-      setunname : e.detail.value
-    })
-  },
-
-  //改名
-  changename:function(event){
-    this.setData({
-      changename:event.detail.value
-    })
-    check.checktext(event.detail.value)
-    .then(res => {
-      checkname = res
-    })
-  },
-
   //确认按钮，上传数据库
   upload:function(){
     wx.vibrateShort({type:"heavy"})
@@ -510,7 +410,7 @@ Page({
         })
         return;
       }
-      if(checkname == false || checkinput == false){
+      if(checkinput == false){
         wx.hideLoading()
         wx.showToast({
           icon: 'none',
@@ -522,10 +422,6 @@ Page({
       var times = this.data.times
       var name = nickname
       var userurl = avatarurl
-      if(this.data.setunname == true){
-        name = this.data.changename
-        userurl = "cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/unname.png"
-      }
       console.log(imgurl)
       if(imgurl){
         wx.cloud.uploadFile({

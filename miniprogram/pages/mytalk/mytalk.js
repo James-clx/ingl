@@ -1,12 +1,9 @@
-var util=require('../../utils/utils.js')
-var gettimes=require('../../utils/times.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
 let avatarurl=''
 let nickname=''
-let pushinput=''//评论内容
 var isPreview
 Page({
 
@@ -15,16 +12,13 @@ Page({
    */
   data: {
     postlist:[],//推文数组
-    likelist:[],//点赞数组
     mylikelist:[],//用户点赞数组
     showlikelist:[],//是否显示已点赞
     //auditpostlist:[],//审核中推文数组
     likecount:0,
     userInfo: {},//用户信息
-    getuser:[],//数据库账号信息
     hasUserInfo: false,
     canIUseGetUserProfile: false,
-    showTalklogin :'block',//页面展示信息授权模态框
     iforumlength:'',//推文集合长度
     iforumcount:7,//推文显示条数
     openid:'',//用户openid
@@ -32,12 +26,7 @@ Page({
     avatarUrl : '',//用户头像
     inputclean:'',
     shownothing:'none',
-    dbhasuser:'',
     userblock:'',
-    touchStartTime: 0,// 触摸开始时间
-    touchEndTime: 0,  // 触摸结束时间
-    lastTapTime: 0, // 最后一次单击事件点击发生时间
-    lastTapTimeoutFunc: null,// 单击事件点击后要触发的函数
     isadmin:false,
     loadModal: false
   },
@@ -45,8 +34,10 @@ Page({
  /**
    * 生命周期函数--监听页面显示
    */
-  onLoad: function (options) {
-
+  async onLoad (options) {
+    this.setData({
+      userblock:options.userblock
+    })
   },
 
   /**
@@ -278,18 +269,10 @@ Page({
       })
     },
 
-  touchStart: function(e) {
-    this.touchStartTime = e.timeStamp
-  },
-
-  touchEnd: function(e) {
-    this.touchEndTime = e.timeStamp
-  },
-
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid
+      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+this.data.userblock
     })
     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
       data:{
@@ -297,42 +280,6 @@ Page({
       }
     })
   },
-
-  //双击点赞功能
-  // totalkinfo:function(e){
-  //   var that = this
-  //   // 当前点击的时间
-  //   var currentTime = e.timeStamp
-  //   var lastTapTime = that.lastTapTime
-  //   // 更新最后一次点击时间
-  //   that.lastTapTime = currentTime
-    
-  //   // 如果两次点击时间在300毫秒内，则认为是双击事件
-  //   if (currentTime - lastTapTime < 250) {
-  //     // 成功触发双击事件时，取消单击事件的执行
-  //     clearTimeout(that.lastTapTimeoutFunc);
-  //     // 判断说说的点赞状态
-  //     if(e.currentTarget.dataset.likestate == true){
-  //       that.likeadd(e)
-  //     }else{
-  //       that.likeminuus(e)
-  //     }
-      
-  //   } else {
-  //     // 单击事件延时250毫秒执行，这和最初的浏览器的点击250ms延时有点像。
-  //     that.lastTapTimeoutFunc = setTimeout(function () {
-  //       var postid = e.currentTarget.dataset.id
-  //       wx.navigateTo({
-  //         url:'../talkinfo/talkinfo?postid='+postid
-  //       })
-  //     }, 250);
-  //     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-  //       data:{
-  //         hot:e.currentTarget.dataset.hot+1
-  //       }
-  //     })
-  //   }
-  // },
 
   shownothing:function(){
     wx.switchTab({

@@ -1,6 +1,6 @@
 import {clearCacheSingle,clearCacheAll} from "../../utils/cache.js"
 import {htmlRequest} from "../../utils/html.js"
-
+var userlogin = require('../../utils/login.js')
 const db=wx.cloud.database()
 let avatarurl=''
 let nickname=''
@@ -35,14 +35,25 @@ Page({
    */
   onShow: function () {
     var that = this
+    var login = wx.getStorageSync('hasUserInfo',login)
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
+        if(!login){
+          console.log(!login)
+          that.login(res.result.openid)
+        }
         var openid = res.result.openid
         that.setData({
+          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
+          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
+          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
+          nickname : wx.getStorageSync('nickname',nickname),
           canIUseGetUserProfile: true,
           openid:openid
         })
+        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
+        nickname = wx.getStorageSync('nickname',nickname)
         //是否管理员
         wx.cloud.callFunction({
           name: 'getadmin',
@@ -57,6 +68,18 @@ Page({
             }
             that.setData({
               isadmin:isadmin
+            })
+          }
+        })
+        wx.cloud.callFunction({
+          name: 'getdbuser',
+          key: 'getdbuser',
+          data:{
+            id:openid
+          },
+          complete: res => {
+            that.setData({
+              userblock : res.result.data[0].block,
             })
           }
         })
@@ -103,97 +126,54 @@ Page({
             })
           }
         })     
-        //检查后台有无用户信息，下次进入时继续调用此判断
-        that.setData({
-          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
-          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
-          nickname : wx.getStorageSync('nickname',nickname)
-        })
-        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
-        nickname = wx.getStorageSync('nickname',nickname)
-        if (that.data.hasUserInfo) {
-          return;
+      }
+    })
+  },
+
+  login:function(openid){
+    var that = this
+    wx.cloud.callFunction({
+      name: 'getdbuser',
+      key: 'getdbuser',
+      data:{
+        id:openid
+      },
+      complete: res => {
+        if (res.result.data) {
+          console.log(res.result.data[0].block)
+          if(res.result.data[0].block == 'true'){
+            that.setData({
+              userblock : 'true',
+              dbhasuser : 'true'
+            })
+          }else{
+            that.setData({
+              userblock : 'false',
+              dbhasuser : 'true'
+            })
+          }
+        }else{
+          that.setData({
+            userblock : 'false',
+            dbhasuser : 'false'
+          })
         }
-        wx.cloud.callFunction({
-          name: 'getuser',
-          key: 'getuser',
-          complete: res => {
-            console.log(that.data.openid)
-            console.log(res)
-            for(var i=0;i<res.result.data.length;i++){
-              console.log('enter')
-              if(this.data.openid == res.result.data[i]._openid && res.result.data[i].block == 'true'){
-                wx.showModal({
-                  title: '用户已被封禁',
-                  content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-                  showCancel:false
-                })
-                that.setData({
-                  userblock : 'true',
-                  dbhasuser : 'true'
-                })
-                break;
-              }else if(this.data.openid == res.result.data[i]._openid && res.result.data[i].block != 'true'){
-                that.setData({
-                  userblock : 'false',
-                  dbhasuser : 'true'
-                })
-                break;
-              }else{
-                that.setData({
-                  userblock : 'false',
-                  dbhasuser : 'false'
-                })
-              }
-            }
-            if(that.data.hasUserInfo == '' || that.data.dbhasuser == 'false'){
-              console.log(that.data.dbhasuser)
-              wx.showModal({//模态框确认获取用户数据
-                showCancel:false,
-                title: '提示',
-                content: 'IOS端手机可能会出现样式错乱 \n如遇到此情况请更新手机系统',
-                success (res) {//确认授权后修改后端数据
-                  if (res.confirm) {
-                    wx.getUserProfile({
-                      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-                      success: (res) => {//获取用户数据
-                        if(that.data.dbhasuser == 'false'){
-                          db.collection("iuser").add({//添加到数据库
-                            data:{
-                              avatarurl:res.userInfo.avatarUrl,
-                              nickname:res.userInfo.nickName,
-                              country:res.userInfo.country,
-                              city:res.userInfo.city,
-                              gender:res.userInfo.gender,
-                              block:that.data.userblock
-                            }
-                          })
-                        }
-                        avatarurl = res.userInfo.avatarUrl
-                        nickname = res.userInfo.nickName
-                        that.setData({
-                          userInfo: res.userInfo,
-                          hasUserInfo: true,
-                          showTalklogin : 'none',
-                          canIUseGetUserProfile: true,
-                        })
-                        wx.setStorageSync('userInfo', that.data.userInfo)
-                        wx.setStorageSync('hasUserInfo', that.data.hasUserInfo)
-                        wx.setStorageSync('avatarurl', avatarurl)
-                        wx.setStorageSync('nickname', nickname)
-                      },
-                      fail: (res) =>{//拒绝后返回功能页面
-                        console.log('false')
-                        wx.switchTab({
-                          url: '/pages/index/index'
-                        })
-                      }
-                    })
-                  }
-                }
-              })
-            }
+        userlogin.userlogin(that.data.dbhasuser)
+        .then(res =>{
+          that.setData({
+            userInfo : res,
+            hasUserInfo : 'true',
+            avatarurl :res.avatarUrl,
+            nickname : res.nickName,
+          })
+          avatarurl = res.avatarUrl
+          nickname = res.nickName
+          if (that.data.userblock == 'true') {
+            wx.showModal({
+              title: '用户已被封禁',
+              content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+              showCancel:false
+            })
           }
         })
       }
@@ -203,7 +183,7 @@ Page({
   //跳转到我的说说
   tomytalk:function(){
     wx.navigateTo({
-      url: '../mytalk/mytalk',
+      url: '../mytalk/mytalk?userblock='+this.data.userblock,
     })
   },
 
