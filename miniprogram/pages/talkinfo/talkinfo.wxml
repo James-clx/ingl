@@ -1,4 +1,4 @@
-<view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" wx:if="{{item._id == postid}}">
+<view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove">
   <view class="user">
     <view>
       <image src="{{item.avatarurl}}" class="userinfoimg"></image>

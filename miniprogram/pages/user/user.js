@@ -2,25 +2,22 @@ import {clearCacheSingle,clearCacheAll} from "../../utils/cache.js"
 import {htmlRequest} from "../../utils/html.js"
 var userlogin = require('../../utils/login.js')
 const db=wx.cloud.database()
-let avatarurl=''
-let nickname=''
+let dbhasuser
+let userblock
+let hasUserInfo =  false//缓存是否有用户信息
+let openid = ''//用户openid
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    canIUseGetUserProfile: false,
-    openid:'',//用户openid
-    nickName : '',//用户名称
-    avatarUrl : '',//用户头像
-    dbhasuser:'',
-    userblock:'',
+    userInfo:[],
     modalName:null,
     isadmin:false,
-    rejectcount:0,
+    //rejectcount:0,
     iforumlength:'',//推文集合长度
-    iforumcount:7,//推文显示条数
   },
 
   /**
@@ -43,17 +40,11 @@ Page({
           console.log(!login)
           that.login(res.result.openid)
         }
-        var openid = res.result.openid
+        openid = res.result.openid
+        hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
         that.setData({
           userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
-          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
-          nickname : wx.getStorageSync('nickname',nickname),
-          canIUseGetUserProfile: true,
-          openid:openid
         })
-        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
-        nickname = wx.getStorageSync('nickname',nickname)
         //是否管理员
         wx.cloud.callFunction({
           name: 'getadmin',
@@ -61,7 +52,7 @@ Page({
           complete: res => {
             var isadmin = false
             for(var i=0;i<res.result.data.length;i++){
-              if(that.data.openid == res.result.data[i].useropenid){
+              if(openid == res.result.data[i].useropenid){
                 isadmin = true
                 break;
               }
@@ -78,9 +69,7 @@ Page({
             id:openid
           },
           complete: res => {
-            that.setData({
-              userblock : res.result.data[0].block,
-            })
+            userblock = res.result.data[0].block
           }
         })
         //获取点赞列表
@@ -90,13 +79,12 @@ Page({
           complete: res => {
             var likecount = 0
             for (var i=0;i<res.result.data.length;i++) {
-              if(res.result.data[i].postuser == that.data.openid){
+              if(res.result.data[i].postuser == openid){
                 likecount = likecount+1
               }
             }
             that.setData({
               likecount:likecount,
-              likelist:res.result.data,
               loadModal: true,
             })
           }
@@ -104,28 +92,27 @@ Page({
 
         db.collection('iforum')
         .where({
-          _openid:that.data.openid
+          _openid:openid
         })
         .count({
           success(res) {
             that.setData({
               iforumlength:res.total,
-              iforumcount:res.total,
               shownothing:'none'
             })
           }
         })
         //未审核数量
-        wx.cloud.callFunction({
-          name: 'getfalseaudit',
-          key: 'rejectcount',
-          complete: res => {
-            console.log(res.result.total)
-            that.setData({
-              rejectcount:res.result.total
-            })
-          }
-        })     
+        // wx.cloud.callFunction({
+        //   name: 'getfalseaudit',
+        //   key: 'rejectcount',
+        //   complete: res => {
+        //     console.log(res.result.total)
+        //     that.setData({
+        //       rejectcount:res.result.total
+        //     })
+        //   }
+        // })     
       }
     })
   },
@@ -142,32 +129,22 @@ Page({
         if (res.result.data) {
           console.log(res.result.data[0].block)
           if(res.result.data[0].block == 'true'){
-            that.setData({
-              userblock : 'true',
-              dbhasuser : 'true'
-            })
+            userblock = 'true'
+            dbhasuser = 'true'
           }else{
-            that.setData({
-              userblock : 'false',
-              dbhasuser : 'true'
-            })
+            userblock = 'false'
+            dbhasuser = 'true'
           }
         }else{
-          that.setData({
-            userblock : 'false',
-            dbhasuser : 'false'
-          })
+          userblock = 'false'
+          dbhasuser = 'false'
         }
-        userlogin.userlogin(that.data.dbhasuser)
+        userlogin.userlogin(dbhasuser)
         .then(res =>{
+          hasUserInfo = 'true'
           that.setData({
             userInfo : res,
-            hasUserInfo : 'true',
-            avatarurl :res.avatarUrl,
-            nickname : res.nickName,
           })
-          avatarurl = res.avatarUrl
-          nickname = res.nickName
           if (that.data.userblock == 'true') {
             wx.showModal({
               title: '用户已被封禁',
@@ -183,7 +160,7 @@ Page({
   //跳转到我的说说
   tomytalk:function(){
     wx.navigateTo({
-      url: '../mytalk/mytalk?userblock='+this.data.userblock,
+      url: '../mytalk/mytalk?userblock='+userblock,
     })
   },
 

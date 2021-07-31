@@ -2,41 +2,39 @@ import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
-let avatarurl=''
-let nickname=''
 var isPreview
+let userblock
+let openid
+let iforumcount = 7//推文显示条数
+let mylikelist = []//用户点赞数组
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    postlist:[],//推文数组
-    mylikelist:[],//用户点赞数组
+    postlist:[],//推文数组    
     showlikelist:[],//是否显示已点赞
     //auditpostlist:[],//审核中推文数组
     likecount:0,
     userInfo: {},//用户信息
-    hasUserInfo: false,
-    canIUseGetUserProfile: false,
-    iforumlength:'',//推文集合长度
-    iforumcount:7,//推文显示条数
-    openid:'',//用户openid
-    nickName : '',//用户名称
-    avatarUrl : '',//用户头像
-    inputclean:'',
     shownothing:'none',
-    userblock:'',
     isadmin:false,
-    loadModal: false
+    loadModal: false,
+    iforumlength : ''//推文集合长度
   },
 
  /**
    * 生命周期函数--监听页面显示
    */
   async onLoad (options) {
+    userblock = options.userblock
+  },
+
+  onReady: function() {
     this.setData({
-      userblock:options.userblock
+      loadModal: true
     })
   },
 
@@ -46,11 +44,7 @@ Page({
   onShow() {
     wx.hideLoading()
     let that = this;//将this另存为
-    var canIUseGetUserProfile
     //设置点击事件不刷新页面
-    if (wx.getUserProfile) {//修改后台用户数据为真
-      canIUseGetUserProfile= true
-    }
 
     if(that.data.isPreview){
       isPreview=false
@@ -59,17 +53,11 @@ Page({
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
-        var openid = res.result.openid
+        openid = res.result.openid
         that.setData({
           userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
-          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
-          nickname : wx.getStorageSync('nickname',nickname),
-          loadModal: true,
-          canIUseGetUserProfile: true,
           getcommentlist:res.result.data,
           isPreview:false,
-          openid:openid
         })
         //查看是否管理员
         wx.cloud.callFunction({
@@ -78,7 +66,7 @@ Page({
           complete: res => {
             var isadmin = false
             for(var i=0;i<res.result.data.length;i++){
-              if(that.data.openid == res.result.data[i].useropenid){
+              if(openid == res.result.data[i].useropenid){
                 isadmin = true
                 break;
               }
@@ -96,7 +84,7 @@ Page({
         //   name: 'getmyauditpost',
         //   key: 'auditpostlist',
         //   data:{
-        //     openid:that.data.openid
+        //     openid:openid
         //   },
         //   complete: res => {
         //     console.log(res.result.data)
@@ -109,19 +97,19 @@ Page({
         var userpostimglist = new Array();
         db.collection('iforum')
         .where({
-          _openid:that.data.openid
+          _openid:openid
         })
         .count({
           success(res) {
             if(res.total<=7&&res.total>0){
+              iforumcount = res.total
               that.setData({
-                iforumlength:res.total,
-                iforumcount:res.total,
+                iforumlength : res.total,
                 shownothing:'none'
               })
             }else if(res.total>7){
               that.setData({
-                iforumlength:res.total,
+                iforumlength : res.total,
                 shownothing:'none'
               })
             }else{
@@ -136,24 +124,24 @@ Page({
               name: 'getmylike',
               key: 'mylikelist',
               data:{
-                userid:that.data.openid
+                userid:openid
               },
               complete: res => {
+                mylikelist = res.result.data
                 that.setData({
-                  likecount:res.result.data.length,
-                  mylikelist:res.result.data
+                  likecount:res.result.data.length
                 })
                 //调用云函数从数据库获取论坛数据
                 wx.cloud.callFunction({
                   name: 'getmypost',//云函数名
                   key: 'postlist',
                   data:{
-                    openid:that.data.openid,
+                    openid:openid,
                     lim:that.data.iforumlength,
-                    pass:that.data.iforumcount
+                    pass:iforumcount
                   },
                   async complete(res){
-                    for(var i=that.data.iforumcount;i<res.result.data.length;i++){
+                    for(var i=iforumcount;i<res.result.data.length;i++){
                       if(res.result.data[i].imgurl) {//判断有无图片信息
                         const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
                         userpostimglist.push(userpostimg)//将图片缓存信息存入数组
@@ -177,8 +165,8 @@ Page({
                     var showlikelist = new Array()
                     for(var i=0;i<that.data.postlist.length;i++){
                       var showlike
-                      for(var j=0;j<that.data.mylikelist.length;j++){
-                        if(that.data.postlist[i]._id == that.data.mylikelist[j].likeid && that.data.mylikelist[j].userid == that.data.openid){
+                      for(var j=0;j<mylikelist.length;j++){
+                        if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
                           showlike=false
                           break;
                         }else{
@@ -272,7 +260,7 @@ Page({
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+this.data.userblock
+      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+userblock
     })
     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
       data:{
@@ -292,7 +280,7 @@ Page({
     wx.vibrateShort({type:"heavy"})
     console.log(e)
     console.log(e.currentTarget.dataset.id)
-    console.log(this.data.openid)
+    console.log(openid)
     //获取用户点赞列表
     wx.cloud.callFunction({
       name: 'getlikecount',
@@ -310,7 +298,7 @@ Page({
           data:{
             postuser:e.currentTarget.dataset.openid,
             likeid:e.currentTarget.dataset.id,
-            userid:this.data.openid
+            userid:openid
           }
         })
         var that = this
@@ -330,7 +318,7 @@ Page({
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
     console.log(e.currentTarget.dataset.id+'delete')
-    console.log(this.data.openid)
+    console.log(openid)
     //获取用户点赞列表
     wx.cloud.callFunction({
       name: 'getlikecount',
@@ -348,7 +336,7 @@ Page({
         .where({
           postuser:e.currentTarget.dataset.openid,
           likeid:e.currentTarget.dataset.id,
-          userid:this.data.openid
+          userid:openid
         })
         .remove()
         .then(res => {
@@ -370,6 +358,9 @@ Page({
   onPullDownRefresh:function(){
     wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
+    this.setData({
+      loadModal: true
+    })
     this.onShow()
   //模拟加载
     wx.hideNavigationBarLoading() //完成停止加载
@@ -380,19 +371,21 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    if(this.data.iforumlength<this.data.iforumcount+7 && this.data.iforumlength>this.data.iforumcount){
+    if(this.data.iforumlength<iforumcount+7 && this.data.iforumlength>iforumcount){
       this.setData({
-        iforumcount:this.data.iforumlength
+        loadModal: true
       })
+      iforumcount = iforumlength
       this.onShow()
-    }else if(this.data.iforumlength<this.data.iforumcount+7){
+    }else if(this.data.iforumlength<iforumcount+7){
       wx.showToast({
         title:"到底啦",
       })
     }else{
       this.setData({
-        iforumcount:this.data.iforumcount+7
+        loadModal: true
       })
+      iforumcount = iforumcount+7
       this.onShow()
     }
   },
@@ -412,7 +405,7 @@ Page({
     db.collection('iaudit')
     .where({
       reject:true,
-      _openid:this.data.openid
+      _openid:openid
     })
     .remove()
   },

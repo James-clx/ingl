@@ -69,6 +69,14 @@ Page({
 
   onLoad:function (option){
     
+  },
+
+  onShareAppMessage: function () {
+    return {
+      title: 'IN广理',
+      path: '/pages/schooltraffic/schooltraffic', // 点击访问的页面
+      imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
+    }
   }
 })
 

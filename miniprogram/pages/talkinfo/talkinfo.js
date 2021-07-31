@@ -8,21 +8,20 @@ let nickname=''
 let pushinput=''//评论内容
 var isPreview
 let checkinput = true
+let userblock
+let postid
+let openid
+let mylikelist = []//用户点赞数组
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    history:[],
     getcommentlist:[],//获取评论列表
     postlist:[],//推文数组
-    mylikelist:[],//用户点赞数组
     showlikelist:[],//是否显示已点赞
-    openid:'',//用户openid
     inputclean:'',//清空评论框数据
-    userblock: '',//全局变量
-    postid:'',
     loadModal: false,
     showinput:true,
     isios: false
@@ -33,20 +32,24 @@ Page({
    */
   async onLoad (options) {
     const showinput =await htmlRequest(['showtallinput','get'])
+    postid = options.postid
+    userblock = options.userblock
     this.setData({
       showinput:showinput,
-      postid:options.postid,
-      userblock:options.userblock
     })
   },
 
+  onReady: function() {
+    this.setData({
+      loadModal: true
+    })
+  },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
     let that = this;//将this另存为
-    var history
     wx.hideLoading()
     nickname = wx.getStorageSync('nickname',nickname)
     // 在右上角菜单 "...”中显示分享，menus可以单写转发shareAppMessage，分享朋友圈必须写shareAppMessage和shareTimeline
@@ -67,11 +70,9 @@ Page({
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
-        var openid = res.result.openid
+        openid = res.result.openid
         that.setData({
-          openid:openid,
           showallinput:app.globalData.showallinput,
-          loadModal: true,
         })
         //获取终端机型
         wx.getSystemInfo({
@@ -83,18 +84,12 @@ Page({
             }
           }
         })
-        //获取全部缓存
-        wx.getStorageInfo({
-          success(res) {
-            history=res.keys
-          },
-        })
         //获取评论列表
         wx.cloud.callFunction({
           name: 'getcomment',
           key: 'getcommentlist',
           data:{
-            postid:that.data.postid
+            postid:postid
           },
           complete: res => {
             that.setData({
@@ -105,14 +100,12 @@ Page({
               name: 'getmylikeinfo',
               key: 'mylikelist',
               data:{
-                userid:that.data.openid,
-                likeid:that.data.postid
+                userid:openid,
+                likeid:postid
               },
               complete: res => {
                 console.log(res.result.data)
-                that.setData({
-                  mylikelist:res.result.data
-                })
+                mylikelist = res.result.data
                 var userpostimglist = new Array();
                 //获取数据条数
                 db.collection('iforum').count({
@@ -125,7 +118,7 @@ Page({
                       name: 'getpost',//云函数名
                       key: 'postlist',
                       data:{
-                        postid:that.data.postid
+                        postid:postid
                       },
                       async complete(res){
                         for(var i=that.data.iforumcount;i<res.result.data.length;i++){
@@ -145,7 +138,6 @@ Page({
                           }
                         }
                         that.setData({
-                          history:history,
                           inputclean: '',
                           //倒序存入数组
                           postlist:res.result.data.reverse()
@@ -155,8 +147,8 @@ Page({
                         var showlikelist = new Array()
                         for(var i=0;i<that.data.postlist.length;i++){
                           var showlike
-                          for(var j=0;j<that.data.mylikelist.length;j++){
-                            if(that.data.postlist[i]._id == that.data.mylikelist[j].likeid && that.data.mylikelist[j].userid == that.data.openid){
+                          for(var j=0;j<mylikelist.length;j++){
+                            if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
                               showlike=false
                               break;
                             }else{
@@ -205,7 +197,7 @@ Page({
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
     console.log(e.currentTarget.dataset.id)
-    console.log(this.data.openid)
+    console.log(openid)
     //获取用户点赞列表
     wx.cloud.callFunction({
       name: 'getlikecount',
@@ -223,7 +215,7 @@ Page({
           data:{
             postuser:e.currentTarget.dataset.openid,
             likeid:e.currentTarget.dataset.id,
-            userid:this.data.openid
+            userid:openid
           }
         })
         var that = this
@@ -243,7 +235,7 @@ Page({
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
     console.log(e.currentTarget.dataset.id+'delete')
-    console.log(this.data.openid)
+    console.log(openid)
     //获取用户点赞列表
     wx.cloud.callFunction({
       name: 'getlikecount',
@@ -261,7 +253,7 @@ Page({
         .where({
           postuser:e.currentTarget.dataset.openid,
           likeid:e.currentTarget.dataset.id,
-          userid:this.data.openid
+          userid:openid
         })
         .remove()
         .then(res => {
@@ -301,7 +293,7 @@ Page({
   uploadcomment:function(e){
     wx.vibrateShort({type:"heavy"})
     var name = nickname
-    if (this.data.userblock == 'true') {
+    if (userblock == 'true') {
       wx.showToast({
         title:"用户已被封禁",
         image: '/images/fail.png',
@@ -339,8 +331,6 @@ Page({
           commentcount:e.currentTarget.dataset.count+1
         }
       })
-      //发布后关闭匿名选择框
-      this.outinputcomment()
       //发布评论后重新抓取评论列表
       this.onShow()
     }
@@ -353,6 +343,9 @@ Page({
   onPullDownRefresh:function(){
     wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
+    this.setData({
+      loadModal: true
+    })
     this.onShow()
   //模拟加载
     wx.hideNavigationBarLoading() //完成停止加载

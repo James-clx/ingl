@@ -13,6 +13,16 @@ let nickname=''
 let gender=''
 var isPreview
 let checkinput = true
+let hasUserInfo =  false//缓存是否有用户信息
+let userInfo = []
+let iforumlength = ''//推文集合长度
+let iforumcount = 7//推文显示条数
+let openid = ''//用户openid
+let times = ''//上传推文时间
+let inputclean = ''//清空评论框数据
+let userblock = ''//全局变量
+let dbhasuser = ''
+let mylikelist = []//用户点赞数组
 
 Page({
   /**
@@ -21,24 +31,11 @@ Page({
   data: {
     toppostlist:[],
     postlist:[],//推文数组
-    mylikelist:[],//用户点赞数组
     showlikelist:[],//是否显示已点赞
-    userInfo: {},//用户信息
-    hasUserInfo: false,//缓存是否有用户信息
-    canIUseGetUserProfile: false,//是否可以获取用户权限
     showTalklogin :'block',//页面展示信息授权模态框
     showinputpage:'block',//上传信息按钮
     showinputinfo:'none',//上传信息页面
     filter:'0rpx',//主页面模糊
-    iforumlength:'',//推文集合长度
-    iforumcount:7,//推文显示条数
-    openid:'',//用户openid
-    nickName : '',//用户名称
-    avatarUrl : '',//用户头像
-    times:'',//上传推文时间
-    inputclean:'',//清空评论框数据
-    userblock: '',//全局变量
-    dbhasuser:'',
     loadModal:false,
     showallinput:false
   },
@@ -50,6 +47,12 @@ Page({
     const showallinput =await htmlRequest(['showtallinput','get'])
     this.setData({
       showallinput:showallinput
+    })
+  },
+
+  onReady: function() {
+    this.setData({
+      loadModal: true
     })
   },
 
@@ -68,15 +71,9 @@ Page({
           console.log(!login)
           that.login(res.result.openid)
         }
-        var openid = res.result.openid
-        that.setData({
-          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          hasUserInfo : wx.getStorageSync('hasUserInfo',that.data.hasUserInfo),
-          avatarurl : wx.getStorageSync('avatarurl',avatarurl),
-          nickname : wx.getStorageSync('nickname',nickname),
-          openid:openid,
-          loadModal: true,
-        })
+        openid = res.result.openid
+        userInfo = wx.getStorageSync('userInfo',userInfo),
+        hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
         avatarurl = wx.getStorageSync('avatarurl',avatarurl)
         nickname = wx.getStorageSync('nickname',nickname)
         //获取置顶说说
@@ -96,9 +93,7 @@ Page({
             id:openid
           },
           complete: res => {
-            that.setData({
-              userblock : res.result.data[0].block,
-            })
+            userblock = res.result.data[0].block
           }
         })
         //设置点击事件不刷新页面
@@ -110,30 +105,26 @@ Page({
         //获取数据条数
         db.collection('iforum').count({
           success(res) {
-            that.setData({
-              iforumlength:res.total
-            })
+            iforumlength = res.total
             //获取用户点赞列表
             wx.cloud.callFunction({
               name: 'getmylike',
               key: 'mylikelist',
               data:{
-                userid:that.data.openid
+                userid:openid
               },
               complete: res => {
-                that.setData({
-                  mylikelist:res.result.data
-                })
+                mylikelist = res.result.data
                 //调用云函数从数据库获取论坛数据
                 wx.cloud.callFunction({
                   name: 'getallpost',//云函数名
                   key: 'postlist',
                   data:{
-                    lim:that.data.iforumlength,
-                    pass:that.data.iforumcount
+                    lim:iforumlength,
+                    pass:iforumcount
                   },
                   async complete(res){
-                    for(var i=that.data.iforumcount;i<res.result.data.length;i++){
+                    for(var i=iforumcount;i<res.result.data.length;i++){
                       if(res.result.data[i].imgurl) {//判断有无图片信息
                         const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
                         userpostimglist.push(userpostimg)//将图片缓存信息存入数组
@@ -149,9 +140,9 @@ Page({
                         continue;
                       }
                     }
+                    inputclean = ''
                     that.setData({
                       isPreview:isPreview,
-                      inputclean: '',
                       //倒序存入数组
                       postlist:res.result.data.reverse()
                     });
@@ -159,8 +150,8 @@ Page({
                     var showlikelist = new Array()
                     for(var i=0;i<that.data.postlist.length;i++){
                       var showlike
-                      for(var j=0;j<that.data.mylikelist.length;j++){
-                        if(that.data.postlist[i]._id == that.data.mylikelist[j].likeid && that.data.mylikelist[j].userid == that.data.openid){
+                      for(var j=0;j<mylikelist.length;j++){
+                        if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
                           showlike=false
                           break;
                         }else{
@@ -195,33 +186,23 @@ Page({
         if (res.result.data) {
           console.log(res.result.data[0].block)
           if(res.result.data[0].block == 'true'){
-            that.setData({
-              userblock : 'true',
-              dbhasuser : 'true'
-            })
+            userblock = 'true'
+            dbhasuser = 'true'
           }else{
-            that.setData({
-              userblock : 'false',
-              dbhasuser : 'true'
-            })
+            userblock = 'false'
+            dbhasuser = 'true'
           }
         }else{
-          that.setData({
-            userblock : 'false',
-            dbhasuser : 'false'
-          })
+          userblock = 'false'
+          dbhasuser = 'false'
         }
-        userlogin.userlogin(that.data.dbhasuser)
+        userlogin.userlogin(dbhasuser)
         .then(res =>{
-          that.setData({
-            userInfo : res,
-            hasUserInfo : 'true',
-            avatarurl :res.avatarUrl,
-            nickname : res.nickName,
-          })
+          userInfo = res
+          hasUserInfo = 'true'
           avatarurl = res.avatarUrl
           nickname = res.nickName
-          if (that.data.userblock == 'true') {
+          if (userblock == 'true') {
             wx.showModal({
               title: '用户已被封禁',
               content: '申诉请前往IN广理公众号,在后台回复申诉即可',
@@ -236,7 +217,7 @@ Page({
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+this.data.userblock
+      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+userblock
     })
     db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
       data:{
@@ -250,7 +231,7 @@ Page({
     wx.vibrateShort({type:"heavy"})
     console.log(e)
     console.log(e.currentTarget.dataset.id)
-    console.log(this.data.openid)
+    console.log(openid)
     //获取用户点赞列表
     wx.cloud.callFunction({
       name: 'getlikecount',
@@ -268,7 +249,7 @@ Page({
           data:{
             postuser:e.currentTarget.dataset.openid,
             likeid:e.currentTarget.dataset.id,
-            userid:this.data.openid
+            userid:openid
           }
         })
         var that = this
@@ -288,7 +269,7 @@ Page({
     likeminuus:function(e){
       wx.vibrateShort({type:"heavy"})
       console.log(e.currentTarget.dataset.id+'delete')
-      console.log(this.data.openid)
+      console.log(openid)
       //获取用户点赞列表
       wx.cloud.callFunction({
         name: 'getlikecount',
@@ -306,7 +287,7 @@ Page({
           .where({
             postuser:e.currentTarget.dataset.openid,
             likeid:e.currentTarget.dataset.id,
-            userid:this.data.openid
+            userid:openid
           })
           .remove()
           .then(res => {
@@ -324,8 +305,8 @@ Page({
     },
 
   openinputpage:function(){//打开上传信息页面
+    times = gettime.formatTimes(new Date()),
     this.setData({
-      times:gettime.formatTimes(new Date()),
       filter:'5rpx',
       showinputpage:'none',//隐藏打开页面按钮
       showinputinfo:'block',//打开上传信息页面
@@ -391,8 +372,8 @@ Page({
   //确认按钮，上传数据库
   upload:function(){
     wx.vibrateShort({type:"heavy"})
-    console.log(this.data.userblock)
-    if (this.data.userblock == 'true') {
+    console.log(userblock)
+    if (userblock == 'true') {
       wx.showToast({
         title:"用户已被封禁",
         image: '/images/fail.png',
@@ -419,13 +400,12 @@ Page({
         return;
       }
       //上传图片文件到数据库(有图片)
-      var times = this.data.times
       var name = nickname
       var userurl = avatarurl
       console.log(imgurl)
       if(imgurl){
         wx.cloud.uploadFile({
-          cloudPath: 'userpost/'+this.data.openid+'/'+times, // 上传至云端的路径
+          cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
           success: res => {//上传云端成功后向数据库添加记录
             // 返回文件 ID
@@ -531,6 +511,9 @@ Page({
   onPullDownRefresh:function(){
     wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
+    this.setData({
+      loadModal: true
+    })
     this.onShow()
   //模拟加载
     wx.hideNavigationBarLoading() //完成停止加载
@@ -541,19 +524,21 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    if(this.data.iforumlength<this.data.iforumcount+7 && this.data.iforumlength>this.data.iforumcount){
+    if(iforumlength<iforumcount+7 && iforumlength>iforumcount){
       this.setData({
-        iforumcount:this.data.iforumlength
+        loadModal: true
       })
+      iforumcount = iforumlength
       this.onShow()
-    }else if(this.data.iforumlength<this.data.iforumcount+7){
+    }else if(iforumlength<iforumcount+7){
       wx.showToast({
         title:"到底啦",
       })
     }else{
       this.setData({
-        iforumcount:this.data.iforumcount+7
+        loadModal: true
       })
+      iforumcount = iforumcount+7
       this.onShow()
     }
   },
