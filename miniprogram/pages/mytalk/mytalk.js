@@ -115,7 +115,9 @@ Page({
             }else{
               console.log('1')
               that.setData({
-                shownothing:'block'
+                shownothing:'block',
+                loadModal: false,
+                iforumlength:0
               })
               return;
             }
