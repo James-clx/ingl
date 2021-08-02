@@ -18,6 +18,7 @@ Page({
     isadmin:false,
     //rejectcount:0,
     iforumlength:'',//推文集合长度
+    likecount:0
   },
 
   /**
@@ -74,17 +75,14 @@ Page({
         })
         //获取点赞列表
         wx.cloud.callFunction({
-          name: 'getlike',
-          key: 'likelist',
+          name: 'getmylike',
+          key: 'mylikelist',
+          data:{
+            userid:openid
+          },
           complete: res => {
-            var likecount = 0
-            for (var i=0;i<res.result.data.length;i++) {
-              if(res.result.data[i].postuser == openid){
-                likecount = likecount+1
-              }
-            }
             that.setData({
-              likecount:likecount,
+              likecount:res.result.data.length,
               loadModal: true,
             })
           }
