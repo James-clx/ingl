@@ -1,3 +1,4 @@
+<!-- 置顶说说 -->
 <view class="push" wx:for="{{toppostlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{item.settop}}">
   <form data-id="{{item._id}}" data-openid="{{item._openid}}" data-likestate="{{showlikelist[index]}}" data-hot="{{item.hot}}" bindtap="totalkinfo">
     <view class="user">
@@ -21,12 +22,12 @@
   </form>
   <view class="pushinfo" bindtap="inputcomment">
 
-    <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus" style="width:50%">
+    <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" data-num="{{index}}" bindtap="likeminuus" style="width:50%">
       <image class="likeimg " src="/images/liked.png"></image>
       <text class="likes">{{item.likecount}}</text>
     </view>
 
-    <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd" style="width:50%">
+    <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" data-num="{{index}}" bindtap="likeadd" style="width:50%">
       <image class="likeimg" src="/images/like.png"></image>
       <text class="likes">{{item.likecount}}</text>
     </view>
@@ -39,6 +40,7 @@
 
 </view>
 
+<!-- 普通说说 -->
 <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{!item.settop}}">
   <form data-id="{{item._id}}" data-openid="{{item._openid}}" data-likestate="{{showlikelist[index]}}" data-hot="{{item.hot}}" bindtap="totalkinfo">
     <view class="user">
@@ -62,12 +64,12 @@
   </form>
   <view class="pushinfo" bindtap="inputcomment">
 
-    <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
-      <image class="likeimg " src="/images/liked.png"></image>
+    <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" data-num="{{index}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
+      <image class="likeimg" src="/images/liked.png"></image>
       <text class="likes">{{item.likecount}}</text>
     </view>
 
-    <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd" style="width:30%;margin-right:40%">
+    <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" data-num="{{index}}" bindtap="likeadd" style="width:30%;margin-right:40%">
       <image class="likeimg" src="/images/like.png"></image>
       <text class="likes">{{item.likecount}}</text>
     </view>

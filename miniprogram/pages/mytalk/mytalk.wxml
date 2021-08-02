@@ -85,12 +85,12 @@
     </form>
     <view class="pushinfo" bindtap="inputcomment">
 
-      <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeminuus" style="width:50%">
+      <view class="likebutton" wx:if="{{showlikelist[index] == false}}" data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" data-num="{{index}}" bindtap="likeminuus" style="width:50%">
         <image class="likeimg " src="/images/liked.png"></image>
         <text class="likes">{{item.likecount}}</text>
       </view>
 
-      <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" bindtap="likeadd" style="width:50%">
+      <view class="likebutton" wx:else data-id="{{item._id}}" data-openid="{{item._openid}}" data-like="{{item.likecount}}" data-num="{{index}}" bindtap="likeadd" style="width:50%">
         <image class="likeimg" src="/images/like.png"></image>
         <text class="likes">{{item.likecount}}</text>
       </view>

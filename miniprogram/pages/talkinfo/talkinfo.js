@@ -1,5 +1,6 @@
 import {htmlRequest} from "../../utils/html.js"
 var check = require('../../utils/check.js')
+var like = require('../../utils/like.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
@@ -196,34 +197,12 @@ Page({
   //点赞功能
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
-    console.log(e.currentTarget.dataset.id)
-    console.log(openid)
-    //获取用户点赞列表
-    wx.cloud.callFunction({
-      name: 'getlikecount',
-      data:{
-        likeid:e.currentTarget.dataset.id
-      },
-      complete: res => {
-        console.log(res)
-        db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-          data:{
-            likecount:res.result.data.length+Math.ceil(Math.random()*4)
-          }
-        })
-        db.collection("ilike").add({//添加到数据库
-          data:{
-            postuser:e.currentTarget.dataset.openid,
-            likeid:e.currentTarget.dataset.id,
-            userid:openid
-          }
-        })
-        var that = this
-        //重新抓取推文列表
-        that.onShow()
-      }
+    var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
+    this.setData({
+      [add]: false//用中括号把str括起来即可
     })
-    
+    like.utillikeadd(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
+    this.onShow()
     wx.showToast({
       mask:true,
       title:"点赞成功",
@@ -234,35 +213,12 @@ Page({
   //取消点赞功能
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
-    console.log(e.currentTarget.dataset.id+'delete')
-    console.log(openid)
-    //获取用户点赞列表
-    wx.cloud.callFunction({
-      name: 'getlikecount',
-      data:{
-        likeid:e.currentTarget.dataset.id
-      },
-      complete: res => {
-        console.log(res)
-        db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-          data:{
-            likecount:res.result.data.length-1
-          }
-        })
-        db.collection("ilike")//添加到数据库
-        .where({
-          postuser:e.currentTarget.dataset.openid,
-          likeid:e.currentTarget.dataset.id,
-          userid:openid
-        })
-        .remove()
-        .then(res => {
-          var that = this
-          //重新抓取推文列表
-          that.onShow()
-        })
-      }
+    var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
+    this.setData({
+      [add]: true//用中括号把str括起来即可
     })
+    like.utillikeminuus(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
+    this.onShow()
     wx.showToast({
       mask:true,
       title:"取消点赞",
@@ -319,6 +275,9 @@ Page({
         })
         return;
       }
+      this.setData({
+        inputclean : ''
+      })
       db.collection("icomment").add({//添加到数据库
         data:{
           commit:pushinput,
