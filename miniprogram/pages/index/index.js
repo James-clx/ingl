@@ -126,6 +126,13 @@ Page({
     })
   },
 
+  //跳转小理出行
+  toxiaolitrip:function(){
+    wx.navigateTo({
+      url: '../xiaolitrip/xiaolitrip',
+    })
+  },
+
   //饿了么
   eClick: function(e) {
     wx.navigateToMiniProgram({

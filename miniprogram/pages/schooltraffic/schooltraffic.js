@@ -34,36 +34,10 @@ Page({
     })
   },
 
-  totalk:function(){
-    wx.switchTab({
-      url: '../talk/talk',
-    })
-  },
-
-  //下载跳转
-  download:function(){
+  //跳转小理出行
+  toxiaolitrip:function(){
     wx.navigateTo({
-      url: '../download/download',
-    })
-  },
-
-  gowechatminipeogram:function(){
-    wx.navigateToMiniProgram({
-    appId: 'wx1129fc27588b7898',
-    path: '',
-    envVersion: 'release',// 打开正式版
-      success(res) {
-          // 打开成功
-      },
-      fail: function (err) {
-        console.log(err);
-      }
-    })
-  },
-
-  makePhoneCall: function (e) {
-    wx.makePhoneCall({
-      phoneNumber: e.currentTarget.dataset.id // 仅为示例，并非真实的电话号码
+      url: '../xiaolitrip/xiaolitrip',
     })
   },
 

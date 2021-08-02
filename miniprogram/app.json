@@ -12,7 +12,8 @@
     "pages/user/user",
     "pages/talkinfo/talkinfo",
     "pages/share/share",
-    "pages/auditpost/auditpost"
+    "pages/auditpost/auditpost",
+    "pages/xiaolitrip/xiaolitrip"
   ],
   "window": {
     "backgroundTextStyle": "light",

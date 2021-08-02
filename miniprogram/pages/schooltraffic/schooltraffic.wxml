@@ -111,20 +111,20 @@
   <view class="info">
 
     <view class="infotitle">
-      <functbg class="infofunct" title="小程序拼车" bindtap="gotowechatminipeogram" />
+      <functbg class="infofunct" title="小理出行"/>
     </view>
     <view class="fixcall">
       <view>
-        <text class="pinche">在IN广里生活小程序内发布拼车信息</text>
-        <text class="pinche">\n有需要的小伙伴在拼车信息下评论即可</text>
+        <text class="pinche">为同学提供即时或预约共同出行的平台</text>
+        <text class="pinche">\n一个容纳得下上万人的拼车群</text>
       </view>
-      <!-- <view>
-        <text class="pinche goto" bindtap="totalk">\n>>点击跳转至拼车模块</text> 
-      </view> -->
+      <view>
+        <text class="pinche goto" bindtap="toxiaolitrip">\n>>点击跳转至小理出行</text> 
+      </view>
     </view>
 
     <view class="infotitle">
-      <functbg class="infofunct" title="群内拼车" bindtap="gotowechatminipeogram" />
+      <functbg class="infofunct" title="群内拼车"/>
     </view>
     <view class="fixcall">
       <view>

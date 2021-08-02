@@ -45,6 +45,11 @@
             <view class="fo-other">
               <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg" data-id="http://tmp/KlKIjEvJY76scfc108da5ce0b12fd47eba574e06d846.jpg" bindtap="tapimg" />
             </view>
+
+            <text>小理出行</text>
+            <view class="fo-other">
+              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/xiaolitrip.png" bindtap="toxiaolitrip" />
+            </view>
           </view>
 
           <view class="footer">
