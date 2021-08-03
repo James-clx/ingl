@@ -12,7 +12,6 @@ let imgurl=''
 let avatarurl=''
 let nickname=''
 let gender=''
-var isPreview
 let checkinput = true
 let hasUserInfo =  false//缓存是否有用户信息
 let userInfo = []
@@ -63,7 +62,6 @@ Page({
   onShow() {
     let that = this;//将this另存为
     var login = wx.getStorageSync('hasUserInfo',login)
-    var isPreview
     wx.hideLoading()
     wx.cloud.callFunction({
       name:'getOpenid',
@@ -97,11 +95,6 @@ Page({
             userblock = res.result.data[0].block
           }
         })
-        //设置点击事件不刷新页面
-        if(that.data.isPreview){
-          isPreview=false
-          return;
-        }
         var userpostimglist = new Array();
         //获取数据条数
         db.collection('iforum').count({
@@ -143,7 +136,6 @@ Page({
                     }
                     inputclean = ''
                     that.setData({
-                      isPreview:isPreview,
                       //倒序存入数组
                       postlist:res.result.data.reverse()
                     });

@@ -3,7 +3,6 @@ var like = require('../../utils/like.js')
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
-var isPreview
 let userblock
 let openid
 let iforumcount = 7//推文显示条数
@@ -46,19 +45,13 @@ Page({
     wx.hideLoading()
     let that = this;//将this另存为
     //设置点击事件不刷新页面
-
-    if(that.data.isPreview){
-      isPreview=false
-      return;
-    }
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
         openid = res.result.openid
         that.setData({
           userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          getcommentlist:res.result.data,
-          isPreview:false,
+          getcommentlist:res.result.data
         })
         //查看是否管理员
         wx.cloud.callFunction({
