@@ -72,8 +72,6 @@ page{
   padding-bottom: 20rpx;
   margin-top: 22rpx;
   margin-bottom: 22rpx;
-  display: flex;
-  flex-direction:column;
 }
 .user{
   display: flex;

@@ -12,8 +12,6 @@ page{
   padding-bottom: 20rpx;
   margin-top: 10rpx;
   margin-bottom: 10rpx;
-  display: flex;
-  flex-direction:column;
 }
 .user{
   display: flex;

@@ -1,1 +1,1 @@
-<web-view :webview-styles="webviewStyles" src="http://dd.kgdgzx.cn/"></web-view>
+<web-view :webview-styles="webviewStyles" src="https://mp.weixin.qq.com/s/tN3gqvlcZ_RP_SgnvuKKrg"></web-view>
