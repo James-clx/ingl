@@ -1,0 +1,61 @@
+<!--
+此文件为开发者工具生成，生成时间: 2021/8/3 下午3:14:21
+使用方法：
+在 D:\clx\miniprogram\pages\talkinfo\talkinfo.wxml 引入模板
+
+```
+<import src="talkinfo.skeleton.wxml"/>
+<template is="skeleton" wx-if="{{loading}}" />
+```
+
+在 D:\clx\miniprogram\pages\talkinfo\talkinfo.wxss 中引入样式
+```
+@import "./talkinfo.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="push">
+      <view class="user">
+        <view>
+          <image class="userinfoimg sk-image"></image>
+        </view>
+        <view class="userinfotext">
+          <view class="nickname sk-transparent sk-text-14-2857-911 sk-text"></view>
+          <view class="userpushtime sk-transparent sk-text-14-2857-209 sk-text"></view>
+        </view>
+      </view>
+      <view class="userpush">
+        <text class="userpushtext sk-transparent sk-text-14-2857-22 sk-text" user-select="true"></text>
+        <view class="userpushimg">
+          <image class="itemimg sk-image" data-id="" mode="aspectFill"></image>
+        </view>
+      </view>
+      <view class="line" style="border: none;"></view>
+      <view class="cu-timeline" style="margin-bottom:90px">
+        <view class="cu-time sk-transparent sk-text-14-2857-366 sk-text" style="background-position-x: 50%;"></view>
+        <view style="text-align: center; color: rgb(223, 222, 222); background-position-x: 50%;" class="sk-transparent sk-text-14-2857-736 sk-text">还不赶紧说点什么！</view>
+      </view>
+      <view class="pushinfo" style="border: none;">
+        <view data-id="14139e126108d3b50211ad2f7ce400b1" data-like="3" data-num="0" data-openid="o1Q1N4xG4hUOsRWrEUpNz6lrSihU">
+          <image class="likeimg sk-image"></image>
+          <text class="likes sk-transparent sk-opacity"></text>
+        </view>
+        <view class="commentimg">
+          <image class="commentimg sk-image"></image>
+        </view>
+        <view class="pushinput">
+          <view auto-height="true" class="inputpost sk-image" placeholder="发表回复" value="true" style="height: 15.6px; border: none;"></view>
+        </view>
+        <text class="postsend sk-transparent sk-text-28-3333-17 sk-text" data-count="1" data-id="14139e126108d3b50211ad2f7ce400b1" style="background-position-x: 50%;">发表</text>
+      </view>
+      <view data-id="14139e126108d3b50211ad2f7ce400b1">
+        <view class="pushbutton" style="border: none;">
+          <image class="pushbuttonimg sk-image"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

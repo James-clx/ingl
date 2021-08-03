@@ -110,7 +110,7 @@
 
   <view class="info">
 
-    <view class="infotitle">
+    <!-- <view class="infotitle">
       <functbg class="infofunct" title="小理出行"/>
     </view>
     <view class="fixcall">
@@ -121,7 +121,7 @@
       <view>
         <text class="pinche goto" bindtap="toxiaolitrip">\n>>点击跳转至小理出行</text> 
       </view>
-    </view>
+    </view> -->
 
     <view class="infotitle">
       <functbg class="infofunct" title="群内拼车"/>

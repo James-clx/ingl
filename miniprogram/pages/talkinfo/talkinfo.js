@@ -197,12 +197,17 @@ Page({
   //点赞功能
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
+    //先改变图标
     var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
     this.setData({
       [add]: false//用中括号把str括起来即可
     })
+    //再更新数据
     like.utillikeadd(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
-    this.onShow()
+    .then(res => {
+      var that = this
+      that.onShow()
+    })
     wx.showToast({
       mask:true,
       title:"点赞成功",
@@ -213,12 +218,17 @@ Page({
   //取消点赞功能
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
+    //先改变图标
     var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
     this.setData({
       [add]: true//用中括号把str括起来即可
     })
+    //再更新数据
     like.utillikeminuus(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
-    this.onShow()
+    .then(res => {
+      var that = this
+      that.onShow()
+    })
     wx.showToast({
       mask:true,
       title:"取消点赞",
