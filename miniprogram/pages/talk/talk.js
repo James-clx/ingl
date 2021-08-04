@@ -336,18 +336,33 @@ Page({
         image: '/images/fail.png',
       })
       return;
-    }else{          
-      wx.showLoading({
-        title: '上传中',
-      })
+    }else{     
+      if(!hasUserInfo){
+        console.log(hasUserInfo)
+        wx.cloud.callFunction({
+          name:'getOpenid',
+          complete:res=>{
+            console.log(res.result.openid)
+            this.login(res.result.openid)
+            openid = res.result.openid
+            userInfo = wx.getStorageSync('userInfo',userInfo),
+            hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
+            avatarurl = wx.getStorageSync('avatarurl',avatarurl)
+            nickname = wx.getStorageSync('nickname',nickname)
+          }
+        })
+        return;
+      }
       if(info == ''&&imgurl == ''){
-        wx.hideLoading()
         wx.showToast({
           title:"不能什么都不写哦",
           image: '/images/fail.png',
         })
         return;
       }
+      wx.showLoading({
+        title: '上传中',
+      })
       if(checkinput == false){
         wx.hideLoading()
         wx.showToast({

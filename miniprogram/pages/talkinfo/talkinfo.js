@@ -1,15 +1,18 @@
 import {htmlRequest} from "../../utils/html.js"
 var check = require('../../utils/check.js')
 var like = require('../../utils/like.js')
+var userlogin = require('../../utils/login.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
 let nickname=''
+let hasUserInfo=''
 let pushinput=''//评论内容
 var isPreview
 let checkinput = true
 let userblock
+let dbhasuser
 let postid
 let openid
 let mylikelist = []//用户点赞数组
@@ -53,6 +56,7 @@ Page({
     let that = this;//将this另存为
     wx.hideLoading()
     nickname = wx.getStorageSync('nickname',nickname)
+    hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
     // 在右上角菜单 "...”中显示分享，menus可以单写转发shareAppMessage，分享朋友圈必须写shareAppMessage和shareTimeline
     wx.showShareMenu({
       withShareTicket: true,
@@ -246,6 +250,44 @@ Page({
     })
   },
 
+  login:function(openid){
+    var that = this
+    wx.cloud.callFunction({
+      name: 'getdbuser',
+      key: 'getdbuser',
+      data:{
+        id:openid
+      },
+      complete: res => {
+        if (res.result.data) {
+          console.log(res.result.data[0].block)
+          if(res.result.data[0].block == 'true'){
+            userblock = 'true'
+            dbhasuser = 'true'
+          }else{
+            userblock = 'false'
+            dbhasuser = 'true'
+          }
+        }else{
+          userblock = 'false'
+          dbhasuser = 'false'
+        }
+        userlogin.userlogin(dbhasuser)
+        .then(res =>{
+          hasUserInfo = 'true'
+          nickname = res.nickName
+          if (userblock == 'true') {
+            wx.showModal({
+              title: '用户已被封禁',
+              content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+              showCancel:false
+            })
+          }
+        })
+      }
+    })
+  },
+
   //获取输入框数据
   pushinput:function(event){
     pushinput=event.detail.value
@@ -266,17 +308,30 @@ Page({
       })
       return;
     }else{
-      wx.showLoading({
-        title: '上传中',
-      })
+      if(!hasUserInfo){
+        console.log(hasUserInfo)
+        wx.cloud.callFunction({
+          name:'getOpenid',
+          complete:res=>{
+            console.log(res.result.openid)
+            this.login(res.result.openid)
+            openid = res.result.openid
+            hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
+            nickname = wx.getStorageSync('nickname',nickname)
+          }
+        })
+        return;
+      }      
       if(pushinput == ''){
-        wx.hideLoading()
         wx.showToast({
           title:"不能什么都不写哦",
           image: '/images/fail.png',
         })
         return;
       }
+      wx.showLoading({
+        title: '上传中',
+      })
       if(checkinput == false){
         wx.hideLoading()
         wx.showToast({

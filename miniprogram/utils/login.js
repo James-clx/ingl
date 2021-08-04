@@ -3,7 +3,7 @@ function userlogin(dbhasuser){
     console.log(dbhasuser)
     wx.showModal({//模态框确认获取用户数据
       showCancel:false,
-      title: '提示',
+      title: '登录',
       content: 'IOS端手机可能会出现样式错乱 \n如遇到此情况请更新手机系统',
       success (res) {//确认授权后修改后端数据
         if (res.confirm) {
