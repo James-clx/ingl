@@ -30,6 +30,7 @@ Page({
    */
   data: {
     toppostlist:[],
+    toppostlistcount:0,
     postlist:[],//推文数组
     showlikelist:[],//是否显示已点赞
     showTalklogin :'block',//页面展示信息授权模态框
@@ -81,7 +82,8 @@ Page({
           key: 'toppostlist',
           complete: res => {
             that.setData({
-              toppostlist:res.result.data
+              toppostlist:res.result.data,
+              toppostlistcount:res.result.data.length
             })
           }
         })
@@ -141,10 +143,16 @@ Page({
                     });
                     
                     var showlikelist = new Array()
-                    for(var i=0;i<that.data.postlist.length;i++){
+                    var postlikelist = that.data.postlist
+                    //将置顶说说倒序并插入postlist数组头部
+                    var toppost = that.data.toppostlist.reverse()
+                    for(var i = 0 ; i < toppost.length ; i++){
+                      postlikelist.unshift(toppost[i])
+                    }
+                    for(var i=0 ; i<postlikelist.length ; i++){
                       var showlike
                       for(var j=0;j<mylikelist.length;j++){
-                        if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
+                        if(postlikelist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
                           showlike=false
                           break;
                         }else{
@@ -414,7 +422,7 @@ Page({
             });
             imgurl=''
             wx.showToast({
-              title:"已提交审核",
+              title:"发布成功",
             })
           },
           fail: console.error//执行失败报错
