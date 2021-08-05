@@ -46,7 +46,6 @@ Page({
         this.setData({
           swiperHeight: rpxHeight
         })
-        console.log(rpxHeight)
       }
     })
   },
@@ -116,7 +115,6 @@ Page({
     //e.currentTarget.dataset.id
     var map = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg'
     const images = await cloudDownLoad('',[map])
-    console.log(images)
     this.setData({
       img:images
     })

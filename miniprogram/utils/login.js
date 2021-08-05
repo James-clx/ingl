@@ -1,6 +1,5 @@
 function userlogin(dbhasuser){
   return new Promise((resolve, reject) => {
-    console.log(dbhasuser)
     wx.showModal({//模态框确认获取用户数据
       showCancel:false,
       title: '登录',
@@ -20,7 +19,6 @@ function userlogin(dbhasuser){
                     gender:res.userInfo.gender
                   }
                 })
-                console.log('add')
               }
               resolve(res.userInfo);
               wx.setStorageSync('userInfo', res.userInfo)
@@ -30,7 +28,6 @@ function userlogin(dbhasuser){
             },
             fail: (res) =>{//拒绝后返回功能页面
               reject("调用失败"); 
-              console.log('false:'+res)
               wx.switchTab({
                 url: '/pages/index/index'
               })

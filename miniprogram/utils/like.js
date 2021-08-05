@@ -25,7 +25,6 @@ function utillikeadd(id,openid,useropenid){
         })
       }
     })
-    console.log("finish")
   })
 }
 
@@ -54,7 +53,6 @@ function utillikeminuus(id,openid,useropenid){
         .remove()
       }
     })
-    console.log("finish")
   })
 }
 

@@ -32,8 +32,6 @@ Page({
     this.setData({
       img:images
     })
-    console.log(this.data.img)
-    console.log(e.currentTarget.dataset.id)
     wx.previewImage({
       current: this.data.img[e.currentTarget.dataset.id], // 当前显示图片的http链接
       urls: this.data.img // 需要预览的图片http链接列表

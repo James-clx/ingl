@@ -120,7 +120,7 @@
 <!-- 打开上传信息页面悬浮按钮 -->
 <view style="display:{{showinputpage}}" bindtap="openinputpage" wx:if="{{showallinput}}">
   <view class="pushbutton">
-    <image class="pushbuttonimg" src="/images/note.png"></image>
+    <image class="pushbuttonimg" src="/images/post.png"></image>
   </view>
 </view>
 

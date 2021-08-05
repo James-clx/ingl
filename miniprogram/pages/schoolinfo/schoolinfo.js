@@ -53,7 +53,6 @@ Page({
           // 打开成功
       },
       fail: function (err) {
-        console.log(err);
       }
     })
   },

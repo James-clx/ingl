@@ -85,7 +85,6 @@ Page({
             that.setData({
               iforumlength:res.result.total
             })
-            console.log(that.data.iforumlength)
             if (that.data.iforumlength<7) {
               that.data.iforumcount = that.data.iforumlength
             }
@@ -134,14 +133,12 @@ Page({
 
   //拒绝按钮
   rejectpost:function(e){
-    console.log(e.currentTarget.dataset.id)
     wx.cloud.callFunction({
       name: 'changereject',
       data:{
         id:e.currentTarget.dataset.id
       },  
       complete: res => {
-        console.log('true:'+res)
       }
     })     
     this.onShow()
@@ -191,7 +188,6 @@ Page({
         id:e.currentTarget.dataset.info._id
       },  
       complete: res => {
-        console.log(res)
       }
     })     
     this.onShow()

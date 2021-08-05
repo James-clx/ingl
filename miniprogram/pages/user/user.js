@@ -37,7 +37,6 @@ Page({
       name:'getOpenid',
       complete:res=>{
         if(!login){
-          console.log(!login)
           that.login(res.result.openid)
         }
         openid = res.result.openid
@@ -124,7 +123,6 @@ Page({
       },
       complete: res => {
         if (res.result.data) {
-          console.log(res.result.data[0].block)
           if(res.result.data[0].block == 'true'){
             userblock = 'true'
             dbhasuser = 'true'

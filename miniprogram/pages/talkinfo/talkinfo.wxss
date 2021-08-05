@@ -141,8 +141,6 @@ page{
 }
 /* 悬浮按钮图片 */
 .pushbuttonimg{
-  margin-top: 8rpx;
-  margin-left: 8rpx;
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
 }

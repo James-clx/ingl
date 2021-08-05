@@ -107,7 +107,6 @@ Page({
                 shownothing:'none'
               })
             }else{
-              console.log('1')
               that.setData({
                 shownothing:'block',
                 loadModal: false,
@@ -148,7 +147,6 @@ Page({
                     for(var i=0;i<res.result.data.length;i++){
                       if(userpostimglist[i]) {//判断有无图片信息
                         res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                        // console.log(userpostimglist[i])
                       }else{
                         continue;
                       }
@@ -188,8 +186,6 @@ Page({
   //置顶推文
   settop:function(e){
     wx.vibrateShort({type:"heavy"})
-    console.log(e.detail.value)
-    console.log(e.currentTarget.dataset.id)
     db.collection("iforum").doc(e.currentTarget.dataset.id).update({
       data:{
         settop:e.detail.value
@@ -288,7 +284,7 @@ Page({
     wx.showToast({
       mask:true,
       title:"点赞成功",
-      image: '/images/like.png',
+      image: '/images/liked.png',
     })
   },
 

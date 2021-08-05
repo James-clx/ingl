@@ -98,10 +98,10 @@ page{
 }
 /* 悬浮按钮图片 */
 .pushbuttonimg{
-  margin-top: 10rpx;
-  margin-left: 10rpx;
-  width: 80rpx;
-  height: 80rpx;
+  margin-top: 13rpx;
+  margin-left: 20rpx;
+  width: 70rpx;
+  height: 70rpx;
 }
 
 /*页面最外层view*/
@@ -119,7 +119,7 @@ page{
   position: fixed;
   bottom: 0rpx;
   width: 100%;
-  height: 650rpx;
+  height: 680rpx;
   background-color: white;
 }
 /* 输入框 */

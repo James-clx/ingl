@@ -7,7 +7,6 @@ import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
-let info=''//发布推文页面输入框数据
 let imgurl=''
 let avatarurl=''
 let nickname=''
@@ -39,6 +38,8 @@ Page({
     filter:'0rpx',//主页面模糊
     loadModal:false,
     showallinput:false,
+    Img:"",
+    info:''//发布推文页面输入框数据
   },
 
   /**
@@ -63,12 +64,11 @@ Page({
   onShow() {
     let that = this;//将this另存为
     var login = wx.getStorageSync('hasUserInfo',login)
-    wx.hideLoading()
+    //wx.hideLoading()
     wx.cloud.callFunction({
       name:'getOpenid',
       complete:res=>{
         if(!login){
-          console.log(!login)
           that.login(res.result.openid)
         }
         openid = res.result.openid
@@ -131,7 +131,6 @@ Page({
                     for(var i=0;i<res.result.data.length;i++){
                       if(userpostimglist[i]) {//判断有无图片信息
                         res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                        // console.log(userpostimglist[i])
                       }else{
                         continue;
                       }
@@ -185,7 +184,6 @@ Page({
       },
       complete: res => {
         if (res.result.data) {
-          console.log(res.result.data[0].block)
           if(res.result.data[0].block == 'true'){
             userblock = 'true'
             dbhasuser = 'true'
@@ -244,7 +242,7 @@ Page({
     wx.showToast({
       mask:true,
       title:"点赞成功",
-      image: '/images/like.png',
+      image: '/images/liked.png',
     })
   },
 
@@ -301,7 +299,6 @@ Page({
   //选择图片
   previewImage: function(){
     var that = this;
-    console.log(that.data.Img)
     wx.previewImage({
       current: that.data.Img1,
       urls:that.data.Img,
@@ -310,7 +307,9 @@ Page({
 
   //发布推文页面输入框数据
   handleinfo:function(event){
-    info=event.detail.value
+    this.setData({
+      info:event.detail.value
+    })
     check.checktext(event.detail.value)
     .then(res => {
       checkinput = res
@@ -323,7 +322,6 @@ Page({
     wx.chooseImage({
       count: 1,
       success:function(res) {
-        console.log(res.tempFilePaths[0])
         imgurl = res.tempFilePaths[0]
         that.setData({
           Img:res.tempFilePaths,
@@ -337,7 +335,6 @@ Page({
   //确认按钮，上传数据库
   upload:function(){
     wx.vibrateShort({type:"heavy"})
-    console.log(userblock)
     if (userblock == 'true') {
       wx.showToast({
         title:"用户已被封禁",
@@ -346,11 +343,9 @@ Page({
       return;
     }else{     
       if(!hasUserInfo){
-        console.log(hasUserInfo)
         wx.cloud.callFunction({
           name:'getOpenid',
           complete:res=>{
-            console.log(res.result.openid)
             this.login(res.result.openid)
             openid = res.result.openid
             userInfo = wx.getStorageSync('userInfo',userInfo),
@@ -361,7 +356,7 @@ Page({
         })
         return;
       }
-      if(info == ''&&imgurl == ''){
+      if(this.data.info == ''&&imgurl == ''){
         wx.showToast({
           title:"不能什么都不写哦",
           image: '/images/fail.png',
@@ -382,18 +377,16 @@ Page({
       //上传图片文件到数据库(有图片)
       var name = nickname
       var userurl = avatarurl
-      console.log(imgurl)
       if(imgurl){
         wx.cloud.uploadFile({
           cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
           success: res => {//上传云端成功后向数据库添加记录
             // 返回文件 ID
-            console.log(res.fileID+'success')
             var posturl = res.fileID
             db.collection("iforum").add({//添加到数据库
               data:{
-                info:info,
+                info:this.data.info,
                 imgurl:posturl,
                 pushtime:gettime.formatTime(new Date()),
                 avatarurl:userurl,
@@ -405,32 +398,13 @@ Page({
                 reject:false
               }
             })
-            wx.hideLoading()
-            wx.showLoading({
-              title: '刷新中',
-            })
-            //重新抓取推文列表
-            this.onShow()
-            this.setData({
-              //倒序存入数组
-              Img:"",
-              info:'',
-              //发布后关闭发布页面
-              filter:'0rpx',
-              showinputinfo:'none',//打开上传信息页面
-              showinputpage:'block',//隐藏打开页面按钮
-            });
-            imgurl=''
-            wx.showToast({
-              title:"发布成功",
-            })
           },
           fail: console.error//执行失败报错
         })
       }else{//没有上传图片
         db.collection("iforum").add({//添加到数据库
           data:{
-            info:info,
+            info:this.data.info,
             pushtime:gettime.formatTime(new Date()),
             avatarurl:userurl,
             nickname:name,
@@ -441,27 +415,29 @@ Page({
             reject:false
           }
         })
-        //重新抓取推文列表
-        this.onShow()
-        this.setData({
-          //倒序存入数组
-          Img:"",
-          info:'',
-          //发布后关闭发布页面
-          filter:'0rpx',
-          showinputinfo:'none',//打开上传信息页面
-          showinputpage:'block',//隐藏打开页面按钮
-        });
-        //清空图片数组
-        imgurl='',
-        wx.showToast({
-          title:"发布成功",
-        })
       }
+      wx.hideLoading()
+      //重新抓取推文列表
+      this.onShow()
+      //清空上传信息数据
+      imgurl='',
+      this.setData({
+        //发布后关闭发布页面
+        info:'',
+        Img:"",
+        filter:'0rpx',
+        showinputinfo:'none',//打开上传信息页面
+        showinputpage:'block',//隐藏打开页面按钮
+      });
+      wx.showToast({
+        title:"发布成功",
+      })
     }
   },
+
   //关闭页面
   close:function(){
+    imgurl='',
     this.setData({
       info:'',
       Img:"",

@@ -109,7 +109,6 @@ Page({
                 likeid:postid
               },
               complete: res => {
-                console.log(res.result.data)
                 mylikelist = res.result.data
                 var userpostimglist = new Array();
                 //获取数据条数
@@ -137,7 +136,6 @@ Page({
                         for(var i=0;i<res.result.data.length;i++){
                           if(userpostimglist[i]) {//判断有无图片信息
                             res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                            // console.log(userpostimglist[i])
                           }else{
                             continue;
                           }
@@ -188,7 +186,6 @@ Page({
     let imgurl=e.currentTarget.dataset.id+''
     for(var i=0;i<this.data.postlist.length;i++){
       if(imgurl==this.data.postlist[i].imgurl){
-        console.log(this.data.postlist[i].imgurl)
         const userpostimg = await cloudDownLoad('',[this.data.postlist[i].imgurl])//调用缓存app.js
         wx.previewImage({
           current: '', // 当前显示图片的http链接
@@ -215,7 +212,7 @@ Page({
     wx.showToast({
       mask:true,
       title:"点赞成功",
-      image: '/images/like.png',
+      image: '/images/liked.png',
     })
   },
 
@@ -260,7 +257,6 @@ Page({
       },
       complete: res => {
         if (res.result.data) {
-          console.log(res.result.data[0].block)
           if(res.result.data[0].block == 'true'){
             userblock = 'true'
             dbhasuser = 'true'
@@ -309,11 +305,9 @@ Page({
       return;
     }else{
       if(!hasUserInfo){
-        console.log(hasUserInfo)
         wx.cloud.callFunction({
           name:'getOpenid',
           complete:res=>{
-            console.log(res.result.openid)
             this.login(res.result.openid)
             openid = res.result.openid
             hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
