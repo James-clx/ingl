@@ -38,6 +38,7 @@ Page({
       complete:res=>{
         if(!login){
           that.login(res.result.openid)
+          return;
         }
         openid = res.result.openid
         hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
@@ -122,7 +123,7 @@ Page({
         id:openid
       },
       complete: res => {
-        if (res.result.data) {
+        if (res.result.data != '') {
           if(res.result.data[0].block == 'true'){
             userblock = 'true'
             dbhasuser = 'true'
@@ -140,6 +141,7 @@ Page({
           that.setData({
             userInfo : res,
           })
+          that.onShow()
           if (that.data.userblock == 'true') {
             wx.showModal({
               title: '用户已被封禁',

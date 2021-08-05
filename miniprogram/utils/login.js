@@ -1,3 +1,4 @@
+const db=wx.cloud.database()
 function userlogin(dbhasuser){
   return new Promise((resolve, reject) => {
     wx.showModal({//模态框确认获取用户数据
