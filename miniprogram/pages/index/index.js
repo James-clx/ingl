@@ -11,7 +11,8 @@ Page({
     lgimgHeight: 0,
     xsimgHeight: 0,
     swiperHeight:0,
-    current:0
+    current:0,
+    cloudimg:[]
   },
 
     // 事件处理函数
@@ -83,7 +84,11 @@ Page({
         })
       }
     })
-  
+    var map = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg'
+    const cloudimages = await cloudDownLoad('',[map])
+    this.setData({
+      cloudimg:cloudimages
+    })
   },
 
   toschoolinfo:function(){
@@ -113,14 +118,10 @@ Page({
   async tapimg(e){
     wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
-    var map = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg'
-    const images = await cloudDownLoad('',[map])
-    this.setData({
-      img:images
-    })
+    
     wx.previewImage({
-      current: this.data.img[e.currentTarget.dataset.id], // 当前显示图片的http链接
-      urls: this.data.img, // 需要预览的图片http链接列表
+      current: this.data.cloudimg[e.currentTarget.dataset.id], // 当前显示图片的http链接
+      urls: this.data.cloudimg, // 需要预览的图片http链接列表
     })
   },
 

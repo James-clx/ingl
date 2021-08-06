@@ -3,7 +3,16 @@ import{cloudDownLoad}from"../../utils/cloud.js"
 
 Page({
   data: {
-    img:['cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png']
+    img:[]
+  },
+
+  async onLoad(option){
+    var wmxycz = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/wmxycz.png'
+    var liantong = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png'
+    const images = await cloudDownLoad('',[wmxycz,liantong])
+    this.setData({
+      img:images
+    })
   },
 
 // 获取屏幕高度
@@ -22,15 +31,9 @@ Page({
   },
   
   //点击图片放大
-  async tapimg(e){
+  tapimg(e){
     wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
-    var wmxycz = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/wmxycz.png'
-    var liantong = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png'
-    const images = await cloudDownLoad('',[wmxycz,liantong])
-    this.setData({
-      img:images
-    })
     wx.previewImage({
       current: this.data.img[e.currentTarget.dataset.id], // 当前显示图片的http链接
       urls: this.data.img // 需要预览的图片http链接列表
@@ -62,11 +65,7 @@ Page({
       phoneNumber: e.currentTarget.dataset.id // 仅为示例，并非真实的电话号码
     })
   },
-
-  onLoad:function (option){
-    
-  },
-
+  
   onShareAppMessage: function () {
     return {
       title: 'IN广理',

@@ -125,20 +125,10 @@ Page({
                         postid:postid
                       },
                       async complete(res){
-                        for(var i=that.data.iforumcount;i<res.result.data.length;i++){
-                          if(res.result.data[i].imgurl) {//判断有无图片信息
-                            const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
-                            userpostimglist.push(userpostimg)//将图片缓存信息存入数组
-                          }else{
-                            continue;
-                          }
-                        }
-                        for(var i=0;i<res.result.data.length;i++){
-                          if(userpostimglist[i]) {//判断有无图片信息
-                            res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                          }else{
-                            continue;
-                          }
+                        if(res.result.data[0].imgurl) {//判断有无图片信息
+                          const userpostimg = await cloudDownLoad('',[res.result.data[0].imgurl])//调用缓存app.js
+                          userpostimglist = userpostimg//将图片缓存信息存入数组
+                          res.result.data[0].imgurl = userpostimglist//使用缓存的url替换本地图片url
                         }
                         that.setData({
                           inputclean: '',
@@ -184,15 +174,12 @@ Page({
     })
     wx.vibrateShort({type:"heavy"})
     let imgurl=e.currentTarget.dataset.id+''
-    for(var i=0;i<this.data.postlist.length;i++){
-      if(imgurl==this.data.postlist[i].imgurl){
-        const userpostimg = await cloudDownLoad('',[this.data.postlist[i].imgurl])//调用缓存app.js
-        wx.previewImage({
-          current: '', // 当前显示图片的http链接
-          urls: userpostimg // 需要预览的图片http链接列表
-        })
-      }
-    }
+    var userpostimg = new Array();
+    userpostimg[0] = imgurl
+    wx.previewImage({
+      current: '', // 当前显示图片的http链接
+      urls: userpostimg // 需要预览的图片http链接列表
+    })
   },
 
   //点赞功能
@@ -304,6 +291,7 @@ Page({
       })
       return;
     }else{
+      console.log(hasUserInfo)
       if(!hasUserInfo){
         wx.cloud.callFunction({
           name:'getOpenid',
