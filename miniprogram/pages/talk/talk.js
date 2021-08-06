@@ -380,6 +380,7 @@ Page({
       var name = nickname
       var userurl = avatarurl
       if(imgurl){
+        var info = this.data.info
         wx.cloud.uploadFile({
           cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
@@ -388,7 +389,7 @@ Page({
             var posturl = res.fileID
             db.collection("iforum").add({//添加到数据库
               data:{
-                info:this.data.info,
+                info:info,
                 imgurl:posturl,
                 pushtime:gettime.formatTime(new Date()),
                 avatarurl:userurl,
