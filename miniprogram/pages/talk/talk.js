@@ -435,6 +435,12 @@ Page({
       wx.showToast({
         title:"发布成功",
       })
+      wx.requestSubscribeMessage({
+        tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+        success (res) { 
+          console.log(res)
+        }
+      })
     }
   },
 

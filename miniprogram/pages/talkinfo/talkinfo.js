@@ -1,6 +1,7 @@
 import {htmlRequest} from "../../utils/html.js"
 var check = require('../../utils/check.js')
 var like = require('../../utils/like.js')
+var userremind = require('../../utils/remind.js')
 var userlogin = require('../../utils/login.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
 const app=getApp()
@@ -338,6 +339,7 @@ Page({
         }
       })
       //发布评论后重新抓取评论列表
+      userremind.sendremind(this.data.postlist[0].openid,this.data.postlist[0].info,name,pushinput)
       this.onShow()
     }
   },
