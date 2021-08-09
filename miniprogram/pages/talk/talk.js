@@ -230,10 +230,19 @@ Page({
   //点赞功能
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
+    var num = e.currentTarget.dataset.num - this.data.toppostlist.length
+    var countadd
+    if (num < 0) {
+      num = this.data.toppostlist.length + num
+      countadd = "toppostlist[" + num + "].likecount"//重点在这里，组合出一个字符串
+    }else{
+      countadd = "postlist[" + num + "].likecount"//重点在这里，组合出一个字符串
+    }
     //先改变图标
     var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
     this.setData({
-      [add]: false//用中括号把str括起来即可
+      [add]: false,//用中括号把str括起来即可
+      [countadd] : this.data.postlist[e.currentTarget.dataset.num].likecount +1
     })
     //再更新数据
     like.utillikeadd(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
@@ -242,7 +251,8 @@ Page({
       that.onShow()
     })
     wx.showToast({
-      mask:true,
+      mask:'true',
+      duration:1500,
       title:"点赞成功",
       image: '/images/liked.png',
     })
@@ -251,10 +261,19 @@ Page({
   //取消点赞功能
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
+    var num = e.currentTarget.dataset.num - this.data.toppostlist.length
+    var countadd
+    if (num < 0) {
+      num = this.data.toppostlist.length + num
+      countadd = "toppostlist[" + num + "].likecount"//重点在这里，组合出一个字符串
+    }else{
+      countadd = "postlist[" + num + "].likecount"//重点在这里，组合出一个字符串
+    }
     //先改变图标
     var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
     this.setData({
-      [add]: true//用中括号把str括起来即可
+      [add]: true,//用中括号把str括起来即可
+      [countadd] : this.data.postlist[e.currentTarget.dataset.num].likecount -1
     })
     //再更新数据
     like.utillikeminuus(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
@@ -263,7 +282,8 @@ Page({
       that.onShow()
     })
     wx.showToast({
-      mask:true,
+      mask:'true',
+      duration:1500,
       title:"取消点赞",
       image: '/images/like.png',
     })

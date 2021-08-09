@@ -1,6 +1,18 @@
 var gettime=require('./times.js')
 
 function sendremind(openid,postinfo,username,info){
+  postinfo = postinfo
+  username = username
+  info = info
+  if(postinfo.length>20){
+    postinfo=longtextcharge(postinfo)
+  }
+  if(username.length>20){
+    username=longtextcharge(username)
+  }
+  if(info.length>20){
+    info=longtextcharge(info)
+  }
   wx.cloud.callFunction({
     // 要调用的云函数名称
     name: 'userremind',
@@ -23,6 +35,14 @@ function sendremind(openid,postinfo,username,info){
   })
 }
 
+function longtextcharge(text){
+  var chargedtext
+  text = text.slice(0,15)
+  chargedtext = text + '...'
+  return chargedtext
+}
+
 export{
-  sendremind
+  sendremind,
+  longtextcharge
 }

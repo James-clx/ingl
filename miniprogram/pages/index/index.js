@@ -175,6 +175,14 @@ Page({
       path: '/pages/index/index', // 点击访问的页面
       imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
     }
+  },
+  // 分享朋友圈，前提是必须有转发onShareAppMessage
+  onShareTimeline:function(){
+    return{
+      imageUrl:'/images/logo.jpg',
+      title: 'IN广理',
+      //query: '' //页面参数 如： ？title='123'
+    }
   }
 })
 

@@ -188,8 +188,10 @@ Page({
     wx.vibrateShort({type:"heavy"})
     //先改变图标
     var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
+    var countlike = "postlist[" + e.currentTarget.dataset.num +"].likecount"//重点在这里，组合出一个字符串
     this.setData({
-      [add]: false//用中括号把str括起来即可
+      [add]: false,//用中括号把str括起来即可
+      [countlike] : this.data.postlist[e.currentTarget.dataset.num].likecount +1
     })
     //再更新数据
     like.utillikeadd(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
@@ -198,7 +200,8 @@ Page({
       that.onShow()
     })
     wx.showToast({
-      mask:true,
+      mask:'true',
+      duration:1500,
       title:"点赞成功",
       image: '/images/liked.png',
     })
@@ -209,8 +212,10 @@ Page({
     wx.vibrateShort({type:"heavy"})
     //先改变图标
     var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
+    var countlike = "postlist[" + e.currentTarget.dataset.num +"].likecount"//重点在这里，组合出一个字符串
     this.setData({
-      [add]: true//用中括号把str括起来即可
+      [add]: true,//用中括号把str括起来即可
+      [countlike] : this.data.postlist[e.currentTarget.dataset.num].likecount -1
     })
     //再更新数据
     like.utillikeminuus(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
@@ -219,7 +224,8 @@ Page({
       that.onShow()
     })
     wx.showToast({
-      mask:true,
+      mask:'true',
+      duration:1500,
       title:"取消点赞",
       image: '/images/like.png',
     })
@@ -284,6 +290,8 @@ Page({
   //评论上传到数据库
   uploadcomment:function(e){
     wx.vibrateShort({type:"heavy"})
+    var input = pushinput
+    pushinput = ''
     var name = nickname
     if (userblock == 'true') {
       wx.showToast({
@@ -292,7 +300,6 @@ Page({
       })
       return;
     }else{
-      console.log(hasUserInfo)
       if(!hasUserInfo){
         wx.cloud.callFunction({
           name:'getOpenid',
@@ -305,7 +312,7 @@ Page({
         })
         return;
       }      
-      if(pushinput == ''){
+      if(input == ''){
         wx.showToast({
           title:"不能什么都不写哦",
           image: '/images/fail.png',
@@ -321,6 +328,7 @@ Page({
           icon: 'none',
           title: '文字违规',
         })
+        pushinput = input
         return;
       }
       this.setData({
@@ -328,7 +336,7 @@ Page({
       })
       db.collection("icomment").add({//添加到数据库
         data:{
-          commit:pushinput,
+          commit:input,
           postid:e.currentTarget.dataset.id,//获取前端推文的id
           postuser:name
         }
@@ -338,8 +346,18 @@ Page({
           commentcount:e.currentTarget.dataset.count+1
         }
       })
+      //用户订阅事件
+      if (openid == this.data.postlist[0]._openid) {
+        wx.requestSubscribeMessage({
+          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+          success (res) { 
+            console.log(res)
+          }
+        })
+      }else{
+        userremind.sendremind(this.data.postlist[0]._openid,this.data.postlist[0].info,name,input)
+      }
       //发布评论后重新抓取评论列表
-      userremind.sendremind(this.data.postlist[0].openid,this.data.postlist[0].info,name,pushinput)
       this.onShow()
     }
   },

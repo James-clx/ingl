@@ -7,7 +7,7 @@ exports.main = async (event, context) => {
   try {
     const result = await cloud.openapi.subscribeMessage.send({
         "touser": event.openid,
-        "page": 'pages/user/user',
+        "page": 'pages/mytalk/mytalk',
         "lang":"zh_CN",
         "data": {
           "time3": {
@@ -23,8 +23,8 @@ exports.main = async (event, context) => {
             "value": event.info
           }
         },
-        "templateId": 'TEMPLATE_ID',
-        "miniprogramState": 'developer'
+        "templateId": 'COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA',
+        "miniprogramState": 'formal'
       })
     return result
   } catch (err) {
