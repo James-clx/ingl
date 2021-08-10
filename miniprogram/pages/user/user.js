@@ -1,11 +1,13 @@
 import {clearCacheSingle,clearCacheAll} from "../../utils/cache.js"
 import {htmlRequest} from "../../utils/html.js"
 var userlogin = require('../../utils/login.js')
+var getuserinfo = require('../../utils/inside_api.js')
+import {getOpenid} from "../../utils/inside_api.js"
 const db=wx.cloud.database()
 let dbhasuser
 let userblock
-let hasUserInfo =  false//缓存是否有用户信息
-let openid = ''//用户openid
+let hasUserInfo = false//缓存是否有用户信息
+let openid = getOpenid()//用户openid
 
 Page({
 
@@ -33,124 +35,101 @@ Page({
   onShow: function () {
     var that = this
     var login = wx.getStorageSync('hasUserInfo',login)
+    if(!login){
+      that.login(openid)
+      return;
+    }
+    hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
+    that.setData({
+      userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
+    })
+    //是否管理员
     wx.cloud.callFunction({
-      name:'getOpenid',
-      complete:res=>{
-        if(!login){
-          that.login(res.result.openid)
-          return;
+      name: 'getadmin',
+      key: 'isadmin',
+      complete: res => {
+        var isadmin = false
+        for(var i=0;i<res.result.data.length;i++){
+          if(openid == res.result.data[i].useropenid){
+            isadmin = true
+            break;
+          }
         }
-        openid = res.result.openid
-        hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
         that.setData({
-          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
+          isadmin:isadmin
         })
-        //是否管理员
-        wx.cloud.callFunction({
-          name: 'getadmin',
-          key: 'isadmin',
-          complete: res => {
-            var isadmin = false
-            for(var i=0;i<res.result.data.length;i++){
-              if(openid == res.result.data[i].useropenid){
-                isadmin = true
-                break;
-              }
-            }
-            that.setData({
-              isadmin:isadmin
-            })
-          }
-        })
-        wx.cloud.callFunction({
-          name: 'getdbuser',
-          key: 'getdbuser',
-          data:{
-            id:openid
-          },
-          complete: res => {
-            userblock = res.result.data[0].block
-          }
-        })
-        //获取点赞列表
-        wx.cloud.callFunction({
-          name: 'getmylike',
-          key: 'mylikelist',
-          data:{
-            userid:openid
-          },
-          complete: res => {
-            that.setData({
-              likecount:res.result.data.length,
-              loadModal: true,
-            })
-          }
-        })     
-
-        db.collection('iforum')
-        .where({
-          _openid:openid
-        })
-        .count({
-          success(res) {
-            that.setData({
-              iforumlength:res.total,
-              shownothing:'none'
-            })
-          }
-        })
-        //未审核数量
-        // wx.cloud.callFunction({
-        //   name: 'getfalseaudit',
-        //   key: 'rejectcount',
-        //   complete: res => {
-        //     console.log(res.result.total)
-        //     that.setData({
-        //       rejectcount:res.result.total
-        //     })
-        //   }
-        // })     
       }
     })
+    getuserinfo.getBlock(openid)
+    .then(res => {
+      userblock = res
+    })
+    //获取点赞列表
+    wx.cloud.callFunction({
+      name: 'getmylike',
+      key: 'mylikelist',
+      data:{
+        userid:openid
+      },
+      complete: res => {
+        that.setData({
+          likecount:res.result.data.length,
+          loadModal: true,
+        })
+      }
+    })     
+
+    db.collection('iforum')
+    .where({
+      _openid:openid
+    })
+    .count({
+      success(res) {
+        that.setData({
+          iforumlength:res.total,
+          shownothing:'none'
+        })
+      }
+    })
+    //未审核数量
+    // wx.cloud.callFunction({
+    //   name: 'getfalseaudit',
+    //   key: 'rejectcount',
+    //   complete: res => {
+    //     console.log(res.result.total)
+    //     that.setData({
+    //       rejectcount:res.result.total
+    //     })
+    //   }
+    // })     
   },
 
   login:function(openid){
     var that = this
-    wx.cloud.callFunction({
-      name: 'getdbuser',
-      key: 'getdbuser',
-      data:{
-        id:openid
-      },
-      complete: res => {
-        if (res.result.data != '') {
-          if(res.result.data[0].block == 'true'){
-            userblock = 'true'
-            dbhasuser = 'true'
-          }else{
-            userblock = 'false'
-            dbhasuser = 'true'
-          }
-        }else{
-          userblock = 'false'
-          dbhasuser = 'false'
-        }
-        userlogin.userlogin(dbhasuser)
-        .then(res =>{
-          hasUserInfo = 'true'
-          that.setData({
-            userInfo : res,
-          })
-          that.onShow()
-          if (that.data.userblock == 'true') {
-            wx.showModal({
-              title: '用户已被封禁',
-              content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-              showCancel:false
-            })
-          }
-        })
+    var checkdb
+    getuserinfo.getUser(openid)
+    .then(res => {
+      checkdb = res
+      if (checkdb.code != 200) {
+        dbhasuser = 'false'
+      }else{
+        dbhasuser = 'true'
       }
+      userlogin.userlogin(openid,dbhasuser)
+      .then(res =>{
+        hasUserInfo = 'true'
+        that.setData({
+          userInfo : res,
+        })
+        that.onShow()
+        if (that.data.userblock == 'false') {
+          wx.showModal({
+            title: '用户已被封禁',
+            content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+            showCancel:false
+          })
+        }
+      })
     })
   },
 

@@ -3,7 +3,9 @@ var gettime=require('../../utils/times.js')
 var check = require('../../utils/check.js')
 var like = require('../../utils/like.js')
 var userlogin = require('../../utils/login.js')
+var getuserinfo = require('../../utils/inside_api.js')
 import{cloudDownLoad}from"../../utils/cloud.js"
+import {getOpenid} from "../../utils/inside_api.js"
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
@@ -16,7 +18,7 @@ let hasUserInfo =  false//缓存是否有用户信息
 let userInfo = []
 let iforumlength = ''//推文集合长度
 let iforumcount = 7//推文显示条数
-let openid = ''//用户openid
+let openid = getOpenid()//用户openid
 let times = ''//上传推文时间
 let inputclean = ''//清空评论框数据
 let userblock = ''//全局变量
@@ -64,108 +66,95 @@ Page({
   onShow() {
     let that = this;//将this另存为
     var login = wx.getStorageSync('hasUserInfo',login)
-    //wx.hideLoading()
+    if(!login){
+      that.login(openid)
+      return;
+    }
+    userInfo = wx.getStorageSync('userInfo',userInfo),
+    hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
+    avatarurl = wx.getStorageSync('avatarurl',avatarurl)
+    nickname = wx.getStorageSync('nickname',nickname)
+    //获取置顶说说
     wx.cloud.callFunction({
-      name:'getOpenid',
-      complete:res=>{
-        if(!login){
-          that.login(res.result.openid)
-          return;
-        }
-        openid = res.result.openid
-        userInfo = wx.getStorageSync('userInfo',userInfo),
-        hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
-        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
-        nickname = wx.getStorageSync('nickname',nickname)
-        //获取置顶说说
-        wx.cloud.callFunction({
-          name: 'gettoppost',
-          key: 'toppostlist',
-          complete: res => {
-            that.setData({
-              toppostlist:res.result.data,
-              toppostlistcount:res.result.data.length
-            })
-          }
+      name: 'gettoppost',
+      key: 'toppostlist',
+      complete: res => {
+        that.setData({
+          toppostlist:res.result.data,
+          toppostlistcount:res.result.data.length
         })
+      }
+    })
+    getuserinfo.getBlock(openid)
+    .then(res => {
+      userblock = res
+    })
+    var userpostimglist = new Array();
+    //获取数据条数
+    db.collection('iforum').count({
+      success(res) {
+        iforumlength = res.total
+        //获取用户点赞列表
         wx.cloud.callFunction({
-          name: 'getdbuser',
-          key: 'getdbuser',
+          name: 'getmylike',
+          key: 'mylikelist',
           data:{
-            id:openid
+            userid:openid
           },
           complete: res => {
-            userblock = res.result.data[0].block
-          }
-        })
-        var userpostimglist = new Array();
-        //获取数据条数
-        db.collection('iforum').count({
-          success(res) {
-            iforumlength = res.total
-            //获取用户点赞列表
+            mylikelist = res.result.data
+            //调用云函数从数据库获取论坛数据
             wx.cloud.callFunction({
-              name: 'getmylike',
-              key: 'mylikelist',
+              name: 'getallpost',//云函数名
+              key: 'postlist',
               data:{
-                userid:openid
+                lim:iforumlength,
+                pass:iforumcount
               },
-              complete: res => {
-                mylikelist = res.result.data
-                //调用云函数从数据库获取论坛数据
-                wx.cloud.callFunction({
-                  name: 'getallpost',//云函数名
-                  key: 'postlist',
-                  data:{
-                    lim:iforumlength,
-                    pass:iforumcount
-                  },
-                  async complete(res){
-                    for(var i=iforumcount;i<res.result.data.length;i++){
-                      if(res.result.data[i].imgurl) {//判断有无图片信息
-                        const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
-                        userpostimglist.push(userpostimg)//将图片缓存信息存入数组
-                      }else{
-                        continue;
-                      }
-                    }
-                    for(var i=0;i<res.result.data.length;i++){
-                      if(userpostimglist[i]) {//判断有无图片信息
-                        res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                      }else{
-                        continue;
-                      }
-                    }
-                    inputclean = ''
-                    that.setData({
-                      //倒序存入数组
-                      postlist:res.result.data.reverse()
-                    });
-                    
-                    var showlikelist = new Array()
-                    var postlikelist = that.data.postlist
-                    //将置顶说说倒序并插入postlist数组头部
-                    var toppost = that.data.toppostlist.reverse()
-                    for(var i = 0 ; i < toppost.length ; i++){
-                      postlikelist.unshift(toppost[i])
-                    }
-                    for(var i=0 ; i<postlikelist.length ; i++){
-                      var showlike
-                      for(var j=0;j<mylikelist.length;j++){
-                        if(postlikelist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
-                          showlike=false
-                          break;
-                        }else{
-                          showlike=true
-                        }
-                      }
-                      showlikelist.push(showlike)
-                    }
-                    that.setData({
-                      showlikelist:showlikelist,
-                      loadModal: false
-                    })
+              async complete(res){
+                for(var i=iforumcount;i<res.result.data.length;i++){
+                  if(res.result.data[i].imgurl) {//判断有无图片信息
+                    const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
+                    userpostimglist.push(userpostimg)//将图片缓存信息存入数组
+                  }else{
+                    continue;
                   }
+                }
+                for(var i=0;i<res.result.data.length;i++){
+                  if(userpostimglist[i]) {//判断有无图片信息
+                    res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
+                  }else{
+                    continue;
+                  }
+                }
+                inputclean = ''
+                that.setData({
+                  //倒序存入数组
+                  postlist:res.result.data.reverse()
+                });
+                
+                var showlikelist = new Array()
+                var postlikelist = that.data.postlist
+                //将置顶说说倒序并插入postlist数组头部
+                var toppost = that.data.toppostlist.reverse()
+                for(var i = 0 ; i < toppost.length ; i++){
+                  postlikelist.unshift(toppost[i])
+                }
+                for(var i=0 ; i<postlikelist.length ; i++){
+                  var showlike
+                  for(var j=0;j<mylikelist.length;j++){
+                    if(postlikelist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
+                      showlike=false
+                      break;
+                    }else{
+                      showlike=true
+                    }
+                  }
+                  showlikelist.push(showlike)
+                }
+                that.setData({
+                  showlikelist:showlikelist,
+                  loadModal: false
                 })
               }
             })
@@ -176,42 +165,30 @@ Page({
   },
 
   login:function(openid){
-    var that = this
-    wx.cloud.callFunction({
-      name: 'getdbuser',
-      key: 'getdbuser',
-      data:{
-        id:openid
-      },
-      complete: res => {
-        if (res.result.data != '') {
-          if(res.result.data[0].block == 'true'){
-            userblock = 'true'
-            dbhasuser = 'true'
-          }else{
-            userblock = 'false'
-            dbhasuser = 'true'
-          }
-        }else{
-          userblock = 'false'
-          dbhasuser = 'false'
-        }
-        userlogin.userlogin(dbhasuser)
-        .then(res =>{
-          userInfo = res
-          hasUserInfo = 'true'
-          avatarurl = res.avatarUrl
-          nickname = res.nickName
-          this.onShow()
-          if (userblock == 'true') {
-            wx.showModal({
-              title: '用户已被封禁',
-              content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-              showCancel:false
-            })
-          }
-        })
+    var checkdb
+    getuserinfo.getUser(openid)
+    .then(res => {
+      checkdb = res
+      if (checkdb.code != 200) {
+        dbhasuser = 'false'
+      }else{
+        dbhasuser = 'true'
       }
+      userlogin.userlogin(openid,dbhasuser)
+      .then(res =>{
+        userInfo = res
+        hasUserInfo = 'true'
+        avatarurl = res.avatarUrl
+        nickname = res.nickName
+        this.onShow()
+        if (userblock == 'false') {
+          wx.showModal({
+            title: '用户已被封禁',
+            content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+            showCancel:false
+          })
+        }
+      })
     })
   },
 
@@ -357,7 +334,7 @@ Page({
   //确认按钮，上传数据库
   upload:function(){
     wx.vibrateShort({type:"heavy"})
-    if (userblock == 'true') {
+    if (userblock == 'false') {
       wx.showToast({
         title:"用户已被封禁",
         image: '/images/fail.png',
@@ -365,17 +342,12 @@ Page({
       return;
     }else{     
       if(!hasUserInfo){
-        wx.cloud.callFunction({
-          name:'getOpenid',
-          complete:res=>{
-            this.login(res.result.openid)
-            openid = res.result.openid
-            userInfo = wx.getStorageSync('userInfo',userInfo),
-            hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
-            avatarurl = wx.getStorageSync('avatarurl',avatarurl)
-            nickname = wx.getStorageSync('nickname',nickname)
-          }
-        })
+        openid = getuseropenid.getOpenid()
+        this.login(openid)
+        userInfo = wx.getStorageSync('userInfo',userInfo),
+        hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
+        avatarurl = wx.getStorageSync('avatarurl',avatarurl)
+        nickname = wx.getStorageSync('nickname',nickname)
         return;
       }
       if(this.data.info == ''&&imgurl == ''){

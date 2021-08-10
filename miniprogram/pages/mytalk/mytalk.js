@@ -1,10 +1,12 @@
 import{cloudDownLoad}from"../../utils/cloud.js"
+import {getOpenid} from "../../utils/inside_api.js"
 var like = require('../../utils/like.js')
+var getuserinfo = require('../../utils/inside_api.js')
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
 let userblock
-let openid
+let openid = getOpenid()
 let iforumcount = 7//推文显示条数
 let mylikelist = []//用户点赞数组
 
@@ -45,135 +47,128 @@ Page({
     wx.hideLoading()
     let that = this;//将this另存为
     //设置点击事件不刷新页面
+    that.setData({
+      userInfo : wx.getStorageSync('userInfo',that.data.userInfo)
+    })
+    //查看是否管理员
     wx.cloud.callFunction({
-      name:'getOpenid',
-      complete:res=>{
-        openid = res.result.openid
-        that.setData({
-          userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
-          getcommentlist:res.result.data
-        })
-        //查看是否管理员
-        wx.cloud.callFunction({
-          name: 'getadmin',
-          key: 'isadmin',
-          complete: res => {
-            var isadmin = false
-            for(var i=0;i<res.result.data.length;i++){
-              if(openid == res.result.data[i].useropenid){
-                isadmin = true
-                break;
-              }
-            }
-            that.setData({
-              isadmin:isadmin
-            })
+      name: 'getadmin',
+      key: 'isadmin',
+      complete: res => {
+        var isadmin = false
+        for(var i=0;i<res.result.data.length;i++){
+          if(openid == res.result.data[i].useropenid){
+            isadmin = true
+            break;
           }
+        }
+        that.setData({
+          isadmin:isadmin
         })
+      }
+    })
 
-        
+    
 
-        //获取审核中的说说
-        // wx.cloud.callFunction({
-        //   name: 'getmyauditpost',
-        //   key: 'auditpostlist',
-        //   data:{
-        //     openid:openid
-        //   },
-        //   complete: res => {
-        //     console.log(res.result.data)
-        //     that.setData({
-        //       auditpostlist:res.result.data
-        //     })
-        //   }
-        // })   
-      
-        var userpostimglist = new Array();
-        db.collection('iforum')
-        .where({
-          _openid:openid
-        })
-        .count({
-          success(res) {
-            if(res.total<=7&&res.total>0){
-              iforumcount = res.total
-              that.setData({
-                iforumlength : res.total,
-                shownothing:'none'
-              })
-            }else if(res.total>7){
-              that.setData({
-                iforumlength : res.total,
-                shownothing:'none'
-              })
-            }else{
-              that.setData({
-                shownothing:'block',
-                loadModal: false,
-                iforumlength:0
-              })
-              return;
-            }
-            //获取用户点赞列表
+    //获取审核中的说说
+    // wx.cloud.callFunction({
+    //   name: 'getmyauditpost',
+    //   key: 'auditpostlist',
+    //   data:{
+    //     openid:openid
+    //   },
+    //   complete: res => {
+    //     console.log(res.result.data)
+    //     that.setData({
+    //       auditpostlist:res.result.data
+    //     })
+    //   }
+    // })   
+  
+    var userpostimglist = new Array();
+    db.collection('iforum')
+    .where({
+      _openid:openid
+    })
+    .count({
+      success(res) {
+        if(res.total<=7&&res.total>0){
+          iforumcount = res.total
+          that.setData({
+            iforumlength : res.total,
+            shownothing:'none'
+          })
+        }else if(res.total>7){
+          that.setData({
+            iforumlength : res.total,
+            shownothing:'none'
+          })
+        }else{
+          that.setData({
+            shownothing:'block',
+            loadModal: false,
+            iforumlength:0
+          })
+          return;
+        }
+        //获取用户点赞列表
+        wx.cloud.callFunction({
+          name: 'getmylike',
+          key: 'mylikelist',
+          data:{
+            userid:openid
+          },
+          complete: res => {
+            mylikelist = res.result.data
+            that.setData({
+              likecount:res.result.data.length
+            })
+            //调用云函数从数据库获取论坛数据
             wx.cloud.callFunction({
-              name: 'getmylike',
-              key: 'mylikelist',
+              name: 'getmypost',//云函数名
+              key: 'postlist',
               data:{
-                userid:openid
+                openid:openid,
+                lim:that.data.iforumlength,
+                pass:iforumcount
               },
-              complete: res => {
-                mylikelist = res.result.data
-                that.setData({
-                  likecount:res.result.data.length
-                })
-                //调用云函数从数据库获取论坛数据
-                wx.cloud.callFunction({
-                  name: 'getmypost',//云函数名
-                  key: 'postlist',
-                  data:{
-                    openid:openid,
-                    lim:that.data.iforumlength,
-                    pass:iforumcount
-                  },
-                  async complete(res){
-                    for(var i=iforumcount;i<res.result.data.length;i++){
-                      if(res.result.data[i].imgurl) {//判断有无图片信息
-                        const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
-                        userpostimglist.push(userpostimg)//将图片缓存信息存入数组
-                      }else{
-                        continue;
-                      }
-                    }
-                    for(var i=0;i<res.result.data.length;i++){
-                      if(userpostimglist[i]) {//判断有无图片信息
-                        res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                      }else{
-                        continue;
-                      }
-                    }
-                    that.setData({
-                      //倒序存入数组
-                      postlist:res.result.data.reverse()
-                    });
-
-                    var showlikelist = new Array()
-                    for(var i=0;i<that.data.postlist.length;i++){
-                      var showlike
-                      for(var j=0;j<mylikelist.length;j++){
-                        if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
-                          showlike=false
-                          break;
-                        }else{
-                          showlike=true
-                        }
-                      }
-                      showlikelist.push(showlike)
-                    }
-                    that.setData({
-                      showlikelist:showlikelist,
-                      loadModal: false
-                    })
+              async complete(res){
+                for(var i=iforumcount;i<res.result.data.length;i++){
+                  if(res.result.data[i].imgurl) {//判断有无图片信息
+                    const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
+                    userpostimglist.push(userpostimg)//将图片缓存信息存入数组
+                  }else{
+                    continue;
                   }
+                }
+                for(var i=0;i<res.result.data.length;i++){
+                  if(userpostimglist[i]) {//判断有无图片信息
+                    res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
+                  }else{
+                    continue;
+                  }
+                }
+                that.setData({
+                  //倒序存入数组
+                  postlist:res.result.data.reverse()
+                });
+
+                var showlikelist = new Array()
+                for(var i=0;i<that.data.postlist.length;i++){
+                  var showlike
+                  for(var j=0;j<mylikelist.length;j++){
+                    if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
+                      showlike=false
+                      break;
+                    }else{
+                      showlike=true
+                    }
+                  }
+                  showlikelist.push(showlike)
+                }
+                that.setData({
+                  showlikelist:showlikelist,
+                  loadModal: false
                 })
               }
             })

@@ -1,3 +1,4 @@
+const db=wx.cloud.database()
 const app = getApp()
 import{cloudDownLoad}from"../../utils/cloud.js"
 
@@ -157,6 +158,39 @@ Page({
       title:"敬请期待",
       image: '/images/fail.png',
     })
+    
+    //转移数据库
+    // wx.cloud.callFunction({
+    //   name: 'getuser',//云函数名
+    //   complete(res){
+    //     console.log(res.result.data)
+    //     for (var i = 0; i < res.result.data.length; i++) {
+    //       (function (i) {
+    //         setTimeout(function () {
+    //           wx.request({
+    //             url: 'https://www.inguangli.cn/ingl/api/user/add',
+    //             method: 'POST',
+    //             data:{
+    //               "openid":res.result.data[i]._openid,
+    //               "avatarurl":res.result.data[i].avatarurl,
+    //               "nickname":res.result.data[i].nickname,
+    //               "country":res.result.data[i].country,
+    //               "city":res.result.data[i].city,
+    //               "gender":res.result.data[i].gender
+    //             },
+    //             success (res) {
+    //               console.log(res.data)
+    //             },
+    //             fail(res){
+    //               console.log(res.data)
+    //             }
+    //           })
+    //         }, 1000 * i);
+    //       })(i);
+    //       }
+    //   }
+    // })
+    
   },
 
     /**

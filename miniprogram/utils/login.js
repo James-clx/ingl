@@ -1,5 +1,4 @@
-const db=wx.cloud.database()
-function userlogin(dbhasuser){
+function userlogin(openid,dbhasuser){
   return new Promise((resolve, reject) => {
     wx.showModal({//模态框确认获取用户数据
       showCancel:false,
@@ -11,13 +10,23 @@ function userlogin(dbhasuser){
             desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
             success: (res) => {//获取用户数据
               if(dbhasuser == 'false'){
-                db.collection("iuser").add({//添加到数据库
+                console.log(openid)
+                wx.request({
+                  url: 'https://www.inguangli.cn/ingl/api/user/add',
+                  method: 'POST',
                   data:{
-                    avatarurl:res.userInfo.avatarUrl,
-                    nickname:res.userInfo.nickName,
-                    country:res.userInfo.country,
-                    city:res.userInfo.city,
-                    gender:res.userInfo.gender
+                    "openid":openid,
+                    "avatarurl":res.userInfo.avatarUrl,
+                    "nickname":res.userInfo.nickName,
+                    "country":res.userInfo.country,
+                    "city":res.userInfo.city,
+                    "gender":res.userInfo.gender
+                  },
+                  success (res) {
+                    console.log(res.data)
+                  },
+                  fail(res){
+                    console.log(res.data)
                   }
                 })
               }

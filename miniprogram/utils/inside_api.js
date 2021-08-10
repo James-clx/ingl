@@ -31,6 +31,7 @@ function getOpenid() {
   openid = getCacheSync('openid')
   return openid
 }
+
 function refreshPage(url){
   wx.switchTab({
     url,
@@ -42,8 +43,54 @@ function refreshPage(url){
   })
 }
 
+function getUser(openid) {
+  var userinfo = ''
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/user/search/openid',
+      method: 'POST',
+      data:{
+        "openid":openid
+      },
+      success (res) {
+        console.log(res.data.data)
+        userinfo = res.data
+        resolve(userinfo);
+      },
+      fail(res){
+        console.log(res.data)
+        reject("调用失败"); 
+      }
+    })
+  })
+}
+
+function getBlock(openid) {
+  var userblock
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/access/issue_forum',
+      method: 'POST',
+      data:{
+        "openid":openid
+      },
+      success (res) {
+        console.log(res.data)
+        userblock = res.data.data
+        resolve(userblock);
+      },
+      fail(res){
+        console.log(res.data)
+        reject("调用失败"); 
+      }
+    })
+  })
+}
+
 export {
   showLoading,
   getOpenid,
   refreshPage,
+  getUser,
+  getBlock
 }
