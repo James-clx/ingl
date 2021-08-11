@@ -24,7 +24,7 @@
     <view class="cu-time">最新</view>
     <view class="cu-item text-grey" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique" wx:if="{{post.postid == item._id}}">
       <view class="content bg-grey shadow-blur">
-        <text>{{post.postuser}}:</text>
+        <text>{{post.postuser}}:\n</text>
         <text user-select="true">{{post.commit}}</text>
       </view>
     </view>

@@ -18,7 +18,7 @@ let hasUserInfo =  false//缓存是否有用户信息
 let userInfo = []
 let iforumlength = ''//推文集合长度
 let iforumcount = 7//推文显示条数
-let openid = getOpenid()//用户openid
+let openid//用户openid
 let times = ''//上传推文时间
 let inputclean = ''//清空评论框数据
 let userblock = ''//全局变量
@@ -64,6 +64,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    openid = getOpenid()
     let that = this;//将this另存为
     var login = wx.getStorageSync('hasUserInfo',login)
     if(!login){
@@ -112,21 +113,6 @@ Page({
                 pass:iforumcount
               },
               async complete(res){
-                for(var i=iforumcount;i<res.result.data.length;i++){
-                  if(res.result.data[i].imgurl) {//判断有无图片信息
-                    const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
-                    userpostimglist.push(userpostimg)//将图片缓存信息存入数组
-                  }else{
-                    continue;
-                  }
-                }
-                for(var i=0;i<res.result.data.length;i++){
-                  if(userpostimglist[i]) {//判断有无图片信息
-                    res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                  }else{
-                    continue;
-                  }
-                }
                 inputclean = ''
                 that.setData({
                   //倒序存入数组

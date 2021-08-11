@@ -1,12 +1,11 @@
 import{cloudDownLoad}from"../../utils/cloud.js"
 import {getOpenid} from "../../utils/inside_api.js"
 var like = require('../../utils/like.js')
-var getuserinfo = require('../../utils/inside_api.js')
 const app=getApp()
 const db=wx.cloud.database()
 const _ = db.command
 let userblock
-let openid = getOpenid()
+let openid
 let iforumcount = 7//推文显示条数
 let mylikelist = []//用户点赞数组
 
@@ -44,6 +43,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onShow() {
+    openid = getOpenid()
     wx.hideLoading()
     let that = this;//将this另存为
     //设置点击事件不刷新页面

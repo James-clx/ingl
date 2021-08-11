@@ -17,7 +17,7 @@ let checkinput = true
 let userblock
 let dbhasuser
 let postid
-let openid = getOpenid()
+let openid
 let mylikelist = []//用户点赞数组
 
 Page({
@@ -38,9 +38,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad (options) {
-    const showinput =await htmlRequest(['showtallinput','get'])
     postid = options.postid
     userblock = options.userblock
+    const showinput =await htmlRequest(['showtallinput','get'])
     this.setData({
       showinput:showinput,
     })
@@ -57,9 +57,8 @@ Page({
    */
   onShow() {
     let that = this;//将this另存为
+    openid = getOpenid()
     wx.hideLoading()
-    nickname = wx.getStorageSync('nickname',nickname)
-    hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
     // 在右上角菜单 "...”中显示分享，menus可以单写转发shareAppMessage，分享朋友圈必须写shareAppMessage和shareTimeline
     wx.showShareMenu({
       withShareTicket: true,
@@ -75,9 +74,6 @@ Page({
       return;
     }
 
-    that.setData({
-      showallinput:app.globalData.showallinput,
-    })
     //获取终端机型
     wx.getSystemInfo({
       success: (res) => {
@@ -271,6 +267,8 @@ Page({
   //评论上传到数据库
   uploadcomment:function(e){
     wx.vibrateShort({type:"heavy"})
+    nickname = wx.getStorageSync('nickname',nickname)
+    hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo)
     var input = pushinput
     pushinput = ''
     var name = nickname

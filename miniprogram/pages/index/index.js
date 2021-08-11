@@ -158,25 +158,136 @@ Page({
       title:"敬请期待",
       image: '/images/fail.png',
     })
-    
+  
     //转移数据库
+    //var movelikelist
+    //var movepostlist
+
+    //点赞表
+    // wx.cloud.callFunction({
+    //   name: 'getlike',//云函数名
+    //   complete(res){
+    //     movelikelist = res.result.data
+    //     console.log(movelikelist)
+    //     wx.cloud.callFunction({
+    //       name: 'getallpost',//云函数名
+    //       data:{
+    //         lim:1000,
+    //         pass:1000
+    //       },
+    //       complete(res){
+    //         movepostlist = res.result.data.reverse()
+    //         console.log(movepostlist)
+    //         var openid = new Array()
+    //         var id = new Array()
+    //         for (var i =0; i <movepostlist.length ; i++) {
+    //           for(var k=0;k<movelikelist.length;k++){
+    //             if(movepostlist[i]._id == movelikelist[k].likeid){
+    //               openid.push(movelikelist[k]._openid)
+    //               id.push((i+1))
+    //               console.log(i)
+    //             }        
+    //           }
+    //         }
+    //         for (var i =0; i <openid.length ; i++) {
+    //           (function (i) {
+    //             setTimeout(function () {           
+    //               console.log("openid:"+openid[i])
+    //               console.log("id:"+id[i])
+    //               wx.request({
+    //                 url: 'https://www.inguangli.cn/ingl/api/add/forum/like',
+    //                 method: 'POST',
+    //                 data:{
+    //                   openid: openid[i],
+    //                   forum_id: id[i]
+    //                 },
+    //                 success (res) {
+    //                   console.log(res.data)
+    //                 },
+    //                 fail(res){
+    //                   console.log(res.data)
+    //                 }
+    //               })
+    //             }, 1000 * i);
+    //           })(i);  
+    //         }
+    //       }
+    //     })
+    //   }
+    // })
+
+    //说说表
+    // wx.cloud.callFunction({
+    //   name: 'getlike',//云函数名
+    //   complete(res){
+    //     movelikelist = res.result.data
+    //     console.log(movelikelist)
+    //     wx.cloud.callFunction({
+    //       name: 'getallpost',//云函数名
+    //       data:{
+    //         lim:1000,
+    //         pass:1000
+    //       },
+    //       complete(res){
+    //         movepostlist = res.result.data.reverse()
+    //         console.log(movepostlist)
+
+    //         for (var i =0; i <movepostlist.length ; i++) {
+    //           (function (i) {
+    //             setTimeout(function () {
+    //               if(!movepostlist[i].imgurl){
+    //                 movepostlist[i].imgurl = ''
+    //               }
+    //               console.log(movepostlist[i]._id+"---"+i)
+    //               wx.request({
+    //                 url: 'https://www.inguangli.cn/ingl/api/add/forum_cat',
+    //                 method: 'POST',
+    //                 data:{
+    //                   set_top: 0,
+    //                   avatarurl: movepostlist[i].avatarurl,
+    //                   user_name: movepostlist[i].nickname,
+    //                   openid: movepostlist[i]._openid,
+    //                   hot: movepostlist[i].hot,
+    //                   comment_count: movepostlist[i].commentcount,
+    //                   imgurl: movepostlist[i].imgurl,
+    //                   info: movepostlist[i].info,
+    //                 },
+    //                 success (res) {
+    //                   console.log(res.data)
+    //                 },
+    //                 fail(res){
+    //                   console.log(res.data)
+    //                 }
+    //               })
+    //             }, 1000 * i);
+    //           })(i);
+    //         }
+    //       }
+    //     })
+    //   }
+    // })
+
+    //用户表
     // wx.cloud.callFunction({
     //   name: 'getuser',//云函数名
+    //   data:{
+    //     lim:1000,
+    //     pass:1000
+    //   },
     //   complete(res){
-    //     console.log(res.result.data)
-    //     for (var i = 0; i < res.result.data.length; i++) {
+    //     for (var i =0; i <5 ; i++) {
     //       (function (i) {
     //         setTimeout(function () {
     //           wx.request({
     //             url: 'https://www.inguangli.cn/ingl/api/user/add',
     //             method: 'POST',
     //             data:{
-    //               "openid":res.result.data[i]._openid,
-    //               "avatarurl":res.result.data[i].avatarurl,
-    //               "nickname":res.result.data[i].nickname,
-    //               "country":res.result.data[i].country,
-    //               "city":res.result.data[i].city,
-    //               "gender":res.result.data[i].gender
+    //               avatarurl: res.result.data[i].avatarurl,
+    //               country: res.result.data[i].country,
+    //               city: res.result.data[i].city,
+    //               nickname: res.result.data[i].nickname,
+    //               gender: res.result.data[i].gender,
+    //               openid: res.result.data[i]._openid,
     //             },
     //             success (res) {
     //               console.log(res.data)
@@ -187,10 +298,10 @@ Page({
     //           })
     //         }, 1000 * i);
     //       })(i);
-    //       }
+    //     }
     //   }
     // })
-    
+
   },
 
     /**

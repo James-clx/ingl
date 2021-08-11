@@ -7,7 +7,7 @@ const db=wx.cloud.database()
 let dbhasuser
 let userblock
 let hasUserInfo = false//缓存是否有用户信息
-let openid = getOpenid()//用户openid
+let openid//用户openid
 
 Page({
 
@@ -27,12 +27,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    openid = getOpenid()
     var that = this
     var login = wx.getStorageSync('hasUserInfo',login)
     if(!login){

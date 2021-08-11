@@ -65,7 +65,7 @@
 
             <text>更多</text>
             <view class="fo-other">
-              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/av1.jpg" bindtap="more" />
+              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/av1.jpg" bindtap="more"/>
             </view>
           </view>
 
