@@ -89,8 +89,14 @@ Page({
     getuserinfo.getBlock(openid)
     .then(res => {
       userblock = res
+      if (userblock == 'false' && dbhasuser == 'true') {
+        wx.showModal({
+          title: '用户已被封禁',
+          content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+          showCancel:false
+        })
+      }
     })
-    var userpostimglist = new Array();
     //获取数据条数
     db.collection('iforum').count({
       success(res) {
@@ -151,6 +157,11 @@ Page({
   },
 
   login:function(openid){
+    if (!openid) {
+      this.onLoad()
+      return
+    }
+    var that = this
     var checkdb
     getuserinfo.getUser(openid)
     .then(res => {
@@ -166,16 +177,10 @@ Page({
         hasUserInfo = 'true'
         avatarurl = res.avatarUrl
         nickname = res.nickName
-        this.onShow()
-        if (userblock == 'false') {
-          wx.showModal({
-            title: '用户已被封禁',
-            content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-            showCancel:false
-          })
-        }
+        that.onShow()
       })
     })
+    
   },
 
   totalkinfo:function(e){

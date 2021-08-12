@@ -65,6 +65,13 @@ Page({
     getuserinfo.getBlock(openid)
     .then(res => {
       userblock = res
+      if (userblock == 'false' && dbhasuser == 'true') {
+        wx.showModal({
+          title: '用户已被封禁',
+          content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+          showCancel:false
+        })
+      }
     })
     //获取点赞列表
     wx.cloud.callFunction({
@@ -107,16 +114,20 @@ Page({
   },
 
   login:function(openid){
+    if (!openid) {
+      this.onLoad()
+      return
+    }
     var that = this
     var checkdb
-    getuserinfo.getUser(openid)
-    .then(res => {
-      checkdb = res
-      if (checkdb.code != 200) {
-        dbhasuser = 'false'
-      }else{
-        dbhasuser = 'true'
-      }
+      getuserinfo.getUser(openid)
+      .then(res => {
+        checkdb = res
+        if (checkdb.code != 200) {
+          dbhasuser = 'false'
+        }else{
+          dbhasuser = 'true'
+        }
       userlogin.userlogin(openid,dbhasuser)
       .then(res =>{
         hasUserInfo = 'true'
@@ -124,13 +135,6 @@ Page({
           userInfo : res,
         })
         that.onShow()
-        if (that.data.userblock == 'false') {
-          wx.showModal({
-            title: '用户已被封禁',
-            content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-            showCancel:false
-          })
-        }
       })
     })
   },

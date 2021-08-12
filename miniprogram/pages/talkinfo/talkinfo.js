@@ -235,24 +235,27 @@ Page({
   },
 
   login:function(openid){
-    var checkdb = getuserinfo.getUser(openid)
-    if (checkdb.code = '404') {
-      dbhasuser = 'false'
+    var checkdb
+    if (!openid) {
+      var useropenid = getOpenid()
+      that.login(useropenid)
     }else{
-      dbhasuser = 'true'
-    }
-    userlogin.userlogin(dbhasuser,dbhasuser)
-    .then(res =>{
-      hasUserInfo = 'true'
-      nickname = res.nickName
-      if (userblock == 'false') {
-        wx.showModal({
-          title: '用户已被封禁',
-          content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-          showCancel:false
+      getuserinfo.getUser(openid)
+      .then(res => {
+        console.log(res)
+        checkdb = res
+        if (checkdb.code != 200) {
+          dbhasuser = 'false'
+        }else{
+          dbhasuser = 'true'
+        }
+        userlogin.userlogin(openid,dbhasuser)
+        .then(res =>{
+          hasUserInfo = 'true'
+          nickname = res.nickName
         })
-      }
-    })
+      })
+    }
   },
 
   //获取输入框数据
@@ -280,10 +283,11 @@ Page({
       return;
     }else{
       if(!hasUserInfo){
-        openid = getuseropenid.getOpenid()
+        openid = getOpenid()
         this.login(openid)
         hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
         nickname = wx.getStorageSync('nickname',nickname)
+        pushinput = input
         return;
       }      
       if(input == ''){

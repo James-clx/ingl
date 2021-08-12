@@ -10,7 +10,6 @@ function userlogin(openid,dbhasuser){
             desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
             success: (res) => {//获取用户数据
               if(dbhasuser == 'false'){
-                console.log(openid)
                 wx.request({
                   url: 'https://www.inguangli.cn/ingl/api/user/add',
                   method: 'POST',
