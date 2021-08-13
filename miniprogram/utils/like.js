@@ -1,56 +1,44 @@
-const db=wx.cloud.database()
-
 //点赞功能
-function utillikeadd(id,openid,useropenid){
+function utillikeadd(id,openid){
   //获取用户点赞列表
   return new Promise((resolve, reject) => {
-    wx.cloud.callFunction({
-      name: 'getlikecount',
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/add/forum/like',
+      method: 'POST',
       data:{
-        likeid:id
+        openid:openid,
+        forum_id:id
       },
-      complete: res => {
-        resolve(res);
-        db.collection("iforum").doc(id).update({//添加到数据库
-          data:{
-            likecount:res.result.data.length+1
-          }
-        })
-        db.collection("ilike").add({//添加到数据库
-          data:{
-            postuser:openid,
-            likeid:id,
-            userid:useropenid
-          }
-        })
+      success (res) {
+        console.log(res.data)
+        resolve(res.data.message)
+      },
+      fail(res){
+        console.log(res.data)
+        reject(res.data)
       }
     })
   })
 }
 
 //取消点赞功能
-function utillikeminuus(id,openid,useropenid){
+function utillikeminuus(id,openid){
   //获取用户点赞列表
   return new Promise((resolve, reject) => {
-    wx.cloud.callFunction({
-      name: 'getlikecount',
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/forum/unlike',
+      method: 'POST',
       data:{
-        likeid:id
+        openid:openid,
+        forum_id:id
       },
-      complete: res => {
-        resolve(res);
-        db.collection("iforum").doc(id).update({//添加到数据库
-          data:{
-            likecount:res.result.data.length-1
-          }
-        })
-        db.collection("ilike")//添加到数据库
-        .where({
-          postuser:openid,
-          likeid:id,
-          userid:useropenid
-        })
-        .remove()
+      success (res) {
+        console.log(res.data)
+        resolve(res.data.message)
+      },
+      fail(res){
+        console.log(res.data)
+        reject(res.data)
       }
     })
   })

@@ -1,13 +1,10 @@
-import{cloudDownLoad}from"../../utils/cloud.js"
 import {getOpenid} from "../../utils/inside_api.js"
 var like = require('../../utils/like.js')
 const app=getApp()
-const db=wx.cloud.database()
-const _ = db.command
 let userblock
 let openid
-let iforumcount = 7//推文显示条数
-let mylikelist = []//用户点赞数组
+let iforumcount = 0//推文显示条数
+let morepost = true
 
 Page({
 
@@ -16,8 +13,9 @@ Page({
    */
   data: {
     postlist:[],//推文数组    
-    showlikelist:[],//是否显示已点赞
     //auditpostlist:[],//审核中推文数组
+    showlikestatus:[],
+    showlikenum:[],
     likecount:0,
     userInfo: {},//用户信息
     shownothing:'none',
@@ -31,12 +29,15 @@ Page({
    */
   async onLoad (options) {
     userblock = options.userblock
-  },
-
-  onReady: function() {
-    this.setData({
+    var that = this
+    that.setData({
       loadModal: true
     })
+    setTimeout(function () {
+      that.setData({
+        loadModal: false
+      })
+    },1500)
   },
 
   /**
@@ -50,25 +51,43 @@ Page({
     that.setData({
       userInfo : wx.getStorageSync('userInfo',that.data.userInfo)
     })
+    
     //查看是否管理员
-    wx.cloud.callFunction({
-      name: 'getadmin',
-      key: 'isadmin',
-      complete: res => {
-        var isadmin = false
-        for(var i=0;i<res.result.data.length;i++){
-          if(openid == res.result.data[i].useropenid){
-            isadmin = true
-            break;
-          }
-        }
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/access/forum_setup',
+      method: 'POST',
+      data:{
+        openid:openid
+      },
+      success (res) {
+        console.log(res.data.data)
         that.setData({
-          isadmin:isadmin
+          isadmin:res.data.data
         })
+      },
+      fail(res){
+        console.log(res.data)
       }
     })
 
-    
+    //获取点赞、发帖数
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/get/forum_like/forum_sum',
+      method: 'POST',
+      data:{
+        openid:openid
+      },
+      success (res) {
+        console.log(res.data)
+        that.setData({
+          likecount:res.data.my_forum_like_sum,
+          iforumlength:res.data.my_forum_sum
+        })
+      },
+      fail(res){
+        console.log(res.data)
+      }
+    })
 
     //获取审核中的说说
     // wx.cloud.callFunction({
@@ -85,100 +104,56 @@ Page({
     //   }
     // })   
   
-    var userpostimglist = new Array();
-    db.collection('iforum')
-    .where({
-      _openid:openid
-    })
-    .count({
-      success(res) {
-        if(res.total<=7&&res.total>0){
-          iforumcount = res.total
-          that.setData({
-            iforumlength : res.total,
-            shownothing:'none'
-          })
-        }else if(res.total>7){
-          that.setData({
-            iforumlength : res.total,
-            shownothing:'none'
-          })
-        }else{
+    //获取我的说说
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/get/my/forum/comment',
+      method: 'POST',
+      data:{
+        openid:openid,
+        limit: 7,
+        offest: iforumcount,
+      },
+      success (res) {
+        console.log(res.data.data)
+        if (!res.data.data) {
           that.setData({
             shownothing:'block',
-            loadModal: false,
-            iforumlength:0
+            loadModal: false
           })
-          return;
-        }
-        //获取用户点赞列表
-        wx.cloud.callFunction({
-          name: 'getmylike',
-          key: 'mylikelist',
-          data:{
-            userid:openid
-          },
-          complete: res => {
-            mylikelist = res.result.data
-            that.setData({
-              likecount:res.result.data.length
-            })
-            //调用云函数从数据库获取论坛数据
-            wx.cloud.callFunction({
-              name: 'getmypost',//云函数名
-              key: 'postlist',
-              data:{
-                openid:openid,
-                lim:that.data.iforumlength,
-                pass:iforumcount
-              },
-              async complete(res){
-                for(var i=iforumcount;i<res.result.data.length;i++){
-                  if(res.result.data[i].imgurl) {//判断有无图片信息
-                    const userpostimg = await cloudDownLoad('',[res.result.data[i].imgurl])//调用缓存app.js
-                    userpostimglist.push(userpostimg)//将图片缓存信息存入数组
-                  }else{
-                    continue;
-                  }
-                }
-                for(var i=0;i<res.result.data.length;i++){
-                  if(userpostimglist[i]) {//判断有无图片信息
-                    res.result.data[i].imgurl = userpostimglist[i]//使用缓存的url替换本地图片url
-                  }else{
-                    continue;
-                  }
-                }
-                that.setData({
-                  //倒序存入数组
-                  postlist:res.result.data.reverse()
-                });
-
-                var showlikelist = new Array()
-                for(var i=0;i<that.data.postlist.length;i++){
-                  var showlike
-                  for(var j=0;j<mylikelist.length;j++){
-                    if(that.data.postlist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
-                      showlike=false
-                      break;
-                    }else{
-                      showlike=true
-                    }
-                  }
-                  showlikelist.push(showlike)
-                }
-                that.setData({
-                  showlikelist:showlikelist,
-                  loadModal: false
-                })
-              }
-            })
+        }else if(that.data.postlist.length-7 != iforumcount){
+          var pustpostlist = new Array()
+          var pustlikestatus = new Array()
+          var pustlikenum = new Array()
+          pustpostlist = that.data.postlist
+          pustlikestatus = that.data.showlikestatus
+          pustlikenum = that.data.showlikenum
+          for (let i = 0; i < 7; i++) {
+            if (!res.data.data[i]) {
+              morepost = false
+              continue;
+            }else{
+              morepost = true
+              pustpostlist.push(res.data.data[i])
+              pustlikestatus.push(res.data.data[i].have_forum_like)
+              pustlikenum.push(res.data.data[i].forum_like_sum)
+            }
           }
-        })
+          console.log(that.data.showlikestatus)
+          that.setData({
+            postlist:pustpostlist,
+            showlikestatus:pustlikestatus,
+            showlikenum:pustlikenum,
+            loadModal: false
+          })
+        }
+      },
+      fail(res){
+        console.log(res.data)
       }
     })
   },
 
-  //置顶推文
+  //置顶说说
   settop:function(e){
     wx.vibrateShort({type:"heavy"})
     db.collection("iforum").doc(e.currentTarget.dataset.id).update({
@@ -188,7 +163,7 @@ Page({
     })
   },
 
-  //删除已发布推文
+  //删除已发布说说
   deletepost:function(e){
     wx.vibrateShort({type:"heavy"})
     let that = this;//将this另存为
@@ -197,18 +172,25 @@ Page({
       content: '确认删除后不能恢复',
       success: function (res) {
         if (res.confirm) {
-          db.collection('iforum')
-          .where({
-            _id:e.currentTarget.dataset.id
+          wx.request({
+            url: 'https://www.inguangli.cn/ingl/api/delete/my/forum',
+            method: 'GET',
+            data:{
+              forum_id:e.currentTarget.dataset.id
+            },
+            success (res) {
+              console.log(res.data)
+              wx.showToast({
+                title:res.data.message,
+              })
+              //重新抓取说说列表
+              that.onShow()
+            },
+            fail(res){
+              console.log(res.data)
+            }
           })
-          .remove()
-          wx.showToast({
-            title:"删除成功",
-          })
-          //重新抓取推文列表
-          that.onShow()
         }
-        
         else if (res.cancel) {
           return false;    
         }
@@ -216,43 +198,38 @@ Page({
     })
   },
 
-    //删除审核中推文
-    deleteauditpost:function(e){
-      wx.vibrateShort({type:"heavy"})
-      let that = this;//将this另存为
-      wx.showModal({
-        title: '确认删除',
-        content: '确认删除后不能恢复',
-        success: function (res) {
-          if (res.confirm) {
-            db.collection('iaudit')
-            .where({
-              _id:e.currentTarget.dataset.id
-            })
-            .remove()
-            wx.showToast({
-              title:"删除成功",
-            })
-            //重新抓取推文列表
-            that.onShow()
-          }
-          
-          else if (res.cancel) {
-            return false;    
-          }
-        }
-      })
-    },
+  //删除审核中推文
+  // deleteauditpost:function(e){
+  //   wx.vibrateShort({type:"heavy"})
+  //   let that = this;//将this另存为
+  //   wx.showModal({
+  //     title: '确认删除',
+  //     content: '确认删除后不能恢复',
+  //     success: function (res) {
+  //       if (res.confirm) {
+  //         db.collection('iaudit')
+  //         .where({
+  //           _id:e.currentTarget.dataset.id
+  //         })
+  //         .remove()
+  //         wx.showToast({
+  //           title:"删除成功",
+  //         })
+  //         //重新抓取推文列表
+  //         that.onShow()
+  //       }
+        
+  //       else if (res.cancel) {
+  //         return false;    
+  //       }
+  //     }
+  //   })
+  // },
 
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+userblock
-    })
-    db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-      data:{
-        hot:e.currentTarget.dataset.hot+Math.ceil(Math.random()*4)
-      }
+      url:'../talkinfo/talkinfo?postid='+postid
     })
   },
 
@@ -265,48 +242,46 @@ Page({
   //点赞功能
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
-    //先改变图标
-    var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
-    var countlike = "postlist[" + e.currentTarget.dataset.num +"].likecount"//重点在这里，组合出一个字符串
+    var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
+    var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
+    var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
     this.setData({
-      [add]: false,//用中括号把str括起来即可
-      [countlike] : this.data.postlist[e.currentTarget.dataset.num].likecount +1
+      [likestatus]:'true',
+      [likesnum]:numadd+1
     })
-    //再更新数据
-    like.utillikeadd(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
+    like.utillikeadd(e.currentTarget.dataset.id,openid)
     .then(res => {
       var that = this
-      that.onShow()
-    })
-    wx.showToast({
-      mask:'true',
-      duration:1500,
-      title:"点赞成功",
-      image: '/images/liked.png',
+      //that.onShow()
+      wx.showToast({
+        mask:'true',
+        duration:1500,
+        title:res,
+        image: '/images/liked.png',
+      })
     })
   },
 
   //取消点赞功能
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
-    //先改变图标
-    var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
-    var countlike = "postlist[" + e.currentTarget.dataset.num +"].likecount"//重点在这里，组合出一个字符串
+    var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
+    var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
+    var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
     this.setData({
-      [add]: true,//用中括号把str括起来即可
-      [countlike] : this.data.postlist[e.currentTarget.dataset.num].likecount -1
+      [likestatus]:'false',
+      [likesnum]:numadd-1
     })
-    //再更新数据
-    like.utillikeminuus(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
+    like.utillikeminuus(e.currentTarget.dataset.id,openid)
     .then(res => {
       var that = this
-      that.onShow()
-    })
-    wx.showToast({
-      mask:'true',
-      duration:1500,
-      title:"取消点赞",
-      image: '/images/like.png',
+      //that.onShow()
+      wx.showToast({
+        mask:'true',
+        duration:1500,
+        title:res,
+        image: '/images/like.png',
+      })
     })
   },
 
@@ -326,15 +301,9 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    if(this.data.iforumlength<iforumcount+7 && this.data.iforumlength>iforumcount){
-      this.setData({
-        loadModal: true
-      })
-      iforumcount = iforumlength
-      this.onShow()
-    }else if(this.data.iforumlength<iforumcount+7){
+    if (!morepost) {
       wx.showToast({
-        title:"到底啦",
+        title: '到底了!',
       })
     }else{
       this.setData({
@@ -345,25 +314,14 @@ Page({
     }
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  // onShareAppMessage: function () {
-  //   return {
-  //     title: '我的说说',
-  //     path: '/pages/mytalk/mytalk', // 点击访问的页面
-  //     imageUrl: '',     //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。
-  //   }
+  // onHide: function() {
+  //   db.collection('iaudit')
+  //   .where({
+  //     reject:true,
+  //     _openid:openid
+  //   })
+  //   .remove()
   // },
-
-  onHide: function() {
-    db.collection('iaudit')
-    .where({
-      reject:true,
-      _openid:openid
-    })
-    .remove()
-  },
 
   onUnload: function(){
     this.onHide()

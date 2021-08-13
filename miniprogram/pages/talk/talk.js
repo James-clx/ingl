@@ -4,26 +4,21 @@ var check = require('../../utils/check.js')
 var like = require('../../utils/like.js')
 var userlogin = require('../../utils/login.js')
 var getuserinfo = require('../../utils/inside_api.js')
-import{cloudDownLoad}from"../../utils/cloud.js"
 import {getOpenid} from "../../utils/inside_api.js"
 const app=getApp()
-const db=wx.cloud.database()
-const _ = db.command
 let imgurl=''
 let avatarurl=''
 let nickname=''
-let gender=''
 let checkinput = true
 let hasUserInfo =  false//缓存是否有用户信息
 let userInfo = []
-let iforumlength = ''//推文集合长度
-let iforumcount = 7//推文显示条数
+let iforumcount = 0//拉取说说开始条数
 let openid//用户openid
 let times = ''//上传推文时间
 let inputclean = ''//清空评论框数据
 let userblock = ''//全局变量
 let dbhasuser = ''
-let mylikelist = []//用户点赞数组
+let morepost = true
 
 Page({
   /**
@@ -32,8 +27,9 @@ Page({
   data: {
     toppostlist:[],
     toppostlistcount:0,
+    showlikestatus:[],
+    showlikenum:[],
     postlist:[],//推文数组
-    showlikelist:[],//是否显示已点赞
     showTalklogin :'block',//页面展示信息授权模态框
     showinputpage:'block',//上传信息按钮
     showinputinfo:'none',//上传信息页面
@@ -48,16 +44,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad (options) {
+    var that = this
     const showallinput =await htmlRequest(['showtallinput','get'])
-    this.setData({
-      showallinput:showallinput
+    that.setData({
+      showallinput:showallinput,
+      loadModal: true,
     })
-  },
-
-  onReady: function() {
-    this.setData({
-      loadModal: true
-    })
+    setTimeout(function () {
+      that.setData({
+        loadModal: false
+      })
+    },1500)
   },
 
   /**
@@ -75,17 +72,8 @@ Page({
     hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
     avatarurl = wx.getStorageSync('avatarurl',avatarurl)
     nickname = wx.getStorageSync('nickname',nickname)
-    //获取置顶说说
-    wx.cloud.callFunction({
-      name: 'gettoppost',
-      key: 'toppostlist',
-      complete: res => {
-        that.setData({
-          toppostlist:res.result.data,
-          toppostlistcount:res.result.data.length
-        })
-      }
-    })
+    
+    //用户封禁状态
     getuserinfo.getBlock(openid)
     .then(res => {
       userblock = res
@@ -97,65 +85,57 @@ Page({
         })
       }
     })
-    //获取数据条数
-    db.collection('iforum').count({
-      success(res) {
-        iforumlength = res.total
-        //获取用户点赞列表
-        wx.cloud.callFunction({
-          name: 'getmylike',
-          key: 'mylikelist',
-          data:{
-            userid:openid
-          },
-          complete: res => {
-            mylikelist = res.result.data
-            //调用云函数从数据库获取论坛数据
-            wx.cloud.callFunction({
-              name: 'getallpost',//云函数名
-              key: 'postlist',
-              data:{
-                lim:iforumlength,
-                pass:iforumcount
-              },
-              async complete(res){
-                inputclean = ''
-                that.setData({
-                  //倒序存入数组
-                  postlist:res.result.data.reverse()
-                });
-                
-                var showlikelist = new Array()
-                var postlikelist = that.data.postlist
-                //将置顶说说倒序并插入postlist数组头部
-                var toppost = that.data.toppostlist.reverse()
-                for(var i = 0 ; i < toppost.length ; i++){
-                  postlikelist.unshift(toppost[i])
-                }
-                for(var i=0 ; i<postlikelist.length ; i++){
-                  var showlike
-                  for(var j=0;j<mylikelist.length;j++){
-                    if(postlikelist[i]._id == mylikelist[j].likeid && mylikelist[j].userid == openid){
-                      showlike=false
-                      break;
-                    }else{
-                      showlike=true
-                    }
-                  }
-                  showlikelist.push(showlike)
-                }
-                that.setData({
-                  showlikelist:showlikelist,
-                  loadModal: false
-                })
-              }
+    //获取说说
+    inputclean = ''
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/get/forum/list',
+      method: 'POST',
+      data:{
+        limit:7,
+        offest:iforumcount,
+        openid:openid
+      },
+      success (res) {
+        if (that.data.postlist.length-7 != iforumcount) {
+          console.log(res.data)
+          var pustpostlist = new Array()
+          var pustlikestatus = new Array()
+          var pustlikenum = new Array()
+          pustpostlist = that.data.postlist
+          pustlikestatus = that.data.showlikestatus
+          pustlikenum = that.data.showlikenum
+          for (let i = 0; i < 7; i++) {
+            if (!res.data.forum_list[i]) {
+              morepost = false
+              continue;
+            }else{
+              morepost = true
+              pustpostlist.push(res.data.forum_list[i])
+              pustlikestatus.push(res.data.forum_list[i].have_forum_like)
+              pustlikenum.push(res.data.forum_list[i].forum_like_sum)
+            }
+          }
+          console.log(that.data.showlikenum)
+          that.setData({
+            postlist:pustpostlist,
+            showlikestatus:pustlikestatus,
+            showlikenum:pustlikenum,
+            loadModal: false
+          });
+          if (res.data.forum_setup_data.create_time) {
+            that.setData({
+              toppostlist:res.data.forum_setup_data,
             })
           }
-        })
+        }
+      },
+      fail(res){
+        console.log(res.data)
       }
     })
   },
 
+  //登录
   login:function(openid){
     if (!openid) {
       this.onLoad()
@@ -183,77 +163,57 @@ Page({
     
   },
 
+  //跳转到说说详细页面
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
       url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+userblock
-    })
-    db.collection("iforum").doc(e.currentTarget.dataset.id).update({//添加到数据库
-      data:{
-        hot:e.currentTarget.dataset.hot+Math.ceil(Math.random()*4)
-      }
     })
   },
 
   //点赞功能
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
-    var num = e.currentTarget.dataset.num - this.data.toppostlist.length
-    var countadd
-    if (num < 0) {
-      num = this.data.toppostlist.length + num
-      countadd = "toppostlist[" + num + "].likecount"//重点在这里，组合出一个字符串
-    }else{
-      countadd = "postlist[" + num + "].likecount"//重点在这里，组合出一个字符串
-    }
-    //先改变图标
-    var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
+    var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
+    var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
+    var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
     this.setData({
-      [add]: false,//用中括号把str括起来即可
-      [countadd] : this.data.postlist[e.currentTarget.dataset.num].likecount +1
+      [likestatus]:'true',
+      [likesnum]:numadd+1
     })
-    //再更新数据
-    like.utillikeadd(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
+    like.utillikeadd(e.currentTarget.dataset.id,openid)
     .then(res => {
       var that = this
-      that.onShow()
-    })
-    wx.showToast({
-      mask:'true',
-      duration:1500,
-      title:"点赞成功",
-      image: '/images/liked.png',
+      //that.onShow()
+      wx.showToast({
+        mask:'true',
+        duration:1500,
+        title:res,
+        image: '/images/liked.png',
+      })
     })
   },
 
   //取消点赞功能
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
-    var num = e.currentTarget.dataset.num - this.data.toppostlist.length
-    var countadd
-    if (num < 0) {
-      num = this.data.toppostlist.length + num
-      countadd = "toppostlist[" + num + "].likecount"//重点在这里，组合出一个字符串
-    }else{
-      countadd = "postlist[" + num + "].likecount"//重点在这里，组合出一个字符串
-    }
-    //先改变图标
-    var add = "showlikelist[" + e.currentTarget.dataset.num + "]"//重点在这里，组合出一个字符串
+    var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
+    var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
+    var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
     this.setData({
-      [add]: true,//用中括号把str括起来即可
-      [countadd] : this.data.postlist[e.currentTarget.dataset.num].likecount -1
+      [likestatus]:'false',
+      [likesnum]:numadd-1
     })
-    //再更新数据
-    like.utillikeminuus(e.currentTarget.dataset.id,e.currentTarget.dataset.openid,openid)
+    like.utillikeminuus(e.currentTarget.dataset.id,openid)
     .then(res => {
       var that = this
-      that.onShow()
-    })
-    wx.showToast({
-      mask:'true',
-      duration:1500,
-      title:"取消点赞",
-      image: '/images/like.png',
+      //that.onShow()
+      wx.showToast({
+        mask:'true',
+        duration:1500,
+        title:res,
+        image: '/images/like.png',
+      })
     })
   },
 
@@ -325,7 +285,7 @@ Page({
   //确认按钮，上传数据库
   upload:function(){
     wx.vibrateShort({type:"heavy"})
-    if (userblock == 'false') {
+    if (userblock == false) {
       wx.showToast({
         title:"用户已被封禁",
         image: '/images/fail.png',
@@ -362,49 +322,51 @@ Page({
       //上传图片文件到数据库(有图片)
       var name = nickname
       var userurl = avatarurl
+      var info = this.data.info
+      var posturl = ''
       if(imgurl){
-        var info = this.data.info
         wx.cloud.uploadFile({
           cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
           success: res => {//上传云端成功后向数据库添加记录
             // 返回文件 ID
-            var posturl = res.fileID
-            db.collection("iforum").add({//添加到数据库
-              data:{
-                info:info,
-                imgurl:posturl,
-                pushtime:gettime.formatTime(new Date()),
-                avatarurl:userurl,
-                nickname:name,
-                gender:gender,
-                likecount:0,
-                hot:0,
-                commentcount:0,
-                reject:false
-              }
-            })
+            posturl = res.fileID
           },
           fail: console.error//执行失败报错
         })
-      }else{//没有上传图片
-        db.collection("iforum").add({//添加到数据库
-          data:{
-            info:this.data.info,
-            pushtime:gettime.formatTime(new Date()),
-            avatarurl:userurl,
-            nickname:name,
-            gender:gender,
-            likecount:0,
-            hot:0,
-            commentcount:0,
-            reject:false
-          }
-        })
       }
+      var changetime = Date.parse(gettime.formatTime(new Date()))
+      var create_time = changetime / 1000
+      console.log(create_time)
+      wx.request({
+        url: 'https://www.inguangli.cn/ingl/api/add/forum',
+        method: 'POST',
+        data:{
+          set_top:0,
+          avatarurl:userurl,
+          user_name:name,
+          openid:openid,
+          hot:0,
+          imgurl:posturl,
+          info:info,
+          create_time:create_time
+        },
+        success (res) {
+          console.log(res.data)
+        },
+        fail(res){
+          console.log(res.data)
+        }
+      })
       wx.hideLoading()
       //重新抓取推文列表
+      this.data.postlist = []
+      iforumcount = 0
+      wx.pageScrollTo({
+        scrollTop: 0
+      })
       this.onShow()
+
       //清空上传信息数据
       imgurl='',
       this.setData({
@@ -458,15 +420,9 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    if(iforumlength<iforumcount+7 && iforumlength>iforumcount){
-      this.setData({
-        loadModal: true
-      })
-      iforumcount = iforumlength
-      this.onShow()
-    }else if(iforumlength<iforumcount+7){
+    if (!morepost) {
       wx.showToast({
-        title:"到底啦",
+        title: '到底了!',
       })
     }else{
       this.setData({

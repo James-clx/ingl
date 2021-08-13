@@ -3,7 +3,6 @@ import {htmlRequest} from "../../utils/html.js"
 var userlogin = require('../../utils/login.js')
 var getuserinfo = require('../../utils/inside_api.js')
 import {getOpenid} from "../../utils/inside_api.js"
-const db=wx.cloud.database()
 let dbhasuser
 let userblock
 let hasUserInfo = false//缓存是否有用户信息
@@ -45,23 +44,26 @@ Page({
     that.setData({
       userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
     })
+
     //是否管理员
-    wx.cloud.callFunction({
-      name: 'getadmin',
-      key: 'isadmin',
-      complete: res => {
-        var isadmin = false
-        for(var i=0;i<res.result.data.length;i++){
-          if(openid == res.result.data[i].useropenid){
-            isadmin = true
-            break;
-          }
-        }
-        that.setData({
-          isadmin:isadmin
-        })
-      }
-    })
+    // wx.cloud.callFunction({
+    //   name: 'getadmin',
+    //   key: 'isadmin',
+    //   complete: res => {
+    //     var isadmin = false
+    //     for(var i=0;i<res.result.data.length;i++){
+    //       if(openid == res.result.data[i].useropenid){
+    //         isadmin = true
+    //         break;
+    //       }
+    //     }
+    //     that.setData({
+    //       isadmin:isadmin
+    //     })
+    //   }
+    // })
+
+    //用户封禁状态
     getuserinfo.getBlock(openid)
     .then(res => {
       userblock = res
@@ -73,33 +75,27 @@ Page({
         })
       }
     })
-    //获取点赞列表
-    wx.cloud.callFunction({
-      name: 'getmylike',
-      key: 'mylikelist',
-      data:{
-        userid:openid
-      },
-      complete: res => {
-        that.setData({
-          likecount:res.result.data.length,
-          loadModal: true,
-        })
-      }
-    })     
 
-    db.collection('iforum')
-    .where({
-      _openid:openid
-    })
-    .count({
-      success(res) {
+    //获取点赞、发帖数
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/get/forum_like/forum_sum',
+      method: 'POST',
+      data:{
+        openid:openid
+      },
+      success (res) {
+        console.log(res.data)
         that.setData({
-          iforumlength:res.total,
-          shownothing:'none'
+          likecount:res.data.my_forum_like_sum,
+          iforumlength:res.data.my_forum_sum,
+          loadModal: true
         })
+      },
+      fail(res){
+        console.log(res.data)
       }
     })
+  
     //未审核数量
     // wx.cloud.callFunction({
     //   name: 'getfalseaudit',

@@ -18,7 +18,6 @@ Page({
     var getcommentlist = JSON.parse(options.getcommentlist)
     this.setData({
       postlist:postlist,
-      postid:options.postid,
       getcommentlist:getcommentlist
     })
   },

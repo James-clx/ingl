@@ -1,4 +1,3 @@
-const db=wx.cloud.database()
 const app = getApp()
 import{cloudDownLoad}from"../../utils/cloud.js"
 
