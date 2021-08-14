@@ -155,7 +155,7 @@ Page({
   more:function(){
     wx.showToast({
       title:"敬请期待",
-      image: '/images/fail.png',
+      icon:'none'
     })
   
     //转移数据库

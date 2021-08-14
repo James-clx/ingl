@@ -155,12 +155,37 @@ Page({
 
   //置顶说说
   settop:function(e){
+    console.log(e.detail.value)
     wx.vibrateShort({type:"heavy"})
-    db.collection("iforum").doc(e.currentTarget.dataset.id).update({
-      data:{
-        settop:e.detail.value
-      }
-    })
+    if (e.detail.value) {
+      wx.request({
+        url: 'https://www.inguangli.cn/ingl/api/set/forum/setup',
+        method: 'GET',
+        data:{
+          forum_id:e.currentTarget.dataset.id
+        },
+        success (res) {
+          console.log(res.data)
+        },
+        fail(res){
+          console.log(res.data)
+        }
+      })
+    }else{
+      wx.request({
+        url: 'https://www.inguangli.cn/ingl/api/cancel/forum/setup',
+        method: 'GET',
+        data:{
+          forum_id:e.currentTarget.dataset.id
+        },
+        success (res) {
+          console.log(res.data)
+        },
+        fail(res){
+          console.log(res.data)
+        }
+      })
+    }
   },
 
   //删除已发布说说
@@ -184,6 +209,10 @@ Page({
                 title:res.data.message,
               })
               //重新抓取说说列表
+              iforumcount = 0
+              that.data.postlist = []
+              that.data.showlikenum = []
+              that.data.showlikestatus = []
               that.onShow()
             },
             fail(res){
@@ -255,7 +284,7 @@ Page({
       //that.onShow()
       wx.showToast({
         mask:'true',
-        duration:1500,
+        duration:1000,
         title:res,
         image: '/images/liked.png',
       })
@@ -278,7 +307,7 @@ Page({
       //that.onShow()
       wx.showToast({
         mask:'true',
-        duration:1500,
+        duration:1000,
         title:res,
         image: '/images/like.png',
       })
@@ -286,12 +315,22 @@ Page({
   },
 
   onPullDownRefresh:function(){
+    var that = this
     wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
-    this.setData({
-      loadModal: true
+    iforumcount = 0
+    that.setData({
+      loadModal: true,
+      postlist:[],
+      showlikenum:[],
+      showlikestatus:[],
     })
-    this.onShow()
+    that.onShow()
+    setTimeout(function () {
+      that.setData({
+        loadModal: false
+      })
+    },1500)
   //模拟加载
     wx.hideNavigationBarLoading() //完成停止加载
     wx.stopPullDownRefresh() //停止下拉刷新
@@ -301,27 +340,40 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+    var that = this
     if (!morepost) {
       wx.showToast({
         title: '到底了!',
+        icon:'none'
       })
     }else{
-      this.setData({
+      that.setData({
         loadModal: true
       })
+      setTimeout(function () {
+        that.setData({
+          loadModal: false
+        })
+      },1500)
       iforumcount = iforumcount+7
-      this.onShow()
+      that.onShow()
     }
   },
 
-  // onHide: function() {
-  //   db.collection('iaudit')
-  //   .where({
-  //     reject:true,
-  //     _openid:openid
-  //   })
-  //   .remove()
-  // },
+  //关闭页面触发函数
+  onHide: function() {
+    iforumcount = 0
+    this.data.postlist = []
+    this.data.showlikenum = []
+    this.data.showlikestatus = []
+    //关闭页面时移除审核中的说说
+    // db.collection('iaudit')
+    // .where({
+    //   reject:true,
+    //   _openid:openid
+    // })
+    // .remove()
+  },
 
   onUnload: function(){
     this.onHide()

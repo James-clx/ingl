@@ -26,7 +26,6 @@ Page({
    */
   data: {
     toppostlist:[],
-    toppostlistcount:0,
     showlikestatus:[],
     showlikenum:[],
     postlist:[],//推文数组
@@ -187,7 +186,7 @@ Page({
       //that.onShow()
       wx.showToast({
         mask:'true',
-        duration:1500,
+        duration:1000,
         title:res,
         image: '/images/liked.png',
       })
@@ -210,7 +209,7 @@ Page({
       //that.onShow()
       wx.showToast({
         mask:'true',
-        duration:1500,
+        duration:1000,
         title:res,
         image: '/images/like.png',
       })
@@ -284,27 +283,28 @@ Page({
 
   //确认按钮，上传数据库
   upload:function(){
+    var that = this
     wx.vibrateShort({type:"heavy"})
     if (userblock == false) {
       wx.showToast({
         title:"用户已被封禁",
-        image: '/images/fail.png',
+        icon:'none'
       })
       return;
     }else{     
       if(!hasUserInfo){
         openid = getuseropenid.getOpenid()
-        this.login(openid)
+        that.login(openid)
         userInfo = wx.getStorageSync('userInfo',userInfo),
         hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
         avatarurl = wx.getStorageSync('avatarurl',avatarurl)
         nickname = wx.getStorageSync('nickname',nickname)
         return;
       }
-      if(this.data.info == ''&&imgurl == ''){
+      if(that.data.info == ''&&imgurl == ''){
         wx.showToast({
-          title:"不能什么都不写哦",
-          image: '/images/fail.png',
+          title:"不能什么都不写哦!",
+          icon:'none'
         })
         return;
       }
@@ -322,64 +322,102 @@ Page({
       //上传图片文件到数据库(有图片)
       var name = nickname
       var userurl = avatarurl
-      var info = this.data.info
-      var posturl = ''
+      var info = that.data.info
       if(imgurl){
+        console.log(imgurl)
         wx.cloud.uploadFile({
           cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
           success: res => {//上传云端成功后向数据库添加记录
             // 返回文件 ID
-            posturl = res.fileID
+            var posturl = res.fileID
+            wx.request({
+              url: 'https://www.inguangli.cn/ingl/api/add/forum',
+              method: 'POST',
+              data:{
+                set_top:0,
+                avatarurl:userurl,
+                user_name:name,
+                openid:openid,
+                hot:0,
+                imgurl:posturl,
+                info:info,
+                create_time:Date.parse(times.replace(/-/g, '/'))/1000
+              },
+              success (res) {
+                console.log(res.data)
+                wx.hideLoading()
+                wx.showToast({
+                  title:res.data.message,
+                })
+                //清空上传信息数据
+                imgurl=''
+                iforumcount = 0
+                that.setData({
+                  //发布后关闭发布页面
+                  info:'',
+                  Img:"",
+                  postlist:[],
+                  showlikenum:[],
+                  showlikestatus:[],
+                  filter:'0rpx',
+                  showinputinfo:'none',//打开上传信息页面
+                  showinputpage:'block',//隐藏打开页面按钮
+                });
+                that.onShow()
+              },
+              fail(res){
+                console.log(res.data)
+              }
+            })
           },
           fail: console.error//执行失败报错
         })
+      }else{
+        wx.request({
+          url: 'https://www.inguangli.cn/ingl/api/add/forum',
+          method: 'POST',
+          data:{
+            set_top:0,
+            avatarurl:userurl,
+            user_name:name,
+            openid:openid,
+            hot:0,
+            imgurl:'',
+            info:info,
+            create_time:Date.parse(times.replace(/-/g, '/'))/1000
+          },
+          success (res) {
+            console.log(res.data)
+            wx.hideLoading()
+            wx.showToast({
+              title:res.data.message,
+            })
+            //清空上传信息数据
+            imgurl=''
+            iforumcount = 0
+            that.setData({
+              //发布后关闭发布页面
+              info:'',
+              Img:"",
+              postlist:[],
+              showlikenum:[],
+              showlikestatus:[],
+              filter:'0rpx',
+              showinputinfo:'none',//打开上传信息页面
+              showinputpage:'block',//隐藏打开页面按钮
+            });
+          },
+          fail(res){
+            console.log(res.data)
+          }
+        })
       }
-      var changetime = Date.parse(gettime.formatTime(new Date()))
-      var create_time = changetime / 1000
-      console.log(create_time)
-      wx.request({
-        url: 'https://www.inguangli.cn/ingl/api/add/forum',
-        method: 'POST',
-        data:{
-          set_top:0,
-          avatarurl:userurl,
-          user_name:name,
-          openid:openid,
-          hot:0,
-          imgurl:posturl,
-          info:info,
-          create_time:create_time
-        },
-        success (res) {
-          console.log(res.data)
-        },
-        fail(res){
-          console.log(res.data)
-        }
-      })
-      wx.hideLoading()
-      //重新抓取推文列表
-      this.data.postlist = []
-      iforumcount = 0
       wx.pageScrollTo({
         scrollTop: 0
       })
-      this.onShow()
-
-      //清空上传信息数据
-      imgurl='',
-      this.setData({
-        //发布后关闭发布页面
-        info:'',
-        Img:"",
-        filter:'0rpx',
-        showinputinfo:'none',//打开上传信息页面
-        showinputpage:'block',//隐藏打开页面按钮
-      });
-      wx.showToast({
-        title:"发布成功",
-      })
+      //重新抓取推文列表
+      that.onShow()
       wx.requestSubscribeMessage({
         tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
         success (res) { 
@@ -405,12 +443,23 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh:function(){
+    var that = this
     wx.vibrateShort({type:"heavy"})
     wx.showNavigationBarLoading() //在标题栏中显示加载
-    this.setData({
-      loadModal: true
+    iforumcount = 0
+    that.setData({
+      loadModal: true,
+      toppostlist:[],
+      postlist:[],
+      showlikenum:[],
+      showlikestatus:[],
     })
-    this.onShow()
+    that.onShow()
+    setTimeout(function () {
+      that.setData({
+        loadModal: false
+      })
+    },1500)
   //模拟加载
     wx.hideNavigationBarLoading() //完成停止加载
     wx.stopPullDownRefresh() //停止下拉刷新
@@ -420,18 +469,26 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+    var that = this
     if (!morepost) {
       wx.showToast({
         title: '到底了!',
+        icon:'none'
       })
     }else{
-      this.setData({
+      that.setData({
         loadModal: true
       })
+      setTimeout(function () {
+        that.setData({
+          loadModal: false
+        })
+      },1500)
       iforumcount = iforumcount+7
-      this.onShow()
+      that.onShow()
     }
   },
+
 
   /**
    * 用户点击右上角分享

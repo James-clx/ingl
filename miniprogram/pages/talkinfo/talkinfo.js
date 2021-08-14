@@ -152,7 +152,7 @@ Page({
       that.onShow()
       wx.showToast({
         mask:'true',
-        duration:1500,
+        duration:1000,
         title:res,
         image: '/images/liked.png',
       })
@@ -168,7 +168,7 @@ Page({
       that.onShow()
       wx.showToast({
         mask:'true',
-        duration:1500,
+        duration:1000,
         title:res,
         image: '/images/like.png',
       })
@@ -230,7 +230,7 @@ Page({
     if (userblock == false) {
       wx.showToast({
         title:"用户已被封禁",
-        image: '/images/fail.png',
+        icon:'none'
       })
       return;
     }else{
@@ -244,8 +244,8 @@ Page({
       }      
       if(input == ''){
         wx.showToast({
-          title:"不能什么都不写哦",
-          image: '/images/fail.png',
+          title:"不能什么都不写哦!",
+          icon:'none'
         })
         return;
       }

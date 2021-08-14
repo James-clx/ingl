@@ -106,11 +106,11 @@
       <view wx:if="{{isadmin == true}}" class="text-gray text-sub admin-top">
         <view class="action" style="z-index:50">
           <text class="text-df margin-right-sm">置顶</text>
-          <switch class="sm" checked="{{item.settop}}" data-id="{{item._id}}" bindchange="settop"></switch>
+          <switch class="sm" checked="{{item.set_top}}" data-id="{{item.id}}" bindchange="settop"></switch>
         </view>
       </view>
 
-      <view class="text-gray text-sub delete-post" data-id="{{item._id}}" bindtap="deletepost">
+      <view class="text-gray text-sub delete-post" data-id="{{item.id}}" bindtap="deletepost">
         <text class="cuIcon-deletefill margin-lr-md"></text> 删除说说
       </view>
     </view>
