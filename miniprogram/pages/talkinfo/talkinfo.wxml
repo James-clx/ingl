@@ -24,7 +24,7 @@
     <view class="cu-time">最新</view>
     <view class="cu-item text-grey" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique">
       <view class="content bg-grey shadow-blur">
-        <text>{{post.user_name}}:\n</text>
+        <text>{{post.user_name}}:</text>
         <text user-select="true">{{post.content}}</text>
       </view>
     </view>

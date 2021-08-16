@@ -324,12 +324,9 @@ Page({
     //用户表
     // wx.cloud.callFunction({
     //   name: 'getuser',//云函数名
-    //   data:{
-    //     lim:1000,
-    //     pass:1000
-    //   },
     //   complete(res){
-    //     for (var i =0; i <5 ; i++) {
+    //     console.log(res.result.data)
+    //     for (var i =0; i <res.result.data.length ; i++) {
     //       (function (i) {
     //         setTimeout(function () {
     //           wx.request({

@@ -15,6 +15,7 @@ let checkinput = true
 let userblock
 let dbhasuser
 let postid
+let postcount
 let openid
 
 Page({
@@ -35,6 +36,8 @@ Page({
    */
   async onLoad (options) {
     postid = options.postid
+    postcount = options.postcount
+    console.log(postcount)
     var that = this
     const showinput =await htmlRequest(['showtallinput','get'])
     that.setData({
@@ -107,6 +110,13 @@ Page({
       },
       async success (res) {
         console.log(res.data)
+        if (!res.data.forum_data.create_time) {
+          wx.setStorageSync('deletepost', postcount)
+          wx.navigateBack({
+            delta: 1,
+          })
+          return
+        }
         var userpostimglist = new Array();
         if(res.data.forum_data.imgurl) {//判断有无图片信息
           const userpostimg = await cloudDownLoad('',[res.data.forum_data.imgurl])//调用缓存app.js

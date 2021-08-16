@@ -1,6 +1,6 @@
 <!-- 置顶说说 -->
 <view class="push" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{toppostlist.create_time}}">
-  <form data-id="{{toppostlist.id}}" bindtap="totalkinfo">
+  <form data-id="{{toppostlist.id}}" data-num="-1" bindtap="totalkinfo">
     <view class="user">
       <view>
         <image src="{{toppostlist.avatarurl}}" class="userinfoimg"></image>
@@ -41,8 +41,8 @@
 </view>
 
 <!-- 普通说说 -->
-<view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})">
-  <form data-id="{{item.id}}" bindtap="totalkinfo">
+<view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{item != ''}}">
+  <form data-id="{{item.id}}" data-num="{{index}}" bindtap="totalkinfo">
     <view class="user">
       <view>
         <image src="{{item.avatarurl}}" class="userinfoimg"></image>

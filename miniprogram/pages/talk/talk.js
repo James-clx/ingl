@@ -1,4 +1,5 @@
 import {htmlRequest} from "../../utils/html.js"
+//const qiniuUploader = require("../../utils/qiniuUploader.js");
 var gettime=require('../../utils/times.js')
 var check = require('../../utils/check.js')
 var like = require('../../utils/like.js')
@@ -67,6 +68,34 @@ Page({
       that.login(openid)
       return;
     }
+    var deletepost = wx.getStorageSync('deletepost',deletepost)
+    if (deletepost) {
+      if (deletepost == -1) {
+        wx.showToast({
+          title: '该说说已被删除',
+          icon:'none'
+        })
+        that.setData({
+          toppostlist:[]
+        })
+        wx.removeStorageSync('deletepost')
+      }else{
+        wx.showToast({
+          title: '该说说已被删除',
+          icon:'none'
+        })
+        var deletepostlist = "postlist[" + deletepost + "]";
+        var deleteshowlikenum = "showlikenum[" + deletepost + "]";
+        var deleteshowlikestatus = "showlikestatus[" + deletepost + "]";
+        that.setData({
+          [deletepostlist]:'',
+          [deleteshowlikenum]:'',
+          [deleteshowlikestatus]:'',
+        })
+        wx.removeStorageSync('deletepost')
+      }
+    }
+   
     userInfo = wx.getStorageSync('userInfo',userInfo),
     hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
     avatarurl = wx.getStorageSync('avatarurl',avatarurl)
@@ -166,7 +195,7 @@ Page({
   totalkinfo:function(e){
     var postid = e.currentTarget.dataset.id
     wx.navigateTo({
-      url:'../talkinfo/talkinfo?postid='+postid+'&userblock='+userblock
+      url:'../talkinfo/talkinfo?postid='+postid+'&postcount='+e.currentTarget.dataset.num
     })
   },
 
@@ -325,10 +354,25 @@ Page({
       var info = that.data.info
       if(imgurl){
         console.log(imgurl)
+
+        // qiniuUploader.upload(imgurl, (res) => {
+        //   //上传成功，上传成功一张图片，进入一次这个方法，也就是返回一次
+        //   console.log(res)
+        // },
+        // (error) => {
+        //   //图片上传失败，可以在七牛的js里面自己加了一个err错误的返回值console.log('error: '+ error)           
+        //   console.log('error: '+ error)
+        // },           
+        // {           
+        //   domain:'qxx6xjgqs.hn-bkt.clouddn.com',           
+        //   uptokenURL:'https://get.qiniutoken.com/minibx/geo_f/gain_qn_token',           
+        //   uploadURL:'https://up.qbox.me',//华东key: fileHead + imgName,// 自定义文件 keyregion:'ECN',           
+        // });
+
         wx.cloud.uploadFile({
           cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
           filePath: imgurl, // 小程序临时文件路径
-          success: res => {//上传云端成功后向数据库添加记录
+          success: res => {//上传云端成功后向数据库添加记录 
             // 返回文件 ID
             var posturl = res.fileID
             wx.request({
@@ -364,6 +408,7 @@ Page({
                   showinputinfo:'none',//打开上传信息页面
                   showinputpage:'block',//隐藏打开页面按钮
                 });
+                //重新抓取推文列表
                 that.onShow()
               },
               fail(res){
@@ -407,6 +452,8 @@ Page({
               showinputinfo:'none',//打开上传信息页面
               showinputpage:'block',//隐藏打开页面按钮
             });
+            //重新抓取推文列表
+            that.onShow()
           },
           fail(res){
             console.log(res.data)
@@ -416,8 +463,6 @@ Page({
       wx.pageScrollTo({
         scrollTop: 0
       })
-      //重新抓取推文列表
-      that.onShow()
       wx.requestSubscribeMessage({
         tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
         success (res) { 
