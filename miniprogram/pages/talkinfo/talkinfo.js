@@ -117,12 +117,6 @@ Page({
           })
           return
         }
-        var userpostimglist = new Array();
-        if(res.data.forum_data.imgurl) {//判断有无图片信息
-          const userpostimg = await cloudDownLoad('',[res.data.forum_data.imgurl])//调用缓存app.js
-          userpostimglist = userpostimg//将图片缓存信息存入数组
-          res.data.forum_data.imgurl = userpostimglist//使用缓存的url替换本地图片url
-        }
         that.setData({
           postlist:res.data.forum_data,
           getcommentlist:res.data.forum_comment,

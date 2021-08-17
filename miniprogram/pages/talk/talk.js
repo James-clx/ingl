@@ -21,17 +21,6 @@ let userblock = ''//全局变量
 let dbhasuser = ''
 let morepost = true
 
-// 初始化七牛相关参数
-function initQiniu() {
-  var options = {
-    region: 'SCN', // 华南区
-    uptokenURL: 'https://yourserver.com/api/uptoken',
-    // uptoken: 'xxxx',
-    domain: 'http://www.inguangli.cn/'
-  };
-  qiniuUploader.init(options);
-}
-
 Page({
   /**
    * 页面的初始数据
@@ -365,65 +354,73 @@ Page({
       var info = that.data.info
       if(imgurl){
         console.log(imgurl)
-
-        qiniuUploader.upload(imgurl, (res) => {
-          console.log(res)
-          var posturl = res
-        }, (error) => {
-          console.error('error: ' + JSON.stringify(error));
-        });
-
-        // wx.cloud.uploadFile({
-        //   cloudPath: 'userpost/'+openid+'/'+times, // 上传至云端的路径
-        //   filePath: imgurl, // 小程序临时文件路径
-        //   success: res => {//上传云端成功后向数据库添加记录 
-
-
-        //     // 返回文件 ID
-        //     var posturl = res.fileID
-        //     wx.request({
-        //       url: 'https://www.inguangli.cn/ingl/api/add/forum',
-        //       method: 'POST',
-        //       data:{
-        //         set_top:0,
-        //         avatarurl:userurl,
-        //         user_name:name,
-        //         openid:openid,
-        //         hot:0,
-        //         imgurl:posturl,
-        //         info:info,
-        //         create_time:Date.parse(times.replace(/-/g, '/'))/1000
-        //       },
-        //       success (res) {
-        //         console.log(res.data)
-        //         wx.hideLoading()
-        //         wx.showToast({
-        //           title:res.data.message,
-        //         })
-        //         //清空上传信息数据
-        //         imgurl=''
-        //         iforumcount = 0
-        //         that.setData({
-        //           //发布后关闭发布页面
-        //           info:'',
-        //           Img:"",
-        //           postlist:[],
-        //           showlikenum:[],
-        //           showlikestatus:[],
-        //           filter:'0rpx',
-        //           showinputinfo:'none',//打开上传信息页面
-        //           showinputpage:'block',//隐藏打开页面按钮
-        //         });
-        //         //重新抓取推文列表
-        //         that.onShow()
-        //       },
-        //       fail(res){
-        //         console.log(res.data)
-        //       }
-        //     })
-        //   },
-        //   fail: console.error//执行失败报错
-        // })
+        //获取七牛token
+        wx.request({
+          url: 'https://www.inguangli.cn/ingl/api/get/qiniu/token',
+          method:'GET',
+          data:{
+            file_name:openid + '/' + times
+          },
+          success(res){
+            //添加数据库
+            qiniuUploader.upload(imgurl, res => {
+              console.log(res)
+              wx.request({
+                url: 'https://www.inguangli.cn/ingl/api/add/forum',
+                method: 'POST',
+                data:{
+                  set_top:0,
+                  avatarurl:userurl,
+                  user_name:name,
+                  openid:openid,
+                  hot:0,
+                  imgurl:res.imageURL,
+                  info:info,
+                  create_time:Date.parse(times.replace(/-/g, '/'))/1000
+                },
+                success (res) {
+                  wx.hideLoading()
+                  wx.showToast({
+                    title:res.data.message,
+                  })
+                  //清空上传信息数据
+                  imgurl=''
+                  iforumcount = 0
+                  that.setData({
+                    //发布后关闭发布页面
+                    info:'',
+                    Img:"",
+                    postlist:[],
+                    showlikenum:[],
+                    showlikestatus:[],
+                    filter:'0rpx',
+                    showinputinfo:'none',//打开上传信息页面
+                    showinputpage:'block',//隐藏打开页面按钮
+                  });
+                  //重新抓取推文列表
+                  that.onShow()
+                },
+                fail(res){
+                  console.log(res.data)
+                }
+              })
+            }, (error) => {
+              console.log('error' + error)
+            }, {
+              //这里是你所在大区的地址
+              uploadURL: 'https://up-z2.qbox.me/',
+              //文件名，与请求后端token的名字一样
+              key: openid + '/' + times,
+              //服务器上传地址
+              domain: 'http://qiniu.inguangli.cn/',
+              //这里的uptoken是后端返回来的
+              uptoken: res.data,
+            })
+          },
+          fail(res){
+            console.log(res)
+          }
+        })
       }else{
         wx.request({
           url: 'https://www.inguangli.cn/ingl/api/add/forum',

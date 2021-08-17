@@ -1,6 +1,6 @@
 const app = getApp()
 import{cloudDownLoad}from"../../utils/cloud.js"
-
+const qiniuUploader = require("../../utils/qiniuUploader.js");
 Page({
   data: {
     images:[],
@@ -229,34 +229,84 @@ Page({
 
     //     for (var i =0; i <movepostlist.length ; i++) {
     //       (function (i) {
-    //         setTimeout(function () {
-    //           if(!movepostlist[i].imgurl){
-    //             movepostlist[i].imgurl = ''
-    //           }
-    //           var changetime = Date.parse(movepostlist[i].pushtime)
-    //           movepostlist[i].pushtime = changetime / 1000
-    //           console.log(movepostlist[i]._id+"---"+i)
-    //           wx.request({
-    //             url: 'https://www.inguangli.cn/ingl/api/add/forum',
-    //             method: 'POST',
-    //             data:{
-    //               set_top: 0,
-    //               avatarurl: movepostlist[i].avatarurl,
-    //               user_name: movepostlist[i].nickname,
-    //               openid: movepostlist[i]._openid,
-    //               hot: movepostlist[i].hot,
-    //               comment_count: movepostlist[i].commentcount,
-    //               imgurl: movepostlist[i].imgurl,
-    //               info: movepostlist[i].info,
-    //               create_time:movepostlist[i].pushtime
-    //             },
-    //             success (res) {
-    //               console.log(res.data)
-    //             },
-    //             fail(res){
-    //               console.log(res.data)
-    //             }
-    //           })
+    //         setTimeout(async function () {
+    //           if(movepostlist[i].imgurl){
+    //             const userpostimg = await cloudDownLoad('',[movepostlist[i].imgurl])//调用缓存app.js
+    //             //获取七牛token
+    //             wx.request({
+    //               url: 'https://www.inguangli.cn/ingl/api/get/qiniu/token',
+    //               method:'GET',
+    //               data:{
+    //                 file_name:movepostlist[i]._openid + '/' + movepostlist[i].pushtime,
+    //               },
+    //               async success(res){
+    //                 //添加数据库                    
+    //                 qiniuUploader.upload(userpostimg[0], res => {
+    //                   console.log(movepostlist[i]._id+"---"+i)
+    //                   wx.request({
+    //                     url: 'https://www.inguangli.cn/ingl/api/add/forum',
+    //                     method: 'POST',
+    //                     data:{
+    //                       set_top: 0,
+    //                       avatarurl: movepostlist[i].avatarurl,
+    //                       user_name: movepostlist[i].nickname,
+    //                       openid: movepostlist[i]._openid,
+    //                       hot: movepostlist[i].hot,
+    //                       comment_count: movepostlist[i].commentcount,
+    //                       imgurl: res.imageURL,
+    //                       info: movepostlist[i].info,
+    //                       create_time:Date.parse(movepostlist[i].pushtime)/1000
+    //                     },
+    //                     success (res) {
+    //                       console.log(res.data)
+    //                     },
+    //                     fail(res){
+    //                       console.log(res.data)
+    //                     }
+    //                   })
+    //                 }, (error) => {
+    //                   console.log('error' + error)
+    //                 }, {
+    //                   //这里是你所在大区的地址
+    //                   uploadURL: 'https://up-z2.qbox.me/',
+    //                   //文件名，与请求后端token的名字一样
+    //                   key: movepostlist[i]._openid + '/' + movepostlist[i].pushtime,
+    //                   //服务器上传地址
+    //                   domain: 'http://qiniu.inguangli.cn/',
+    //                   //这里的uptoken是后端返回来的
+    //                   uptoken: res.data,
+    //                 })
+    //               },
+    //               fail(res){
+    //                 console.log(res)
+    //               }
+    //             })
+    //           }else{
+    //             var changetime = Date.parse(movepostlist[i].pushtime)
+    //             movepostlist[i].pushtime = changetime / 1000
+    //             console.log(movepostlist[i]._id+"---"+i)
+    //             wx.request({
+    //               url: 'https://www.inguangli.cn/ingl/api/add/forum',
+    //               method: 'POST',
+    //               data:{
+    //                 set_top: 0,
+    //                 avatarurl: movepostlist[i].avatarurl,
+    //                 user_name: movepostlist[i].nickname,
+    //                 openid: movepostlist[i]._openid,
+    //                 hot: movepostlist[i].hot,
+    //                 comment_count: movepostlist[i].commentcount,
+    //                 imgurl: '',
+    //                 info: movepostlist[i].info,
+    //                 create_time:movepostlist[i].pushtime
+    //               },
+    //               success (res) {
+    //                 console.log(res.data)
+    //               },
+    //               fail(res){
+    //                 console.log(res.data)
+    //               }
+    //             })
+    //           }              
     //         }, 1000 * i);
     //       })(i);
     //     }
