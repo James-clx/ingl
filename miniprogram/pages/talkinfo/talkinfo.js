@@ -292,7 +292,17 @@ Page({
               that.setData({
                 getcommentlist:res.data.data
               })
-              console.log(that.data.getcommentlist)
+              //用户订阅事件
+              if (openid == that.data.postlist.openid) {
+                wx.requestSubscribeMessage({
+                  tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+                  success (res) { 
+                    console.log(res)
+                  }
+                })
+              }else{
+                userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+              }
             },
             fail(res){
               console.log(res.data)
@@ -304,17 +314,7 @@ Page({
         }
       })
       wx.hideLoading()
-      //用户订阅事件
-      if (openid == this.data.postlist.openid) {
-        wx.requestSubscribeMessage({
-          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-          success (res) { 
-            console.log(res)
-          }
-        })
-      }else{
-        userremind.sendremind(postlist.openid,postlist.info,name,input)
-      }
+     
       //发布评论后重新抓取评论列表
       that.onShow()
     }
