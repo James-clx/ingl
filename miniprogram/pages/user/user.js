@@ -110,10 +110,7 @@ Page({
   },
 
   login:function(openid){
-    if (!openid) {
-      this.onLoad()
-      return
-    }
+    openid = openid
     var that = this
     var checkdb
       getuserinfo.getUser(openid)

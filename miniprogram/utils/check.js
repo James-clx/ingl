@@ -1,7 +1,7 @@
 
 // 违规字符检查
 
-function checktext(input){
+function checktext(input,openid){
   var info = input
 
   return new Promise((resolve, reject) => {

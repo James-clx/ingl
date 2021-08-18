@@ -43,29 +43,29 @@
           <view class="footer">
             <text>校园地图</text>
             <view class="fo-other">
-              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg" data-id="http://tmp/KlKIjEvJY76scfc108da5ce0b12fd47eba574e06d846.jpg" bindtap="tapimg" />
+              <in-rblock src="http://qiniu.inguangli.cn/map.jpg" data-id="http://qiniu.inguangli.cn/map.jpg" bindtap="tapimg" />
             </view>
 
             <!-- <text>小理出行</text>
             <view class="fo-other">
-              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/xiaolitrip.jpg" bindtap="toxiaolitrip" />
+              <in-rblock src="http://qiniu.inguangli.cn/xiaolitrip.jpg" bindtap="toxiaolitrip" />
             </view> -->
           </view>
 
           <view class="footer">
             <text>饿了么红包</text>
             <view class="fo-other" id="elmhb">
-              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/elm.jpg" bindtap="eClick" />
+              <in-rblock src="http://qiniu.inguangli.cn/elm.jpg" bindtap="eClick" />
             </view>
             
             <text>美团红包</text>
             <view class="fo-other">
-              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/mt.jpg" bindtap="mClick" />
+              <in-rblock src="http://qiniu.inguangli.cn/mt.jpg" bindtap="mClick" />
             </view>
 
             <text>更多</text>
             <view class="fo-other">
-              <in-rblock src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/av1.jpg" bindtap="more"/>
+              <in-rblock src="http://qiniu.inguangli.cn/av1.jpg" bindtap="more"/>
             </view>
           </view>
 

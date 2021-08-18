@@ -10,7 +10,6 @@ const app=getApp()
 let imgurl=''
 let avatarurl=''
 let nickname=''
-let checkinput = true
 let hasUserInfo =  false//缓存是否有用户信息
 let userInfo = []
 let iforumcount = 0//拉取说说开始条数
@@ -65,7 +64,9 @@ Page({
     let that = this;//将this另存为
     var login = wx.getStorageSync('hasUserInfo',login)
     if(!login){
-      that.login(openid)
+      openid = wx.getStorageSync('openid',openid)
+      console.log("111"+openid)
+      that.login(wx.getStorageSync('openid'))
       return;
     }
     var deletepost = wx.getStorageSync('deletepost',deletepost)
@@ -165,10 +166,7 @@ Page({
 
   //登录
   login:function(openid){
-    if (!openid) {
-      this.onLoad()
-      return
-    }
+    openid = openid
     var that = this
     var checkdb
     getuserinfo.getUser(openid)
@@ -288,10 +286,6 @@ Page({
     this.setData({
       info:event.detail.value
     })
-    check.checktext(event.detail.value)
-    .then(res => {
-      checkinput = res
-    })
   },
   
   //上传图片
@@ -340,137 +334,140 @@ Page({
       wx.showLoading({
         title: '上传中',
       })
-      if(checkinput == false){
-        wx.hideLoading()
-        wx.showToast({
-          icon: 'none',
-          title: '文字违规',
-        })
-        return;
-      }
       //上传图片文件到数据库(有图片)
       var name = nickname
       var userurl = avatarurl
       var info = that.data.info
-      if(imgurl){
-        console.log(imgurl)
-        //获取七牛token
-        wx.request({
-          url: 'https://www.inguangli.cn/ingl/api/get/qiniu/token',
-          method:'GET',
-          data:{
-            file_name:openid + '/' + times
-          },
-          success(res){
-            //添加数据库
-            qiniuUploader.upload(imgurl, res => {
-              console.log(res)
-              wx.request({
-                url: 'https://www.inguangli.cn/ingl/api/add/forum',
-                method: 'POST',
-                data:{
-                  set_top:0,
-                  avatarurl:userurl,
-                  user_name:name,
-                  openid:openid,
-                  hot:0,
-                  imgurl:res.imageURL,
-                  info:info,
-                  create_time:Date.parse(times.replace(/-/g, '/'))/1000
-                },
-                success (res) {
-                  wx.hideLoading()
-                  wx.showToast({
-                    title:res.data.message,
-                  })
-                  //清空上传信息数据
-                  imgurl=''
-                  iforumcount = 0
-                  that.setData({
-                    //发布后关闭发布页面
-                    info:'',
-                    Img:"",
-                    postlist:[],
-                    showlikenum:[],
-                    showlikestatus:[],
-                    filter:'0rpx',
-                    showinputinfo:'none',//打开上传信息页面
-                    showinputpage:'block',//隐藏打开页面按钮
-                  });
-                  //重新抓取推文列表
-                  that.onShow()
-                },
-                fail(res){
-                  console.log(res.data)
-                }
+      check.checktext(info,openid)
+      .then(res => {
+        if(res == false){
+          wx.hideLoading()
+          wx.showToast({
+            icon: 'none',
+            title: '文字违规',
+          })
+          return;
+        }
+        if(imgurl){
+          console.log(imgurl)
+          //获取七牛token
+          wx.request({
+            url: 'https://www.inguangli.cn/ingl/api/get/qiniu/token',
+            method:'GET',
+            data:{
+              file_name:openid + '/' + times
+            },
+            success(res){
+              //添加数据库
+              qiniuUploader.upload(imgurl, res => {
+                console.log(res)
+                wx.request({
+                  url: 'https://www.inguangli.cn/ingl/api/add/forum',
+                  method: 'POST',
+                  data:{
+                    set_top:0,
+                    avatarurl:userurl,
+                    user_name:name,
+                    openid:openid,
+                    hot:0,
+                    imgurl:res.imageURL,
+                    info:info,
+                    create_time:Date.parse(times.replace(/-/g, '/'))/1000
+                  },
+                  success (res) {
+                    wx.hideLoading()
+                    wx.showToast({
+                      title:res.data.message,
+                    })
+                    //清空上传信息数据
+                    imgurl=''
+                    iforumcount = 0
+                    that.setData({
+                      //发布后关闭发布页面
+                      info:'',
+                      Img:"",
+                      postlist:[],
+                      showlikenum:[],
+                      showlikestatus:[],
+                      filter:'0rpx',
+                      showinputinfo:'none',//打开上传信息页面
+                      showinputpage:'block',//隐藏打开页面按钮
+                    });
+                    //重新抓取推文列表
+                    that.onShow()
+                  },
+                  fail(res){
+                    console.log(res.data)
+                  }
+                })
+              }, (error) => {
+                console.log('error' + error)
+              }, {
+                //这里是你所在大区的地址
+                uploadURL: 'https://up-z2.qbox.me/',
+                //文件名，与请求后端token的名字一样
+                key: openid + '/' + times,
+                //服务器上传地址
+                domain: 'http://qiniu.inguangli.cn/',
+                //这里的uptoken是后端返回来的
+                uptoken: res.data,
               })
-            }, (error) => {
-              console.log('error' + error)
-            }, {
-              //这里是你所在大区的地址
-              uploadURL: 'https://up-z2.qbox.me/',
-              //文件名，与请求后端token的名字一样
-              key: openid + '/' + times,
-              //服务器上传地址
-              domain: 'http://qiniu.inguangli.cn/',
-              //这里的uptoken是后端返回来的
-              uptoken: res.data,
-            })
-          },
-          fail(res){
+            },
+            fail(res){
+              console.log(res)
+            }
+          })
+        }else{
+          wx.request({
+            url: 'https://www.inguangli.cn/ingl/api/add/forum',
+            method: 'POST',
+            data:{
+              set_top:0,
+              avatarurl:userurl,
+              user_name:name,
+              openid:openid,
+              hot:0,
+              imgurl:'',
+              info:info,
+              create_time:Date.parse(times.replace(/-/g, '/'))/1000
+            },
+            success (res) {
+              console.log(res.data)
+              wx.hideLoading()
+              wx.showToast({
+                title:res.data.message,
+              })
+              //清空上传信息数据
+              imgurl=''
+              iforumcount = 0
+              that.setData({
+                //发布后关闭发布页面
+                info:'',
+                Img:"",
+                postlist:[],
+                showlikenum:[],
+                showlikestatus:[],
+                filter:'0rpx',
+                showinputinfo:'none',//打开上传信息页面
+                showinputpage:'block',//隐藏打开页面按钮
+              });
+              //重新抓取推文列表
+              that.onShow()
+            },
+            fail(res){
+              console.log(res.data)
+            }
+          })
+        }
+        wx.pageScrollTo({
+          scrollTop: 0
+        })
+        wx.requestSubscribeMessage({
+          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+          success (res) { 
             console.log(res)
           }
         })
-      }else{
-        wx.request({
-          url: 'https://www.inguangli.cn/ingl/api/add/forum',
-          method: 'POST',
-          data:{
-            set_top:0,
-            avatarurl:userurl,
-            user_name:name,
-            openid:openid,
-            hot:0,
-            imgurl:'',
-            info:info,
-            create_time:Date.parse(times.replace(/-/g, '/'))/1000
-          },
-          success (res) {
-            console.log(res.data)
-            wx.hideLoading()
-            wx.showToast({
-              title:res.data.message,
-            })
-            //清空上传信息数据
-            imgurl=''
-            iforumcount = 0
-            that.setData({
-              //发布后关闭发布页面
-              info:'',
-              Img:"",
-              postlist:[],
-              showlikenum:[],
-              showlikestatus:[],
-              filter:'0rpx',
-              showinputinfo:'none',//打开上传信息页面
-              showinputpage:'block',//隐藏打开页面按钮
-            });
-            //重新抓取推文列表
-            that.onShow()
-          },
-          fail(res){
-            console.log(res.data)
-          }
-        })
-      }
-      wx.pageScrollTo({
-        scrollTop: 0
-      })
-      wx.requestSubscribeMessage({
-        tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-        success (res) { 
-          console.log(res)
-        }
       })
     }
   },

@@ -7,12 +7,12 @@ Page({
   },
 
   async onLoad(option){
-    var map = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg'
-    var jrxydl = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/jrxydl.png'
-    const images = await cloudDownLoad('',[jrxydl,map])
-    this.setData({
-      img:images
-    })
+    // var map = 'http://qiniu.inguangli.cn/map.jpg'
+    // var jrxydl = 'http://qiniu.inguangli.cn/jrxydl.png'
+    // const images = await cloudDownLoad([jrxydl,map])
+    // this.setData({
+    //   img:images
+    // })
   },
 
 // 获取屏幕高度
@@ -34,10 +34,9 @@ Page({
   tapimg(e){
     wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
-    
     wx.previewImage({
-      current: this.data.img[e.currentTarget.dataset.id], // 当前显示图片的http链接
-      urls: this.data.img // 需要预览的图片http链接列表
+      current: '', // 当前显示图片的http链接
+      urls: [e.currentTarget.dataset.id], // 需要预览的图片http链接列表
     })
   },
 

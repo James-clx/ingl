@@ -24,7 +24,7 @@
       <image class="wmxy" src="/images/wmxy.png"></image>
     </view>
     <view class="liantong">
-      <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="0" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/wmxycz.png"></image>
+      <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="http://qiniu.inguangli.cn/wmxycz.png" src="http://qiniu.inguangli.cn/wmxycz.png"></image>
     </view>
 
     <view class="infotitle">
@@ -38,8 +38,13 @@
         <text class="goto" bindtap="gowechatminipeogram">>>点击跳转小程序</text>
       </view>
       <view class="liantong">
-        <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="1" src="cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png"></image>
+        <image class="ltstap" bindtap="tapimg" mode="aspectFit" data-id="http://qiniu.inguangli.cn/liantong.png" src="http://qiniu.inguangli.cn/liantong.png"></image>
       </view>
+    </view>
+
+    <view class="infotitle" style="padding-bottom:50rpx">
+      <functbg class="infofunct" title="P.S." />
+      <text class="functtime" style="margin-left:-350rpx">据网络中心通知，下学期充值方式将会变更\n敬请留意最新公告</text>
     </view>
 
   </view>

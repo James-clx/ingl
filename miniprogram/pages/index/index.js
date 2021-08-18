@@ -84,11 +84,12 @@ Page({
         })
       }
     })
-    var map = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/map.jpg'
-    const cloudimages = await cloudDownLoad('',[map])
-    this.setData({
-      cloudimg:cloudimages
-    })
+    // var map = 'https://qiniu.inguangli.cn/map.jpg'
+    // const cloudimages = await cloudDownLoad([map])
+    // console.log(cloudimages)
+    // this.setData({
+    //   cloudimg:cloudimages
+    // })
   },
 
   toschoolinfo:function(){
@@ -118,10 +119,9 @@ Page({
   async tapimg(e){
     wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
-    
     wx.previewImage({
-      current: this.data.cloudimg[e.currentTarget.dataset.id], // 当前显示图片的http链接
-      urls: this.data.cloudimg, // 需要预览的图片http链接列表
+      current: '', // 当前显示图片的http链接
+      urls: [e.currentTarget.dataset.id], // 需要预览的图片http链接列表
     })
   },
 

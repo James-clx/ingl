@@ -11,7 +11,6 @@ let nickname=''
 let hasUserInfo=''
 let pushinput=''//评论内容
 var isPreview
-let checkinput = true
 let userblock
 let dbhasuser
 let postid
@@ -25,6 +24,7 @@ Page({
   data: {
     getcommentlist:[],//获取评论列表
     postlist:[],//推文数组
+    images:[],
     inputclean:'',//清空评论框数据
     loadModal: false,
     showinput:true,
@@ -117,6 +117,13 @@ Page({
           })
           return
         }
+        // if(res.data.forum_data.imgurl != ''){
+        //   var postimg = res.data.forum_data.imgurl
+        //   const cloudimages = await cloudDownLoad([postimg])
+        //   that.setData({
+        //     images:cloudimages
+        //   })
+        // }
         that.setData({
           postlist:res.data.forum_data,
           getcommentlist:res.data.forum_comment,
@@ -138,12 +145,9 @@ Page({
       isPreview:true
     })
     wx.vibrateShort({type:"heavy"})
-    let imgurl=e.currentTarget.dataset.id+''
-    var userpostimg = new Array();
-    userpostimg[0] = imgurl
     wx.previewImage({
       current: '', // 当前显示图片的http链接
-      urls: userpostimg // 需要预览的图片http链接列表
+      urls: [e.currentTarget.dataset.id] // 需要预览的图片http链接列表
     })
   },
 
@@ -216,10 +220,6 @@ Page({
   //获取输入框数据
   pushinput:function(event){
     pushinput=event.detail.value
-    check.checktext(event.detail.value)
-    .then(res => {
-      checkinput = res
-    })
   },
 
   //评论上传到数据库
@@ -256,67 +256,72 @@ Page({
       wx.showLoading({
         title: '上传中',
       })
-      if(checkinput == false){
-        wx.hideLoading()
-        wx.showToast({
-          icon: 'none',
-          title: '文字违规',
-        })
-        pushinput = input
-        return;
-      }
-      that.setData({
-        inputclean : ''
-      })
-
-      wx.request({
-        url: 'https://www.inguangli.cn/ingl/api/add/forum/comment',
-        method:'POST',
-        data:{
-          openid: openid,
-          content:input,
-          forum_id:e.currentTarget.dataset.id,//获取前端推文的id
-          com_username:name
-        },
-        success (res) {
-          console.log(res.data)
-
-          wx.request({
-            url: 'https://www.inguangli.cn/ingl/api/get/forum/comment',
-            method:"GET",
-            data:{
-              forum_id:e.currentTarget.dataset.id,//获取前端推文的id
-            },
-            success (res) {
-              console.log(res.data.data)
-              that.setData({
-                getcommentlist:res.data.data
-              })
-              //用户订阅事件
-              if (openid == that.data.postlist.openid) {
-                wx.requestSubscribeMessage({
-                  tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-                  success (res) { 
-                    console.log(res)
-                  }
-                })
-              }else{
-                userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
-              }
-            },
-            fail(res){
-              console.log(res.data)
-            }
+      check.checktext(input,openid)
+      .then(res => {
+        console.log(res)
+        if(res == false){
+          wx.hideLoading()
+          wx.showToast({
+            icon: 'none',
+            title: '文字违规',
           })
-        },
-        fail(res){
-          console.log(res.data)
+          pushinput = input
+          return;
         }
+        that.setData({
+          inputclean : ''
+        })
+
+        wx.request({
+          url: 'https://www.inguangli.cn/ingl/api/add/forum/comment',
+          method:'POST',
+          data:{
+            openid: openid,
+            content:input,
+            forum_id:e.currentTarget.dataset.id,//获取前端推文的id
+            com_username:name
+          },
+          success (res) {
+            console.log(res.data)
+
+            wx.request({
+              url: 'https://www.inguangli.cn/ingl/api/get/forum/comment',
+              method:"GET",
+              data:{
+                forum_id:e.currentTarget.dataset.id,//获取前端推文的id
+              },
+              success (res) {
+                console.log(res.data.data)
+                that.setData({
+                  getcommentlist:res.data.data
+                })
+                //用户订阅事件
+                if (openid == that.data.postlist.openid) {
+                  wx.requestSubscribeMessage({
+                    tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+                    success (res) { 
+                      console.log(res)
+                    }
+                  })
+                }else{
+                  userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+                }
+              },
+              fail(res){
+                console.log(res.data)
+              }
+            })
+          },
+          fail(res){
+            console.log(res.data)
+          }
+        })
+      
+        wx.hideLoading()
+      
+        //发布评论后重新抓取评论列表
+        that.onShow()
       })
-      wx.hideLoading()
-     
-      //发布评论后重新抓取评论列表
-      that.onShow()
     }
   },
 

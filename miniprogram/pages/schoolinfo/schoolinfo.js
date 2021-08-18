@@ -7,12 +7,12 @@ Page({
   },
 
   async onLoad(option){
-    var wmxycz = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/wmxycz.png'
-    var liantong = 'cloud://user-1go7hmfiae35dce5.7573-user-1go7hmfiae35dce5-1306031834/admin/liantong.png'
-    const images = await cloudDownLoad('',[wmxycz,liantong])
-    this.setData({
-      img:images
-    })
+    // var wmxycz = 'http://qiniu.inguangli.cn/wmxycz.png'
+    // var liantong = 'http://qiniu.inguangli.cn/liantong.png'
+    // const images = await cloudDownLoad([wmxycz,liantong])
+    // this.setData({
+    //   img:images
+    // })
   },
 
 // 获取屏幕高度
@@ -35,8 +35,8 @@ Page({
     wx.vibrateShort({type:"heavy"})
     //e.currentTarget.dataset.id
     wx.previewImage({
-      current: this.data.img[e.currentTarget.dataset.id], // 当前显示图片的http链接
-      urls: this.data.img // 需要预览的图片http链接列表
+      current: '', // 当前显示图片的http链接
+      urls: [e.currentTarget.dataset.id], // 需要预览的图片http链接列表
     })
   },
 
