@@ -64,10 +64,11 @@ Page({
     let that = this;//将this另存为
     var login = wx.getStorageSync('hasUserInfo',login)
     if(!login){
-      openid = wx.getStorageSync('openid',openid)
-      console.log("111"+openid)
-      that.login(wx.getStorageSync('openid'))
-      return;
+      getuserinfo.getLoginOpenid()
+      .then(res => {
+        that.login(res)
+        return;
+      })
     }
     var deletepost = wx.getStorageSync('deletepost',deletepost)
     if (deletepost) {
@@ -126,7 +127,6 @@ Page({
       },
       success (res) {
         if (that.data.postlist.length-7 != iforumcount) {
-          console.log(res.data)
           var pustpostlist = new Array()
           var pustlikestatus = new Array()
           var pustlikenum = new Array()
@@ -144,7 +144,6 @@ Page({
               pustlikenum.push(res.data.forum_list[i].forum_like_sum)
             }
           }
-          console.log(that.data.showlikenum)
           that.setData({
             postlist:pustpostlist,
             showlikestatus:pustlikestatus,
@@ -166,7 +165,7 @@ Page({
 
   //登录
   login:function(openid){
-    openid = openid
+    var openid = openid
     var that = this
     var checkdb
     getuserinfo.getUser(openid)
@@ -308,7 +307,7 @@ Page({
   upload:function(){
     var that = this
     wx.vibrateShort({type:"heavy"})
-    if (userblock == false) {
+    if (userblock == 'false') {
       wx.showToast({
         title:"用户已被封禁",
         icon:'none'
@@ -462,12 +461,15 @@ Page({
         wx.pageScrollTo({
           scrollTop: 0
         })
-        wx.requestSubscribeMessage({
-          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-          success (res) { 
-            console.log(res)
-          }
-        })
+      })
+      wx.requestSubscribeMessage({
+        tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+        success (res) { 
+          console.log(res)
+        },
+        fail(res){
+          console.log(res)
+        }
       })
     }
   },

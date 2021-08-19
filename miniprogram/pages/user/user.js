@@ -37,8 +37,11 @@ Page({
     var that = this
     var login = wx.getStorageSync('hasUserInfo',login)
     if(!login){
-      that.login(openid)
-      return;
+      getuserinfo.getLoginOpenid()
+      .then(res => {
+        that.login(res)
+        return;
+      })
     }
     hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
     that.setData({
@@ -84,7 +87,6 @@ Page({
         openid:openid
       },
       success (res) {
-        console.log(res.data)
         that.setData({
           likecount:res.data.my_forum_like_sum,
           iforumlength:res.data.my_forum_sum,
@@ -110,17 +112,17 @@ Page({
   },
 
   login:function(openid){
-    openid = openid
+    var openid = openid
     var that = this
     var checkdb
-      getuserinfo.getUser(openid)
-      .then(res => {
-        checkdb = res
-        if (checkdb.code != 200) {
-          dbhasuser = 'false'
-        }else{
-          dbhasuser = 'true'
-        }
+    getuserinfo.getUser(openid)
+    .then(res => {
+      checkdb = res
+      if (checkdb.code != 200) {
+        dbhasuser = 'false'
+      }else{
+        dbhasuser = 'true'
+      }
       userlogin.userlogin(openid,dbhasuser)
       .then(res =>{
         hasUserInfo = 'true'

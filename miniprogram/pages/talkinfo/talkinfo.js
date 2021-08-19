@@ -37,7 +37,6 @@ Page({
   async onLoad (options) {
     postid = options.postid
     postcount = options.postcount
-    console.log(postcount)
     var that = this
     const showinput =await htmlRequest(['showtallinput','get'])
     that.setData({
@@ -92,7 +91,6 @@ Page({
         openid:openid
       },
       success (res) {
-        console.log(res.data.data)
         userblock = res.data.data
       },
       fail(res){
@@ -109,7 +107,6 @@ Page({
         forum_id:postid
       },
       async success (res) {
-        console.log(res.data)
         if (!res.data.forum_data.create_time) {
           wx.setStorageSync('deletepost', postcount)
           wx.navigateBack({
@@ -231,7 +228,7 @@ Page({
     var input = pushinput
     pushinput = ''
     var name = nickname
-    if (userblock == false) {
+    if (userblock == 'false') {
       wx.showToast({
         title:"用户已被封禁",
         icon:'none'
@@ -322,6 +319,19 @@ Page({
         //发布评论后重新抓取评论列表
         that.onShow()
       })
+      if (openid == that.data.postlist.openid) {
+        wx.requestSubscribeMessage({
+          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+          success (res) { 
+            console.log(res)
+          },
+          fail(res){
+            console.log(res)
+          }
+        })
+      }else{
+        userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+      }
     }
   },
 

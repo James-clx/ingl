@@ -60,7 +60,6 @@ Page({
         openid:openid
       },
       success (res) {
-        console.log(res.data.data)
         that.setData({
           isadmin:res.data.data
         })
@@ -78,7 +77,6 @@ Page({
         openid:openid
       },
       success (res) {
-        console.log(res.data)
         that.setData({
           likecount:res.data.my_forum_like_sum,
           iforumlength:res.data.my_forum_sum
@@ -114,7 +112,6 @@ Page({
         offest: iforumcount,
       },
       success (res) {
-        console.log(res.data.data)
         if (!res.data.data) {
           that.setData({
             shownothing:'block',
@@ -138,7 +135,6 @@ Page({
               pustlikenum.push(res.data.data[i].forum_like_sum)
             }
           }
-          console.log(that.data.showlikestatus)
           that.setData({
             postlist:pustpostlist,
             showlikestatus:pustlikestatus,
