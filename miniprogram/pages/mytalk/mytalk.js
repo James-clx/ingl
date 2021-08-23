@@ -1,7 +1,11 @@
 import {getOpenid} from "../../utils/inside_api.js"
+var getuserinfo = require('../../utils/inside_api.js')
+var userlogin = require('../../utils/login.js')
 var like = require('../../utils/like.js')
 const app=getApp()
+let dbhasuser
 let userblock
+let hasUserInfo = false//缓存是否有用户信息
 let openid
 let iforumcount = 0//推文显示条数
 let morepost = true
@@ -47,6 +51,15 @@ Page({
     openid = getOpenid()
     wx.hideLoading()
     let that = this;//将this另存为
+    var login = wx.getStorageSync('hasUserInfo',login)
+    if(!login){
+      getuserinfo.getLoginOpenid()
+      .then(res => {
+        that.login(res)
+        return;
+      })
+    }
+    hasUserInfo = wx.getStorageSync('hasUserInfo',hasUserInfo),
     //设置点击事件不刷新页面
     that.setData({
       userInfo : wx.getStorageSync('userInfo',that.data.userInfo)
@@ -66,6 +79,19 @@ Page({
       },
       fail(res){
         console.log(res.data)
+      }
+    })
+
+    //用户封禁状态
+    getuserinfo.getBlock(openid)
+    .then(res => {
+      userblock = res
+      if (userblock == 'false' && dbhasuser == 'true') {
+        wx.showModal({
+          title: '用户已被封禁',
+          content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+          showCancel:false
+        })
       }
     })
 
@@ -146,6 +172,29 @@ Page({
       fail(res){
         console.log(res.data)
       }
+    })
+  },
+
+  login:function(openid){
+    var openid = openid
+    var that = this
+    var checkdb
+    getuserinfo.getUser(openid)
+    .then(res => {
+      checkdb = res
+      if (checkdb.code != 200) {
+        dbhasuser = 'false'
+      }else{
+        dbhasuser = 'true'
+      }
+      userlogin.userlogin(openid,dbhasuser)
+      .then(res =>{
+        hasUserInfo = 'true'
+        that.setData({
+          userInfo : res,
+        })
+        that.onShow()
+      })
     })
   },
 

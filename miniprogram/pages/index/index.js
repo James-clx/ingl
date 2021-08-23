@@ -6,6 +6,8 @@ Page({
     images:[],
     botTitle :[],
     botText : [],
+    bannertitle:[],
+    bannerimg:[],
     animation : "text",
     mdimgHeight: 0,//初始时swiper的高度是0
     lgimgHeight: 0,
@@ -56,6 +58,8 @@ Page({
     var img = []
     var botTitle=[]
     var botText=[]
+    var bannerimg=[]
+    var bannertitle=[]
     that.catchScreenHeight()
     wx.request({
       url: 'https://www.inguangli.cn/ingl/api/tweetswiper',
@@ -82,6 +86,34 @@ Page({
           animation:"text",
           opacity:100,
         })
+      }
+    })
+
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/get/all/banner',
+      method:'GET',
+      success (res) {
+        var i = 0
+        //按sortnum排序
+        while(!!res.data[i]){
+          bannerimg[res.data[i].sortnum]=(res.data[i])
+          i++;
+        }
+        //给每个字段赋值
+        for(var k = 0 ; k < bannerimg.length-1 ;k++){
+          bannertitle[k]=bannerimg[k+1].title
+          //循环存入data，防止setdata数据过长
+          var index = "bannerimg[" + k + "]"
+          that.setData({
+            [index]:{src:bannerimg[k+1].image}
+          })
+        }
+        that.setData({
+          bannertitle:bannertitle,
+        })
+      },
+      fail(res){
+        console.log(res)
       }
     })
     // var map = 'https://qiniu.inguangli.cn/map.jpg'

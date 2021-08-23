@@ -318,8 +318,7 @@ Page({
       
         //发布评论后重新抓取评论列表
         that.onShow()
-      })
-      if (openid == that.data.postlist.openid) {
+        if (openid == that.data.postlist.openid) {
         wx.requestSubscribeMessage({
           tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
           success (res) { 
@@ -332,6 +331,7 @@ Page({
       }else{
         userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
       }
+      })
     }
   },
 

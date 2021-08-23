@@ -13,25 +13,23 @@ function sendremind(openid,postinfo,username,info){
   if(info.length>20){
     info=longtextcharge(info)
   }
-  wx.cloud.callFunction({
-    // 要调用的云函数名称
-    name: 'userremind',
-    // 传递给云函数的参数
+
+  wx.request({
+    url: 'https://www.inguangli.cn/ingl/api/subscribe_message',
+    method:'POST',
     data: {
       openid:openid,
-      time:gettime.formatTimes(new Date()),
-      postinfo:postinfo,
+      forum_content:postinfo,
       username:username,
-      info:info
+      comment_content:info,
+      page:'pages/mytalk/mytalk'
     },
-    success: res => {
+    success(res){
       console.log(res)
-      // output: res.result === 3
     },
-    fail: err => {
-      console.log(err)
-      // handle error
-    },
+    fail(res){
+      console.log(res)
+    }
   })
 }
 
