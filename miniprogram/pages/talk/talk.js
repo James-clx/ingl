@@ -199,13 +199,23 @@ Page({
   //点赞功能
   likeadd:function(e){
     wx.vibrateShort({type:"heavy"})
-    var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
-    var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
-    var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
-    this.setData({
-      [likestatus]:'true',
-      [likesnum]:numadd+1
-    })
+    if(e.currentTarget.dataset.num == -1){
+      var numadd = this.data.toppostlist.forum_like_sum
+      var likestatus = "toppostlist.have_forum_like";
+      var likesnum = "toppostlist.forum_like_sum";
+      this.setData({
+        [likestatus]:'true',
+        [likesnum]:numadd+1
+      })
+    }else{
+      var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
+      var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
+      var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
+      this.setData({
+        [likestatus]:'true',
+        [likesnum]:numadd+1
+      })
+    }
     like.utillikeadd(e.currentTarget.dataset.id,openid)
     .then(res => {
       var that = this
@@ -222,13 +232,23 @@ Page({
   //取消点赞功能
   likeminuus:function(e){
     wx.vibrateShort({type:"heavy"})
-    var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
-    var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
-    var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
-    this.setData({
-      [likestatus]:'false',
-      [likesnum]:numadd-1
-    })
+    if(e.currentTarget.dataset.num == -1){
+      var numadd = this.data.toppostlist.forum_like_sum
+      var likestatus = "toppostlist.have_forum_like";
+      var likesnum = "toppostlist.forum_like_sum";
+      this.setData({
+        [likestatus]:'false',
+        [likesnum]:numadd-1
+      })
+    }else{
+      var numadd = this.data.showlikenum[e.currentTarget.dataset.num]
+      var likestatus = "showlikestatus[" + e.currentTarget.dataset.num + "]";
+      var likesnum = "showlikenum[" + e.currentTarget.dataset.num + "]";
+      this.setData({
+        [likestatus]:'false',
+        [likesnum]:numadd-1
+      })
+    }
     like.utillikeminuus(e.currentTarget.dataset.id,openid)
     .then(res => {
       var that = this
@@ -461,15 +481,15 @@ Page({
         wx.pageScrollTo({
           scrollTop: 0
         })
-      })
-      wx.requestSubscribeMessage({
-        tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-        success (res) { 
-          console.log(res)
-        },
-        fail(res){
-          console.log(res)
-        }
+        wx.requestSubscribeMessage({
+          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+          success (res) { 
+            console.log(res)
+          },
+          fail(res){
+            console.log(res)
+          }
+        })
       })
     }
   },

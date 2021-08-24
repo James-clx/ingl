@@ -22,12 +22,12 @@
   </form>
   <view class="pushinfo" bindtap="inputcomment">
 
-    <view class="likebutton" wx:if="{{toppostlist.have_forum_like == 'true'}}" data-id="{{toppostlist.id}}" bindtap="likeminuus" style="width:50%">
+    <view class="likebutton" wx:if="{{toppostlist.have_forum_like == 'true'}}" data-id="{{toppostlist.id}}" data-num="-1" bindtap="likeminuus" style="width:50%">
       <image class="likeimg " src="/images/liked.png"></image>
       <text class="likes">{{toppostlist.forum_like_sum}}</text>
     </view>
 
-    <view class="likebutton" wx:else data-id="{{toppostlist.id}}" bindtap="likeadd" style="width:50%">
+    <view class="likebutton" wx:else data-id="{{toppostlist.id}}" data-num="-1" bindtap="likeadd" style="width:50%">
       <image class="likeimg" src="/images/like.png"></image>
       <text class="likes">{{toppostlist.forum_like_sum}}</text>
     </view>
