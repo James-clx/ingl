@@ -16,6 +16,18 @@
   overflow: hidden;
 }
 
+.month{
+  border-radius: 0; 
+  width: 90rpx;
+  position: absolute;
+  z-index: 3;
+  overflow: hidden;
+  font-size: medium;
+  color: #808080;
+  font-weight: 500;
+  padding-top: 35rpx;
+}
+
 .top {
   border-radius: 20rpx 20rpx 0 0; 
   display: flex;

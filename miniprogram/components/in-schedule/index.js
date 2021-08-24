@@ -20,6 +20,7 @@ Component({
     point_day: 0, // 指向今天星期几
     selected_week_data: {}, // 用户选择的周次的数据
     selected_week_date: [], // 日
+    selected_week_month: [], // 月
     schedule_data: {}, // 所有的课表数据
     _schedule_date: [], // 单个课表的日数据
     today_week: 0, // 今天的周次
@@ -76,6 +77,8 @@ Component({
 
         // 处理日的数据
         let selected_week_date = this.getDateHandler(schedule_data, temp)
+        console.log(schedule_data[temp]['date'][0].slice(0,2))
+        let selected_week_month = parseInt(schedule_data[temp]['date'][0].slice(0,2))
         var hideweekend = wx.getStorageSync('hideweekend')
         if (hideweekend != false) {
           hideweekend = true
@@ -86,6 +89,7 @@ Component({
           selected_week:selected_week,
           selected_week_data:selected_week_data,
           selected_week_date:selected_week_date,
+          selected_week_month:selected_week_month,
           weekarray:weekarray,
         })
         return
@@ -176,19 +180,25 @@ Component({
 
       // 处理日的数据
       let selected_week_date = this.getDateHandler(schedule_data, temp)
-
       let selected_week_data = schedule_data[temp]['data']
+      console.log(schedule_data[temp]['date'][0].slice(0,2))
+      let selected_week_month = parseInt(schedule_data[temp]['date'][0].slice(0,2))
       // 数据绑定
       this.setData({
         selected_week: selected_week,
         selected_week_data: selected_week_data,
-        selected_week_date: selected_week_date
+        selected_week_date: selected_week_date,
+        selected_week_month: selected_week_month
       })
     },
 
     // 获取数据的月日后，要处理该数据，目前不需要月，只需要日就可以了,处理完后还要赋值，因为后面还要用到
     getDateHandler(schedule_data, temp) {
       let selected_week_date = schedule_data[temp]['date']
+      // this.setData({
+      //   selected_week_month : parseInt(selected_week_date[0].slice(0,2))
+      // })
+      // console.log(this.data.selected_week_month)
       let selected_week_date_handler = this.processDate(selected_week_date)
       // 把数据深拷贝下来，用来隐藏/显示周末
       this.data._schedule_date = deepClone(selected_week_date_handler)
