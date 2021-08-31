@@ -4,5 +4,11 @@
       <p wx:if="{{selected_week != 0}}">第{{selected_week}}</p>周
     </view>
   </picker>
+  <image class="picker week pickerimg" src="/images/down.png"></image>
 </view>
-<view class="week backweek" wx:if="{{selected_week != today_week}}" bindtap="backWeek">回到本周</view>
+<view class="week backweek" wx:if="{{selected_week != today_week}}" bindtap="backWeek" style="top:{{swiperHeight}}rpx">回到本周</view>
+<!-- <view wx:if="{{selected_week != today_week}}" bindtap="backWeek">
+  <view class="pushbutton">
+    <image class="pushbuttonimg" src="/images/backweek.png"></image>
+  </view>
+</view> -->

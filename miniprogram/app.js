@@ -10,7 +10,7 @@ App({
     this.globalData = {
       showallinput:false,
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
-      open_date: "2021-03-01",
+      open_date: "2021-08-30",
       schedule_go_class_time: [{
         time: "1",
         start: "8:20",

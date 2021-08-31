@@ -293,16 +293,16 @@ Page({
                   getcommentlist:res.data.data
                 })
                 //用户订阅事件
-                if (openid == that.data.postlist.openid) {
-                  wx.requestSubscribeMessage({
-                    tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-                    success (res) { 
-                      console.log(res)
-                    }
-                  })
-                }else{
-                  userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
-                }
+                // if (openid == that.data.postlist.openid) {
+                //   wx.requestSubscribeMessage({
+                //     tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+                //     success (res) { 
+                //       console.log(res)
+                //     }
+                //   })
+                // }else{
+                //   userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+                // }
               },
               fail(res){
                 console.log(res.data)
@@ -319,18 +319,18 @@ Page({
         //发布评论后重新抓取评论列表
         that.onShow()
         if (openid == that.data.postlist.openid) {
-        wx.requestSubscribeMessage({
-          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-          success (res) { 
-            console.log(res)
-          },
-          fail(res){
-            console.log(res)
-          }
-        })
-      }else{
-        userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
-      }
+          wx.requestSubscribeMessage({
+            tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+            success (res) { 
+              console.log(res)
+            },
+            fail(res){
+              console.log(res)
+            }
+          })
+        }else{
+          userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+        }
       })
     }
   },

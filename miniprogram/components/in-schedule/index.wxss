@@ -1,6 +1,8 @@
+@import "/main.wxss";
+@import "/icon.wxss";
+
 .schedule{
-  margin-bottom: 50rpx;
-  margin-top: 270rpx;
+  margin-top: 195rpx;
   width: 96%;
   margin-left: 2%;
   border-radius: 20rpx;
@@ -12,7 +14,7 @@
   width: 90rpx;
   position: absolute;
   z-index: 3;
-  height: 1300rpx;
+  height: 1240rpx;
   overflow: hidden;
 }
 
@@ -22,10 +24,10 @@
   position: absolute;
   z-index: 3;
   overflow: hidden;
-  font-size: medium;
-  color: #808080;
+  font-size: 11pt;
+  color: #1B283B;
   font-weight: 500;
-  padding-top: 35rpx;
+  padding-top: 25rpx;
 }
 
 .top {
@@ -34,8 +36,9 @@
   flex-direction: row;
   padding-left: 88rpx;
   background-color: #fff;
-  color: #808080;
-  height: 50rpx;
+  color: #1B283B;
+  font-weight: 500;
+  height: 35rpx;
 }
 
 .week{
@@ -64,7 +67,7 @@
 
 .left {
   width: 90rpx;
-  height: 120rpx;
+  height: 115rpx;
   font-size: 9pt;
   justify-content: center;
   display: flex;
@@ -74,14 +77,14 @@
 
 .flex-item {
   width: 85rpx;
-  height: 230rpx;
+  height: 215rpx;
   text-align: center;
   z-index: 7;
 }
 
 .kcb-item {
   position: absolute;
-  top: 250rpx;
+  top: 190rpx;
   left: 105rpx;
   justify-content: center;
   display: flex;
@@ -90,13 +93,14 @@
 }
 
 .smalltext {
-  font-size: 8pt;
+  font-size: 7pt;
   color: #fff;
   overflow: hidden; 
 }
 
 .smalltext-info{
   margin-left: 5rpx;
+  padding-bottom: 10rpx;
   text-align: left;
   overflow: hidden; 
   text-overflow: ellipsis; 

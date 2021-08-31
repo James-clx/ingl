@@ -1,5 +1,8 @@
 import {deepClone} from "../../utils/utils.js"
 import {getTermTodayWeek} from "../../utils/times.js"
+import {htmlRequest} from "../../utils/html.js"
+import {showLoading,refreshPage} from "../../utils/inside_api.js"
+import {getCacheSync,setCacheSync,clearCacheAll,clearCacheSingle} from "../../utils/cache.js"
 
 const app = getApp()
 
@@ -26,6 +29,9 @@ Component({
     today_week: 0, // 今天的周次
     selected_week:0, // 用户选择的周次
 
+    swiperHeight:0,
+    modalName:null,
+
     // 课程详细信息相关数据
     show_class_message: 'none', // 控制课程详细信息的显示隐藏
     ccourse_info_target: {}, // 保存课程的详细信息
@@ -36,6 +42,20 @@ Component({
 
   // 这里是用于没登录的时候的初始化
   attached() {
+
+    wx.getSystemInfo({
+      success:(res) => {
+        let clientHeight = res.windowHeight
+        let clientWidth = res.windowWidth
+        let ratio = 750 / clientWidth;//计算为百分比
+        let rpxHeight = ratio * clientHeight - 320
+        console.log(rpxHeight)
+        this.setData({
+          swiperHeight: rpxHeight
+        })
+      }
+    })
+
     // 指向今天星期几
     let today = new Date();
     let point_day = today.getDay() == 0 ? 7 : today.getDay()
@@ -77,7 +97,6 @@ Component({
 
         // 处理日的数据
         let selected_week_date = this.getDateHandler(schedule_data, temp)
-        console.log(schedule_data[temp]['date'][0].slice(0,2))
         let selected_week_month = parseInt(schedule_data[temp]['date'][0].slice(0,2))
         var hideweekend = wx.getStorageSync('hideweekend')
         if (hideweekend != false) {
@@ -124,6 +143,63 @@ Component({
   },
 
   methods: {
+    showModal(e) {
+      this.setData({
+        modalName: e.currentTarget.dataset.target
+      })
+    },
+
+    hideModal(e) {
+      this.setData({
+        modalName: null
+      })
+    },
+
+    // 清空课表缓存
+    async reloadschedule(){
+      showLoading('加载中...')
+
+      let student_number = getCacheSync('student_number')
+      let password = getCacheSync('password')
+      let cookies = getCacheSync('cookies')
+      let openid =  getCacheSync('openid')
+      // 用cookies获取课表
+      const data = [{"student_number": student_number,"password": password,"openid":openid},cookies]
+      const result = await htmlRequest(['schedule', 'POST', data])
+      
+      
+      // 如果有cookies更新了，则要更新缓存
+      if(result['cookies']){
+        setCacheSync({'cookies':result["cookies"]})
+      }
+      
+      // 如果检测到密码更改了，则要清空登录缓存让用户重新登录
+      if(result['message']){
+        wx.hideLoading()
+        // 清空教务系统相关缓存
+        clearCacheAll(['schedule_casche','student_number','password','cookies'])
+        // 提示信息
+        wx.showModal({
+          title: "清除缓存失败",
+          content: result['message'],
+          showCancel: false
+        })
+
+        // 刷新页面
+        refreshPage('../../pages/schedule/schedule')
+        
+        return
+      }
+      setCacheSync({'schedule_cache':result["data"]})
+      this.data.schedule_data = result["data"]
+
+      // 刷新页面
+      refreshPage('../../pages/schedule/schedule')
+      this.setData({
+        modalName: null
+      })
+      wx.hideLoading()
+    },
 
     //监听左右滑动事件
     touchstart(e){
@@ -168,6 +244,7 @@ Component({
       })
       this.setData({
         hideweekend: hideweekend,
+        modalName: null
       })
     },
 
@@ -181,7 +258,6 @@ Component({
       // 处理日的数据
       let selected_week_date = this.getDateHandler(schedule_data, temp)
       let selected_week_data = schedule_data[temp]['data']
-      console.log(schedule_data[temp]['date'][0].slice(0,2))
       let selected_week_month = parseInt(schedule_data[temp]['date'][0].slice(0,2))
       // 数据绑定
       this.setData({

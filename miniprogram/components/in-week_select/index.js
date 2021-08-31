@@ -5,7 +5,24 @@ Component({
     today_week :Number
   },
 
-  data: {},
+  data: {
+    swiperHeight:0
+  },
+
+  attached() {
+
+    wx.getSystemInfo({
+      success:(res) => {
+        let clientHeight = res.windowHeight
+        let clientWidth = res.windowWidth
+        let ratio = 750 / clientWidth;//计算为百分比
+        let rpxHeight = ratio * clientHeight - 420
+        this.setData({
+          swiperHeight: rpxHeight
+        })
+      }
+    })
+  },
 
   methods: {
     //周次选择器

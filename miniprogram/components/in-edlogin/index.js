@@ -25,6 +25,7 @@ Component({
   methods: {
     // 教务系统登录
     async login(e) {
+      wx.vibrateShort({type:"heavy"})
       const can_in_edbrowser = await htmlRequest(['can_in_browser', 'GET']) // 判断能否进入教务系统
       if(can_in_edbrowser['error']){ // 不能进入教务系统的处理
         this.canNotInEdbrowserHandler('教务系统驾崩啦')

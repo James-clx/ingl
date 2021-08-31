@@ -1,20 +1,45 @@
+.section{
+  z-index: 550;
+  position: fixed;
+  top: -70rpx;
+  height: 50rpx;
+  background-color: white;
+  width: 100%;
+}
+
 .week{
+  z-index: 40;
   position: absolute;
-  border-radius:15rpx;
+  border-radius:0 15rpx 15rpx 0;
   height: 50rpx;
   width: 300rpx;
-  color:#808080;
+  color:#1B283B;
   background-color: white;
   line-height: 50rpx;
-  top:180rpx;
+  top:150rpx;
+  font-size: medium;
   font-weight: 600;
   text-align: center;
   margin:20rpx 0 20rpx 210rpx;
+  border-radius: 15rpx;
+}
+
+.pickerimg{
+  width: 35rpx;
+  height: 35rpx;
+  z-index: 99;
+  border: 0px;
+  margin:28rpx 0 20rpx 415rpx;
 }
 
 .backweek{
-  width: 200rpx;
-  left: 325rpx;
-  background-color: rgb(159, 220, 255);
-  color: #000;
+  padding-top: 20rpx;
+  line-height: 40rpx;
+  height: 200rpx;
+  top: 1050rpx;
+  width: 50rpx;
+  left: -215rpx;
+  border-radius: 0 15rpx 15rpx 0;
+  background-color: rgb(250, 158, 75);
+  color: rgb(255, 255, 255);
 }
