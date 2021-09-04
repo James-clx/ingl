@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "in-course_details":"/components/in-course_details/index",
+    "in-week_select":"/components/in-week_select/index",
+    "in-bar":"/components/in-bar/index"
+
+  }
+}

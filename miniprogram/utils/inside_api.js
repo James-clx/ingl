@@ -39,6 +39,9 @@ function refreshPage(url){
       var page = getCurrentPages().pop();
       if (page == undefined || page == null) return;
       page.onLoad();
+    },
+    fail(res){
+      console.log(res)
     }
   })
 }

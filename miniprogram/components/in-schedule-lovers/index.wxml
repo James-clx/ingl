@@ -38,15 +38,26 @@
       </view>
     </view>
 
-    <view wx:for="{{selected_week_data}}" wx:key="key">
+    <view wx:for="{{selected_week_data_me}}" wx:key="key">
       <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
-        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-color:{{item.color}}">
+        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('http://qiniu.inguangli.cn/mybg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
         <view class="smalltext">
           <text class="smalltext-info" style="padding-bottom:5rpx">{{item.course_name}}</text>
           <text class="smalltext-info" style="padding-top:5rpx;padding-bottom:5rpx">{{item.class_location}}</text>
         </view>
       </view>
     </view>
+
+    <view wx:for="{{selected_week_data_lovers}}" wx:key="key">
+      <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
+        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('http://qiniu.inguangli.cn/lovers-bg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
+        <view class="smalltext">
+          <text class="smalltext-info" style="padding-bottom:5rpx">{{item.course_name}}</text>
+          <text class="smalltext-info" style="padding-top:5rpx;padding-bottom:5rpx">{{item.class_location}}</text>
+        </view>
+      </view>
+    </view>
+
   </view>
 
   <!-- 周1-5 -->
@@ -79,10 +90,9 @@
       </view>
     </view>
 
-
-    <view wx:for="{{selected_week_data}}" wx:key="key">
+    <view wx:for="{{selected_week_data_me}}" wx:key="key">
       <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
-        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-color:{{item.color}};width:115rpx;left:140rpx"
+        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('http://qiniu.inguangli.cn/mybg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
         wx:if="{{item.week<6}}">
         <view class="smalltext">
           <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.course_name}}</text>
@@ -91,6 +101,19 @@
         </view>
       </view>
     </view>
+
+    <view wx:for="{{selected_week_data_lovers}}" wx:key="key">
+      <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
+        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('http://qiniu.inguangli.cn/lovers-bg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
+        wx:if="{{item.week<6}}">
+        <view class="smalltext">
+          <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.course_name}}</text>
+          <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.class_location}}</text>
+          <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.teacher_name}}</text>
+        </view>
+      </view>
+    </view>
+
   </view>
 </view>
 
@@ -139,9 +162,9 @@
         </view>
       </view>
 
-      <view class="cu-item arrow" bindtap="toloversschedule">
+      <view class="cu-item arrow" bindtap="tomyschedule">
         <view class="content">
-          <view>情侣课表</view>
+          <view>我的课表</view>
         </view>
       </view>
       

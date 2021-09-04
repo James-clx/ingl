@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "in-edlogin-lovers":"/components/in-edlogin-lovers/index",
+    "in-schedule-lovers":"/components/in-schedule-lovers/index"
+  }
+}

@@ -83,6 +83,12 @@
           "pathName": "pages/auditpost/auditpost",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/schedule-lovers/schedule-lovers",
+          "pathName": "pages/schedule-lovers/schedule-lovers",
+          "query": "",
+          "scene": null
         }
       ]
     }

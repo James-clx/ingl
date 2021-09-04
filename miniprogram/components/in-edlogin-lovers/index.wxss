@@ -1,0 +1,49 @@
+@import "/main.wxss";
+@import "/icon.wxss";
+
+.class-title{
+  margin-left: 20rpx;
+  font-size: larger;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.class-info{
+  margin-left: 80rpx;
+}
+
+.login{
+  height: 70rpx;
+  margin-top: 20rpx;
+  margin-left: 0rpx;
+  padding-left: 20rpx;
+  padding-top: 20rpx;
+  width: 500rpx;
+  background-color: #F9F9F9;
+  border: 1px solid rgba(0 ,0 , 0, 0.1);
+  border-radius: 15rpx;
+}
+
+.login-input{
+  width: 400rpx;
+  padding-left: 0rpx;
+  margin-top: -10rpx;
+  margin-left: 15rpx;
+  text-align: left;
+}
+
+.login-button{
+  text-align: center;
+  line-height: 70rpx;
+  height: 70rpx;
+  width: 500rpx;
+  border-radius: 15rpx;
+  margin-left:80rpx;
+  font-weight: 500;
+  font-size:medium;
+  background-color: #0091ff;
+  color: white;
+  font-weight: 600;
+  padding-left: 0;
+  padding-top: 0;
+}

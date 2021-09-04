@@ -1,7 +1,7 @@
 import {deepClone} from "../../utils/utils.js"
 import {getTermTodayWeek} from "../../utils/times.js"
 import {htmlRequest} from "../../utils/html.js"
-import {showLoading,refreshPage} from "../../utils/inside_api.js"
+import {showLoading} from "../../utils/inside_api.js"
 import {getCacheSync,setCacheSync,clearCacheAll,clearCacheSingle} from "../../utils/cache.js"
 
 const app = getApp()
@@ -9,7 +9,8 @@ const app = getApp()
 Component({
   properties: {
     ban_hide_weekeen: Boolean, // 是否禁止按显示周末这个按钮
-    schedule_data: Object ,// 获取的所有课表数据
+    schedule_data_lovers: Object ,// 获取的所有课表数据
+    schedule_data_me: Object//情侣课表数据
   },
 
   data: {
@@ -21,10 +22,12 @@ Component({
 
     // 课程表的相关数据
     point_day: 0, // 指向今天星期几
-    selected_week_data: {}, // 用户选择的周次的数据
+    selected_week_data_lovers: {}, // 用户选择的周次的数据
+    selected_week_data_me: {}, // 用户选择的周次的数据
     selected_week_date: [], // 日
     selected_week_month: [], // 月
-    schedule_data: {}, // 所有的课表数据
+    schedule_data_lovers: {}, // 所有的课表数据
+    schedule_data_me:{},//情侣课表数据
     _schedule_date: [], // 单个课表的日数据
     today_week: 0, // 今天的周次
     selected_week:0, // 用户选择的周次
@@ -42,7 +45,7 @@ Component({
 
   // 这里是用于没登录的时候的初始化
   attached() {
-
+    
     wx.getSystemInfo({
       success:(res) => {
         let clientHeight = res.windowHeight
@@ -71,14 +74,16 @@ Component({
   },
 
   observers: {
-    'schedule_data': function (schedule_data) {
+    //情侣课表数据
+    'schedule_data_lovers': function (schedule_data_lovers) {
+      console.log(schedule_data_lovers)
       // 如果schedule_data有数据，那么就要初始化课程表
-      if (Object.keys(schedule_data).length) {
-        this.data.schedule_data = schedule_data // 保存数据，以便二次使用
+      if (Object.keys(schedule_data_lovers).length) {
+        this.data.schedule_data_lovers = schedule_data_lovers // 保存数据，以便二次使用
 
         // 判断目前周数是否大于数据的周数总数，大于则维持数据周数总数
         let today_week_cache = getTermTodayWeek()
-        let max_week = Object.keys(schedule_data).length
+        let max_week = Object.keys(schedule_data_lovers).length
         let today_week = today_week_cache > max_week?max_week:today_week_cache
 
         let weekarray = []
@@ -93,20 +98,78 @@ Component({
 
         // 拿取该周的数据
         let temp = 'weektime' + selected_week
-        let selected_week_data = schedule_data[temp]['data']
-
+        let selected_week_data_lovers = schedule_data_lovers[temp]['data']
         // 处理日的数据
-        let selected_week_date = this.getDateHandler(schedule_data, temp)
-        let selected_week_month = parseInt(schedule_data[temp]['date'][0].slice(0,2))
+        let selected_week_date = this.getDateHandler(schedule_data_lovers, temp)
+        let selected_week_month = parseInt(schedule_data_lovers[temp]['date'][0].slice(0,2))
         var hideweekend = wx.getStorageSync('hideweekend')
         if (hideweekend != false) {
           hideweekend = true
         }
+        console.log(selected_week_data_lovers)
         this.setData({
           hideweekend:hideweekend,
           today_week:today_week,
           selected_week:selected_week,
-          selected_week_data:selected_week_data,
+          selected_week_data_lovers:selected_week_data_lovers,
+          selected_week_date:selected_week_date,
+          selected_week_month:selected_week_month,
+          weekarray:weekarray,
+        })
+        return
+      }
+      // 如果schedule_data没有数据，也要初始化值
+      var hideweekend = wx.getStorageSync('hideweekend')
+      if (hideweekend != false) {
+        hideweekend = true
+      }
+      console.log("111")
+      this.setData({
+        hideweekend:hideweekend,
+        today_week:0,
+        selected_week:[],
+        selected_week_data_lovers:{},
+        selected_week_date:[],
+        weekarray:0,
+      })
+    },
+    //我的课表数据
+    'schedule_data_me': function (schedule_data_me) {
+      // 如果schedule_data有数据，那么就要初始化课程表
+      if (Object.keys(schedule_data_me).length) {
+        this.data.schedule_data_me = schedule_data_me // 保存数据，以便二次使用
+
+        // 判断目前周数是否大于数据的周数总数，大于则维持数据周数总数
+        let today_week_cache = getTermTodayWeek()
+        let max_week = Object.keys(schedule_data_me).length
+        let today_week = today_week_cache > max_week?max_week:today_week_cache
+
+        let weekarray = []
+        // 控制组件的周数
+        weekarray = []
+        for (let i = 1; i <= max_week; i++) {
+          weekarray[i - 1] = i
+        }
+
+        // 客户默认选择本周
+        let selected_week = today_week
+
+        // 拿取该周的数据
+        let temp = 'weektime' + selected_week
+        let selected_week_data_me = schedule_data_me[temp]['data']
+        // 处理日的数据
+        let selected_week_date = this.getDateHandler(schedule_data_me, temp)
+        let selected_week_month = parseInt(schedule_data_me[temp]['date'][0].slice(0,2))
+        var hideweekend = wx.getStorageSync('hideweekend')
+        if (hideweekend != false) {
+          hideweekend = true
+        }
+        console.log(selected_week_data_me)
+        this.setData({
+          hideweekend:hideweekend,
+          today_week:today_week,
+          selected_week:selected_week,
+          selected_week_data_me:selected_week_data_me,
           selected_week_date:selected_week_date,
           selected_week_month:selected_week_month,
           weekarray:weekarray,
@@ -155,9 +218,9 @@ Component({
       })
     },
 
-    toloversschedule(e){
-      wx.navigateTo({
-        url: '../../pages/schedule-lovers/schedule-lovers',
+    tomyschedule(e){
+      wx.switchTab({
+        url: '../../pages/schedule/schedule',
       })
     },
 
@@ -165,9 +228,9 @@ Component({
     async reloadschedule(){
       showLoading('加载中...')
 
-      let student_number = getCacheSync('student_number')
-      let password = getCacheSync('password')
-      let cookies = getCacheSync('cookies')
+      let student_number = getCacheSync('student_number_lovers')
+      let password = getCacheSync('password_lovers')
+      let cookies = getCacheSync('cookies_lovers')
       let openid =  getCacheSync('openid')
       // 用cookies获取课表
       const data = [{"student_number": student_number,"password": password,"openid":openid},cookies]
@@ -176,14 +239,14 @@ Component({
       
       // 如果有cookies更新了，则要更新缓存
       if(result['cookies']){
-        setCacheSync({'cookies':result["cookies"]})
+        setCacheSync({'cookies_lovers':result["cookies"]})
       }
       
       // 如果检测到密码更改了，则要清空登录缓存让用户重新登录
       if(result['message']){
         wx.hideLoading()
         // 清空教务系统相关缓存
-        clearCacheAll(['schedule_casche','student_number','password','cookies'])
+        clearCacheAll(['schedule_casche_lovers','student_number_lovers','password_lovers','cookies_lovers'])
         // 提示信息
         wx.showModal({
           title: "清除缓存失败",
@@ -192,15 +255,19 @@ Component({
         })
 
         // 刷新页面
-        refreshPage('../../pages/schedule/schedule')
+        wx.reLaunch({
+          url: '../../pages/schedule-lovers/schedule-lovers'
+        })
         
         return
       }
-      setCacheSync({'schedule_cache':result["data"]})
-      this.data.schedule_data = result["data"]
+      setCacheSync({'schedule_cache_lovers':result["data"]})
+      this.data.schedule_data_lovers = result["data"]
 
       // 刷新页面
-      refreshPage('../../pages/schedule/schedule')
+      wx.reLaunch({
+        url: '../../pages/schedule-lovers/schedule-lovers'
+      })
       this.setData({
         modalName: null
       })
@@ -258,7 +325,7 @@ Component({
     onPickerOrBackWeek(options) {
       // 获取数据
       let selected_week = Number(options.detail)
-      let schedule_data = this.data.schedule_data
+      let schedule_data = this.data.schedule_data_lovers
       let temp = 'weektime' + selected_week
 
       // 处理日的数据
@@ -268,19 +335,15 @@ Component({
       // 数据绑定
       this.setData({
         selected_week: selected_week,
-        selected_week_data: selected_week_data,
+        selected_week_data_lovers: selected_week_data,
         selected_week_date: selected_week_date,
         selected_week_month: selected_week_month
       })
     },
 
     // 获取数据的月日后，要处理该数据，目前不需要月，只需要日就可以了,处理完后还要赋值，因为后面还要用到
-    getDateHandler(schedule_data, temp) {
-      let selected_week_date = schedule_data[temp]['date']
-      // this.setData({
-      //   selected_week_month : parseInt(selected_week_date[0].slice(0,2))
-      // })
-      // console.log(this.data.selected_week_month)
+    getDateHandler(schedule_data_lovers, temp) {
+      let selected_week_date = schedule_data_lovers[temp]['date']
       let selected_week_date_handler = this.processDate(selected_week_date)
       // 把数据深拷贝下来，用来隐藏/显示周末
       this.data._schedule_date = deepClone(selected_week_date_handler)

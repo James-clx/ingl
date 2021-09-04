@@ -1,0 +1,5 @@
+<!-- 课程表 -->
+<in-schedule-lovers ban_hide_weekeen="{{ban_hide_weekeen}}" schedule_data_lovers="{{schedule_data_lovers}}" schedule_data_me="{{schedule_data_me}}"/>
+
+<!-- 教务系统登录界面 -->
+<in-edlogin-lovers hidelogin="{{hidelogin}}" />
