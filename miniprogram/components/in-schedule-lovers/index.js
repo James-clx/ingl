@@ -289,7 +289,8 @@ Component({
       if (startX - endX > 50 && this.data.weekarray.length > this.data.selected_week){
         var selected_week=this.data.selected_week
         let options={detail:selected_week+1}
-        this.onPickerOrBackWeek(options)
+        this.myonPickerOrBackWeek(options)
+        this.loversonPickerOrBackWeek(options)
         this.setData({
             slider: true,
             selected_week:selected_week+1
@@ -300,7 +301,8 @@ Component({
       if (endX-startX  > 75 && this.data.selected_week > 1){
         var selected_week=this.data.selected_week
         let options={detail:selected_week-1}
-        this.onPickerOrBackWeek(options)
+        this.myonPickerOrBackWeek(options)
+        this.loversonPickerOrBackWeek(options)
         this.setData({
             slider: true,
             selected_week:selected_week-1
@@ -321,8 +323,13 @@ Component({
       })
     },
 
+    onPickerOrBackWeek(options){
+      this.myonPickerOrBackWeek(options)
+      this.loversonPickerOrBackWeek(options)
+    },
+
     // 周次选择或回到本周后的数据重新绑定
-    onPickerOrBackWeek(options) {
+    myonPickerOrBackWeek(options) {
       // 获取数据
       let selected_week = Number(options.detail)
       let schedule_data = this.data.schedule_data_lovers
@@ -336,6 +343,26 @@ Component({
       this.setData({
         selected_week: selected_week,
         selected_week_data_lovers: selected_week_data,
+        selected_week_date: selected_week_date,
+        selected_week_month: selected_week_month
+      })
+    },
+
+    // 周次选择或回到本周后的数据重新绑定
+    loversonPickerOrBackWeek(options) {
+      // 获取数据
+      let selected_week = Number(options.detail)
+      let schedule_data = this.data.schedule_data_me
+      let temp = 'weektime' + selected_week
+
+      // 处理日的数据
+      let selected_week_date = this.getDateHandler(schedule_data, temp)
+      let selected_week_data = schedule_data[temp]['data']
+      let selected_week_month = parseInt(schedule_data[temp]['date'][0].slice(0,2))
+      // 数据绑定
+      this.setData({
+        selected_week: selected_week,
+        selected_week_data_me: selected_week_data,
         selected_week_date: selected_week_date,
         selected_week_month: selected_week_month
       })

@@ -8,7 +8,7 @@
 <view class="schedule" bindtouchstart='touchstart' bindtouchend='touchend'>
   <!-- 周次选择器 -->
   <in-week_select weekarray="{{weekarray}}" selected_week="{{selected_week}}" today_week="{{today_week}}"
-    bindpickerorbackweek="onPickerOrBackWeek" />
+    bindpickerorbackweek="onPickerOrBackWeek"/>
 
   <!-- 周1-7 -->
   <view style="display:{{hideweekend == true?'none':'block'}}">
