@@ -54,6 +54,10 @@
     <view class="setting-info logout">注销教务系统</view>
   </view>
 
+  <view class="setting-item" open-type="contact" data-target="relief" style="text-align:center;padding-top: 5rpx;padding-bottom: 0rpx">
+    <button class="setting-info" size="mini" open-type="contact">客服反馈</button>
+  </view>
+
 </view>
 
 <view class="cu-modal {{modalName=='cooperate'?'show':''}}">

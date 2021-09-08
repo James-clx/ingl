@@ -187,7 +187,7 @@ Page({
     }
     // 清空schedule_cache课表缓存
     clearCacheSingle('schedule_cache')
-
+    clearCacheSingle('schedule_cache_lovers')
     // 提示信息
     wx.showToast({
       title:"已清空课表缓存"
@@ -198,7 +198,7 @@ Page({
   logoutEdlogin(){
     // 清空教务系统相关缓存
     clearCacheAll(['schedule_cache','student_number','password','cookies'])
-
+    clearCacheAll(['schedule_cache_lovers','student_number_lovers','password_lovers','cookies_lovers'])
     // 提示信息
     wx.showToast({
       title:"已注销教务系统"

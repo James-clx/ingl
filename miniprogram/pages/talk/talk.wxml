@@ -1,86 +1,97 @@
-<!-- 置顶说说 -->
-<view class="push" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{toppostlist.create_time}}">
-  <form data-id="{{toppostlist.id}}" data-num="-1" bindtap="totalkinfo">
-    <view class="user">
-      <view>
-        <image src="{{toppostlist.avatarurl}}" class="userinfoimg"></image>
-      </view>
-      <view class="userinfotext">
-        <view class="nickname">{{toppostlist.user_name}}</view>
-        <view class="userpushtime">{{toppostlist.create_time}}</view>
-      </view> 
-      <view class="text-gray text-sub" style="padding-left:80rpx;margin-top:10rpx">
-        <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
-      </view>
-    </view>
-    <view class="userpush">
-      <text class="userpushtext">{{toppostlist.info}}</text>
-      <view class="userpushimg" wx:if="{{toppostlist.imgurl}}">
-        <image class="itemimg" src="{{toppostlist.imgurl}}" mode="aspectFill"></image>
-      </view>
-    </view>
-  </form>
-  <view class="pushinfo" bindtap="inputcomment">
-
-    <view class="likebutton" wx:if="{{toppostlist.have_forum_like == 'true'}}" data-id="{{toppostlist.id}}" data-num="-1" bindtap="likeminuus" style="width:50%">
-      <image class="likeimg " src="/images/liked.png"></image>
-      <text class="likes">{{toppostlist.forum_like_sum}}</text>
-    </view>
-
-    <view class="likebutton" wx:else data-id="{{toppostlist.id}}" data-num="-1" bindtap="likeadd" style="width:50%">
-      <image class="likeimg" src="/images/like.png"></image>
-      <text class="likes">{{toppostlist.forum_like_sum}}</text>
-    </view>
-
-    <view class="text-gray text-sub hot-info">
-      <text class="cuIcon-hotfill margin-lr-xs"></text> {{toppostlist.hot}}
-      <text class="cuIcon-messagefill margin-lr-xs"></text> {{toppostlist.comment_count}}
+<view class="header">
+  <view class="cu-bar search searchtalk">
+    <view class="search-form round" style="background-color:white" bindtap="searchtalk">
+      <text class="cuIcon-search"></text>
+      <text style="color:#808080">搜索说说</text>
     </view>
   </view>
-
 </view>
 
-<!-- 普通说说 -->
-<view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{item != ''}}">
-  <form data-id="{{item.id}}" data-num="{{index}}" bindtap="totalkinfo">
-    <view class="user">
-      <view>
-        <image src="{{item.avatarurl}}" class="userinfoimg"></image>
+<view class="talk">
+<!-- 置顶说说 -->
+  <view class="push" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{toppostlist.create_time}}">
+    <form data-id="{{toppostlist.id}}" data-num="-1" bindtap="totalkinfo">
+      <view class="user">
+        <view>
+          <image src="{{toppostlist.avatarurl}}" class="userinfoimg"></image>
+        </view>
+        <view class="userinfotext">
+          <view class="nickname">{{toppostlist.user_name}}</view>
+          <view class="userpushtime">{{toppostlist.create_time}}</view>
+        </view> 
+        <view class="text-gray text-sub" style="padding-left:80rpx;margin-top:10rpx">
+          <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
+        </view>
       </view>
-      <view class="userinfotext">
-        <view class="nickname">{{item.user_name}}</view>
-        <view class="userpushtime">{{item.create_time}}</view>
-      </view> 
-      <view class="text-gray text-sub" style="padding-left:80rpx;margin-top:10rpx">
-        <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
+      <view class="userpush">
+        <text class="userpushtext">{{toppostlist.info}}</text>
+        <view class="userpushimg" wx:if="{{toppostlist.imgurl}}">
+          <image class="itemimg" src="{{toppostlist.imgurl}}" mode="aspectFill"></image>
+        </view>
       </view>
-    </view>
-    <view class="userpush">
-      <text class="userpushtext ellipsis">{{item.info}}</text>
-      <view class="userpushimg" wx:if="{{item.imgurl}}">
-        <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill"></image>
+    </form>
+    <view class="pushinfo" bindtap="inputcomment">
+
+      <view class="likebutton" wx:if="{{toppostlist.have_forum_like == 'true'}}" data-id="{{toppostlist.id}}" data-num="-1" bindtap="likeminuus" style="width:50%">
+        <image class="likeimg " src="/images/liked.png"></image>
+        <text class="likes">{{toppostlist.forum_like_sum}}</text>
       </view>
-    </view>
-  </form>
-  <view class="pushinfo" bindtap="inputcomment">
 
-    <view class="likebutton" wx:if="{{showlikestatus[index] == 'true'}}" data-id="{{item.id}}" data-num="{{index}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
-      <image class="likeimg" src="/images/liked.png"></image>
-      <text class="likes">{{showlikenum[index]}}</text>
-    </view>
+      <view class="likebutton" wx:else data-id="{{toppostlist.id}}" data-num="-1" bindtap="likeadd" style="width:50%">
+        <image class="likeimg" src="/images/like.png"></image>
+        <text class="likes">{{toppostlist.forum_like_sum}}</text>
+      </view>
 
-    <view class="likebutton" wx:else data-id="{{item.id}}" data-num="{{index}}" bindtap="likeadd" style="width:30%;margin-right:40%">
-      <image class="likeimg" src="/images/like.png"></image>
-      <text class="likes">{{showlikenum[index]}}</text>
-    </view>
-
-    <view class="text-gray text-sub hot-info">
-      <text class="cuIcon-hotfill margin-lr-xs"></text> {{item.hot}}
-      <text class="cuIcon-messagefill margin-lr-xs"></text> {{item.comment_count}}
+      <view class="text-gray text-sub hot-info">
+        <text class="cuIcon-hotfill margin-lr-xs"></text> {{toppostlist.hot}}
+        <text class="cuIcon-messagefill margin-lr-xs"></text> {{toppostlist.comment_count}}
+      </view>
     </view>
 
   </view>
 
+  <!-- 普通说说 -->
+  <view class="push" wx:for="{{postlist}}" wx:data-item="item" wx:key="key" touchmove="touchmove" style="filter: blur({{filter}})" wx:if="{{item != ''}}">
+    <form data-id="{{item.id}}" data-num="{{index}}" bindtap="totalkinfo">
+      <view class="user">
+        <view>
+          <image src="{{item.avatarurl}}" class="userinfoimg"></image>
+        </view>
+        <view class="userinfotext">
+          <view class="nickname">{{item.user_name}}</view>
+          <view class="userpushtime">{{item.create_time}}</view>
+        </view> 
+        <view class="text-gray text-sub" style="padding-left:80rpx;margin-top:10rpx">
+          <text class="cuIcon-attentionfill margin-lr-xs"></text> 查看详情
+        </view>
+      </view>
+      <view class="userpush">
+        <text class="userpushtext ellipsis">{{item.info}}</text>
+        <view class="userpushimg" wx:if="{{item.imgurl}}">
+          <image class="itemimg" src="{{item.imgurl}}" data-id="{{item.imgurl}}" mode="aspectFill"></image>
+        </view>
+      </view>
+    </form>
+    <view class="pushinfo" bindtap="inputcomment">
+
+      <view class="likebutton" wx:if="{{showlikestatus[index] == 'true'}}" data-id="{{item.id}}" data-num="{{index}}" bindtap="likeminuus" style="width:30%;margin-right:40%">
+        <image class="likeimg" src="/images/liked.png"></image>
+        <text class="likes">{{showlikenum[index]}}</text>
+      </view>
+
+      <view class="likebutton" wx:else data-id="{{item.id}}" data-num="{{index}}" bindtap="likeadd" style="width:30%;margin-right:40%">
+        <image class="likeimg" src="/images/like.png"></image>
+        <text class="likes">{{showlikenum[index]}}</text>
+      </view>
+
+      <view class="text-gray text-sub hot-info">
+        <text class="cuIcon-hotfill margin-lr-xs"></text> {{item.hot}}
+        <text class="cuIcon-messagefill margin-lr-xs"></text> {{item.comment_count}}
+      </view>
+
+    </view>
+
+  </view>
 </view>
 
 <!-- 上传信息页面 -->
@@ -127,4 +138,47 @@
 <view class='cu-load load-modal' wx:if="{{loadModal}}">
   <image src='/images/logo.jpg' class='png' mode='aspectFit'></image>
   <view class='gray-text'>加载中...</view>
+</view>
+
+<view class="searchmask" bindtap="hidesearch" style="height:{{swiperHeight+400}}rpx;display:{{showsearchtalk}}"></view>
+
+<view class="searchtalkinfo" style="height:auto;display:{{showsearchtalk}};">
+
+  <view class="cu-bar search bg-white searchinput">
+    <view class="search-form round">
+      <text class="cuIcon-search"></text>
+      <input type="text" placeholder="搜索说说,用户名" confirm-type="search" bindinput="searchinfo"></input>
+      <image class="searchsubmit" bindtap="search" src="/images/search.png"></image>
+    </view>
+  </view>
+
+  
+
+  <view class="searchcount">搜索到{{searchlist.length}}条记录</view>
+
+  <scroll-view scroll-y="true" style="max-height:{{swiperHeight}}rpx;">
+    <view class="cu-list menu-avatar">
+      <view class="cu-item" wx:for="{{searchlist}}" wx:data-item="item" wx:key="key" data-id="{{item.id}}" bindtap="totalkinfo">
+        <view class="cu-avatar round lg" style="background-image:url({{item.avatarurl}});"></view>
+        <view class="content">
+          <view class="text-grey">{{item.user_name}}</view>
+          <view class="text-gray text-sm flex">
+            <text class="text-cut searchinfo">
+                <text class="cuIcon-communityfill text-red margin-right-xs"></text> {{item.info}}
+            </text>
+          </view>
+        </view>
+        <view class="action">
+          <view class="text-grey text-xs" style="width:220rpx;margin-left:-100rpx;margin-top:-10rpx">{{item.create_time}}</view>
+          <view class="cu-tag round bg-grey sm"><text class="cuIcon-messagefill margin-lr-xs" style="margin-left:0"></text>{{item.forum_comment}}</view>
+        </view>
+        <view class="content action" style="border-top: 1px solid rgb(216, 216, 216);width:80%;top:0"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="searchend" style="display:{{showsearchtalk}};text-align:center">
+    <text class="cuIcon-fold lg text-black" bindtap="hidesearch" style="line-height:40rpx"></text>
+  </view>
+
 </view>

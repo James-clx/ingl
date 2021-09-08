@@ -38,9 +38,17 @@
       </view>
     </view>
 
+    <view wx:for="{{selected_week_data_lovers}}" wx:key="key">
+      <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
+        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('{{loversbg[choosecolornum]}}');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
+        <view class="smalltext">
+        </view>
+      </view>
+    </view>
+
     <view wx:for="{{selected_week_data_me}}" wx:key="key">
       <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
-        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('http://qiniu.inguangli.cn/mybg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
+        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('{{loversschedule[choosecolornum]}}');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
         <view class="smalltext">
           <text class="smalltext-info" style="padding-bottom:5rpx">{{item.course_name}}</text>
           <text class="smalltext-info" style="padding-top:5rpx;padding-bottom:5rpx">{{item.class_location}}</text>
@@ -50,7 +58,7 @@
 
     <view wx:for="{{selected_week_data_lovers}}" wx:key="key">
       <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
-        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('http://qiniu.inguangli.cn/lovers-bg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
+        style="margin-left:{{(item.week-1)*91}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;background-image:url('{{myschedule[choosecolornum]}}');background-size:122% 119%;background-repeat:no-repeat;background-position:center;">
         <view class="smalltext">
           <text class="smalltext-info" style="padding-bottom:5rpx">{{item.course_name}}</text>
           <text class="smalltext-info" style="padding-top:5rpx;padding-bottom:5rpx">{{item.class_location}}</text>
@@ -92,7 +100,16 @@
 
     <view wx:for="{{selected_week_data_me}}" wx:key="key">
       <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
-        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('http://qiniu.inguangli.cn/mybg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
+        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('{{loversbg[choosecolornum]}}');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
+        wx:if="{{item.week<6}}">
+        <view class="smalltext">
+        </view>
+      </view>
+    </view>
+
+    <view wx:for="{{selected_week_data_me}}" wx:key="key">
+      <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
+        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('{{loversschedule[choosecolornum]}}');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
         wx:if="{{item.week<6}}">
         <view class="smalltext">
           <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.course_name}}</text>
@@ -104,7 +121,7 @@
 
     <view wx:for="{{selected_week_data_lovers}}" wx:key="key">
       <view class="flex-item kcb-item" bindtap="showCardView" data-info="{{item}}"
-        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('http://qiniu.inguangli.cn/lovers-bg9-4.png');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
+        style="margin-left:{{(item.week-1)*120}}rpx;margin-top:{{(item.pitch_num-1)*(swiperHeight/10)+120}}rpx;height:{{swiperHeight/5-10}}rpx;width:115rpx;left:140rpx;background-image:url('{{myschedule[choosecolornum]}}');background-size:122% 119%;background-repeat:no-repeat;background-position:center;"
         wx:if="{{item.week<6}}">
         <view class="smalltext">
           <text class="smalltext-info" style="padding-bottom:5rpx;margin-right:2rpx">{{item.course_name}}</text>
@@ -162,6 +179,12 @@
         </view>
       </view>
 
+      <view class="cu-item arrow" bindtap="showModal" data-target="RadioModal">
+        <view class="content">
+          <view>更换颜色</view>
+        </view>
+      </view>
+
       <view class="cu-item arrow" bindtap="tomyschedule">
         <view class="content">
           <view>我的课表</view>
@@ -169,5 +192,26 @@
       </view>
       
     </view>
+  </view>
+</view>
+
+<view class="cu-modal {{modalName=='RadioModal'?'show':''}}" bindtap="hideModal">
+  <view class="cu-dialog" catchtap>
+    <radio-group class="block" bindchange="choosecolor">
+      <view class="cu-list menu text-left">
+        <view class="cu-item" wx:for="{{loversbg}}" wx:key>
+          <label class="flex justify-between align-center flex-sub">
+            <view class="flex-sub">
+              <text style="background-color:{{mycolorlist[index]}}" decode="{{true}}" space="{{true}}">&nbsp;&nbsp;&nbsp;&nbsp;</text>
+              <text decode="{{true}}" space="{{true}}">&nbsp;{{mycolorname[index]}}</text>
+              <text decode="{{true}}" space="{{true}}">&nbsp;&nbsp;/&nbsp;&nbsp;</text>
+              <text style="background-color:{{loverscolorlist[index]}}" decode="{{true}}" space="{{true}}">&nbsp;&nbsp;&nbsp;&nbsp;</text>
+              <text decode="{{true}}" space="{{true}}">&nbsp;{{loverscolorname[index]}}</text>
+            </view>
+            <radio class="round" value="{{index}}" checked="{{index == choosecolornum ? 'true':''}}"></radio>
+          </label>
+        </view>
+      </view>
+    </radio-group>
   </view>
 </view>

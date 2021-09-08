@@ -39,6 +39,16 @@ Component({
     show_class_message: 'none', // 控制课程详细信息的显示隐藏
     ccourse_info_target: {}, // 保存课程的详细信息
 
+    //课表贴图列表
+    loversbg:['http://qiniu.inguangli.cn/loversbg-quartz.png','http://qiniu.inguangli.cn/loversbg-tiffany.png','http://qiniu.inguangli.cn/loversbg-asphalt.png'],
+    myschedule:['http://qiniu.inguangli.cn/loversschedule-quartz.png','http://qiniu.inguangli.cn/loversschedule-tiffany.png','http://qiniu.inguangli.cn/loversschedule-asphalt.png'],
+    loversschedule:['http://qiniu.inguangli.cn/myschedule-serenity.png','http://qiniu.inguangli.cn/myschedule-blush.png','http://qiniu.inguangli.cn/myschedule-asbestos.png'],
+    mycolorlist:['#F8CDCD','#14B1B1','#33495F'],
+    loverscolorlist:['#91A8D0','#E5A4A8','#7F8C8D'],
+    mycolorname:['水晶粉','蒂芙尼蓝','潘多拉蓝'],
+    loverscolorname:['宁静蓝','活力粉','学院灰'],
+    choosecolornum:0,
+
     // 其他信息
     schedule_go_class_time: app.globalData.schedule_go_class_time, // 课程表左边栏
   },
@@ -52,9 +62,14 @@ Component({
         let clientWidth = res.windowWidth
         let ratio = 750 / clientWidth;//计算为百分比
         let rpxHeight = ratio * clientHeight - 320
-        console.log(rpxHeight)
+        var choosecolornum = wx.getStorageSync('choosecolornum')
+        if(!choosecolornum){
+          choosecolornum = 0
+          wx.setStorageSync('choosecolornum',choosecolornum)
+        }
         this.setData({
-          swiperHeight: rpxHeight
+          swiperHeight: rpxHeight,
+          choosecolornum: choosecolornum
         })
       }
     })
@@ -123,7 +138,6 @@ Component({
       if (hideweekend != false) {
         hideweekend = true
       }
-      console.log("111")
       this.setData({
         hideweekend:hideweekend,
         today_week:0,
@@ -222,6 +236,14 @@ Component({
       wx.switchTab({
         url: '../../pages/schedule/schedule',
       })
+    },
+
+    choosecolor(e){
+      var num = e.detail.value
+      this.setData({
+        choosecolornum:num
+      })
+      wx.setStorageSync('choosecolornum', num)
     },
 
     // 清空课表缓存

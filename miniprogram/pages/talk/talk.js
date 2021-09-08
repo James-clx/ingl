@@ -19,6 +19,7 @@ let inputclean = ''//清空评论框数据
 let userblock = ''//全局变量
 let dbhasuser = ''
 let morepost = true
+let searchinfo = ''
 
 Page({
   /**
@@ -29,12 +30,15 @@ Page({
     showlikestatus:[],
     showlikenum:[],
     postlist:[],//推文数组
+    searchlist:[],
     showTalklogin :'block',//页面展示信息授权模态框
     showinputpage:'block',//上传信息按钮
     showinputinfo:'none',//上传信息页面
     filter:'0rpx',//主页面模糊
     loadModal:false,
     showallinput:false,
+    swiperHeight:0,
+    showsearchtalk:'none',
     Img:"",
     info:''//发布推文页面输入框数据
   },
@@ -186,6 +190,74 @@ Page({
       })
     })
     
+  },
+
+  searchtalk:function(){
+    wx.getSystemInfo({
+      success:(res) => {
+        let clientHeight = res.windowHeight
+        let clientWidth = res.windowWidth
+        let ratio = 750 / clientWidth;//计算为百分比
+        let rpxHeight = ratio * clientHeight - 400
+        this.setData({
+          swiperHeight: rpxHeight,
+          showsearchtalk:'block',
+          filter:'5rpx'
+        })
+      }
+    })
+  },
+
+  searchinfo:function(event){
+    searchinfo = event.detail.value
+  },
+
+  search:function(){
+    if(searchinfo == ''){
+      wx.showToast({
+        title: '要搜些什么呀？',
+        icon:'none'
+      })
+      return;
+    }
+    var that = this
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/cancel/forum/search/name/content',
+      method:'GET',
+      data:{
+        forum_content:searchinfo
+      },
+      success(res){
+        if(res.data.code != '200'){
+          wx.showToast({
+            icon:'error',
+            title: '搜索失败',
+          })
+        }
+        that.setData({
+          searchlist:res.data.data
+        })
+        console.log(that.data.searchlist)
+      },
+      fail(res){
+        console.log(res)
+      }
+    })
+  },
+
+  hidesearch:function(){
+    var swiperHeight = this.data.swiperHeight*0.2
+    this.setData({
+      swiperHeight: swiperHeight,
+    })
+    var that = this
+    setTimeout(function(){
+      that.setData({
+        swiperHeight: 0,
+        showsearchtalk:'none',
+        filter:'0rpx'
+      })
+    },50)
   },
 
   //跳转到说说详细页面

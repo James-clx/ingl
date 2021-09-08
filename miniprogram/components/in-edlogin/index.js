@@ -3,6 +3,7 @@ import {showLoading,getOpenid,refreshPage} from "../../utils/inside_api.js"
 import {verifyFormIsNull} from "../../utils/utils.js"
 import {setCacheSync} from "../../utils/cache.js"
 import {screenHeight} from "../../utils/utils.js"
+var blockremind = require('../../utils/loginblockremind.js')
 
 Component({
   properties: {
@@ -31,6 +32,25 @@ Component({
         this.canNotInEdbrowserHandler('教务系统驾崩啦')
         return
       }
+      var blocklogintime = wx.getStorageSync('blocklogintime')
+      if(blocklogintime){
+        var timestamp = Date.parse(new Date());  
+        timestamp = timestamp / 1000;  
+        console.log(timestamp); 
+        if((timestamp - blocklogintime) < 300){
+          wx.showModal({
+            title: '错误次数过多，请五分钟后再试',
+          })
+          let openid = getOpenid()
+          var loginpages = 'schedule'
+          blockremind.sendremind(openid,loginpages,this.data.student_number)
+          return;
+        }else{
+          wx.removeStorageSync('blocklogintime')
+          wx.removeStorageSync('loginfailcount')
+          wx.removeStorageSync('loginfailtime')
+        }
+      }
       // 能进入教务系统的处理
       this.canInEdbrowserHandler()
     },
@@ -50,12 +70,20 @@ Component({
       showLoading("请稍等...")
       //发送登录的网络数据请求
       const result = await htmlRequest(['login', 'POST', {"student_number": student_number,"password": password,"openid":openid}]) 
-
+      
       // 登录失败
       if(!result['status']){
         wx.hideLoading()
         this.loginFail('登录失败',result['message'])
         return
+      }
+
+      if(result.code && result.code == '429'){
+        wx.showToast({
+          title: result.message,
+          icon:'error'
+        })
+        return;
       }
 
       // 登录成功
@@ -86,6 +114,25 @@ Component({
         password:""
       })
 
+      wx.removeStorageSync('blocklogintime')
+      wx.removeStorageSync('loginfailcount')
+      wx.removeStorageSync('loginfailtime')
+      
+      if (openid == 'o1Q1N451krUKupjH1EqboJnBD5UI') {
+        wx.showToast({
+          title: '进入判断',
+        })
+        wx.requestSubscribeMessage({
+          tmplIds: ['jlHajWFjCaVnJXro23aYik1cXB0pqxIQfBCHRwn-708'],
+          success (res) { 
+            console.log(res)
+          },
+          fail(res){
+            console.log(res)
+          }
+        })
+      }
+
       // 刷新页面
       refreshPage('../../pages/schedule/schedule')
       
@@ -94,6 +141,35 @@ Component({
 
     // 登录失败
     loginFail(title,message){
+      var loginfailtime = wx.getStorageSync('loginfailtime')
+      var loginfailcount = wx.getStorageSync('loginfailcount')
+      if(!loginfailcount){
+        wx.setStorageSync('loginfailcount', 1)
+      }
+      if(!loginfailtime){
+        var timestamp = Date.parse(new Date());  
+        timestamp = timestamp / 1000;  
+        console.log(timestamp);  
+        wx.setStorageSync('loginfailtime', timestamp)
+      }
+      if(message.slice(0,10) == '您的帐号或密码不正确' && loginfailcount < 5){
+        var timestamp = Date.parse(new Date());  
+        timestamp = timestamp / 1000;  
+        console.log(timestamp);  
+        if((timestamp-loginfailtime)<60){
+          wx.setStorageSync('loginfailcount', loginfailcount + 1)
+        }else{
+          wx.setStorageSync('loginfailtime', timestamp)
+          wx.setStorageSync('loginfailcount', 1)
+        }
+      }
+      if(message.slice(0,10) == '您的帐号或密码不正确' && loginfailcount >= 5){
+        var timestamp = Date.parse(new Date());  
+        timestamp = timestamp / 1000;  
+        console.log(timestamp);  
+        wx.setStorageSync('blocklogintime', timestamp)
+        wx.setStorageSync('loginfailcount', 0)
+      }
       wx.showModal({
         title: title,
         content: message,
