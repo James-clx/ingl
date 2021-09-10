@@ -43,7 +43,7 @@
   </view>
 
   <view class="setting-item" style="margin-bottom:0rpx;border-bottom:0px" bindtap="showModal" data-target="cooperate">
-    <view class="setting-info">商务合作</view>
+    <view class="setting-info">找小IN</view>
   </view>
 
   <view class="setting-item" bindtap="showModal" data-target="relief">
@@ -63,14 +63,14 @@
 <view class="cu-modal {{modalName=='cooperate'?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class="content relief-text">商务合作</view>
+      <view class="content relief-text">找小IN</view>
       <view class="action" bindtap="hideModal">
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
     <view class="padding-xl">
       <text>
-      我们是校内领先的校园信息平台运营团队，欢迎各项目操盘手、核心领导人、团队长合作\n
+      有需要快速帮助，如寻物、求助和咨询问题可以添加小IN微信，小IN将快速为你解答\n
       (长按保存下方二维码，添加好友即可)
       </text>
       <image class="cooperate-img" show-menu-by-longpress="true" src="http://qiniu.inguangli.cn/cooperate-qrcode.jpg"></image>

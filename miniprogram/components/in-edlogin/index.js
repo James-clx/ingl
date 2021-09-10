@@ -32,6 +32,15 @@ Component({
         this.canNotInEdbrowserHandler('教务系统驾崩啦')
         return
       }
+      let openid = getOpenid()
+      const loginschedule = await htmlRequest(['access/login_schoolsys', 'POST',{openid}]) // 判断能否进入教务系统
+      console.log(loginschedule.data)
+      if(loginschedule.data == 'false'){
+        wx.showModal({
+          title: '用户已被封禁，请前往我的页面联系IN广理管理员',
+        })
+        return;
+      }
       var blocklogintime = wx.getStorageSync('blocklogintime')
       if(blocklogintime){
         var timestamp = Date.parse(new Date());  
@@ -41,7 +50,6 @@ Component({
           wx.showModal({
             title: '错误次数过多，请五分钟后再试',
           })
-          let openid = getOpenid()
           var loginpages = 'schedule'
           blockremind.sendremind(openid,loginpages,this.data.student_number)
           return;
