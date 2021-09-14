@@ -33,13 +33,13 @@ Component({
         return
       }
       let openid = getOpenid()
-      const loginschedule = await htmlRequest(['access/login_schoolsys', 'POST',{openid}]) // 判断能否进入教务系统
-      if(loginschedule.data == 'false'){
-        wx.showModal({
-          title: '用户已被封禁，请前往我的页面联系IN广理管理员',
-        })
-        return;
-      }
+      // const loginschedule = await htmlRequest(['access/login_schoolsys', 'POST',{openid}]) // 判断能否进入教务系统
+      // if(loginschedule.data == 'false'){
+      //   wx.showModal({
+      //     title: '用户已被封禁，请前往我的页面联系IN广理管理员',
+      //   })
+      //   return;
+      // }
       var blocklogintime = wx.getStorageSync('loversblocklogintime')
       if(blocklogintime){
         var timestamp = Date.parse(new Date());  
