@@ -75,7 +75,7 @@ function getBlock(openid) {
       url: 'https://www.inguangli.cn/ingl/api/access/issue_forum',
       method: 'POST',
       data:{
-        "openid":openid
+        "openid":'o1Q1N451krUKupjH1EqboJnBD5UI'
       },
       success (res) {
         userblock = res.data.data

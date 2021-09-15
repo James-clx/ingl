@@ -56,7 +56,7 @@
   <view class="info">
 
     <view class="map">
-      <image class="mapinfo" bindtap="tapimg" data-id="http://qiniu.inguangli.cn/map9-10.jpg" src="http://qiniu.inguangli.cn/map9-10.jpg"></image>
+      <image class="mapinfo" bindtap="tapimg" data-id="http://qiniu.inguangli.cn/map8-28.jpg" src="http://qiniu.inguangli.cn/map8-28.jpg"></image>
     </view>
 
   </view>
