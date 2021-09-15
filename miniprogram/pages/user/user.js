@@ -3,7 +3,6 @@ import {htmlRequest} from "../../utils/html.js"
 var userlogin = require('../../utils/login.js')
 var getuserinfo = require('../../utils/inside_api.js')
 import {getOpenid} from "../../utils/inside_api.js"
-const app = getApp()
 let dbhasuser
 let userblock
 let hasUserInfo = false//缓存是否有用户信息
@@ -70,11 +69,7 @@ Page({
     //用户封禁状态
     getuserinfo.getBlock(openid)
     .then(res => {
-      if(res == 'false'){
-        userblock = 'false'
-      }else{
-        userblock = 'true'
-      }
+      userblock = res
       if (userblock == 'false' && dbhasuser == 'true') {
         wx.showModal({
           title: '用户已被封禁',
@@ -170,7 +165,6 @@ Page({
   cleanAllCache(){
     try {
       wx.clearStorageSync()
-      wx.setStorageSync('version', app.globalData.nowversion)
       this.setData({
         userInfo: '',
         likecount: 0,

@@ -110,11 +110,7 @@ Page({
     //用户封禁状态
     getuserinfo.getBlock(openid)
     .then(res => {
-      if(res == 'false'){
-        userblock = 'false'
-      }else{
-        userblock = 'true'
-      }
+      userblock = res
       if (userblock == 'false' && dbhasuser == 'true') {
         wx.showModal({
           title: '用户已被封禁',

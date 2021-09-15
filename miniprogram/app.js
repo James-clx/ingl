@@ -8,10 +8,9 @@ App({
 
   onLaunch () {
     this.globalData = {
-      nowversion: '2.1.3',
       showallinput:false,
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
-      open_date: "2021-08-30 0:0:0",
+      open_date: "2021-08-30",
       schedule_go_class_time: [{
         time: "1",
         start: "8:20",

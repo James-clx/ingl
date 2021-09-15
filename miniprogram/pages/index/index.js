@@ -1,7 +1,6 @@
 const app = getApp()
 import{cloudDownLoad}from"../../utils/cloud.js"
 const qiniuUploader = require("../../utils/qiniuUploader.js");
-
 Page({
   data: {
     images:[],
@@ -117,23 +116,6 @@ Page({
         console.log(res)
       }
     })
-
-    //版本判断
-    var version = wx.getStorageSync('version')
-    if(!version || version != app.globalData.nowversion){
-      wx.showModal({
-        title:"小程序已更新，请重新登录",
-        showCancel:false,
-        success (res) {
-          try {
-            wx.clearStorageSync()
-            wx.setStorageSync('version', app.globalData.nowversion)
-          } catch(e) {
-            // Do something when catch error
-          }
-        }
-      })
-    }
     // var map = 'https://qiniu.inguangli.cn/map.jpg'
     // const cloudimages = await cloudDownLoad([map])
     // console.log(cloudimages)

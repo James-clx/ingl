@@ -91,11 +91,7 @@ Page({
         openid:openid
       },
       success (res) {
-        if(res.data.data == 'false'){
-          userblock = 'false'
-        }else{
-          userblock = 'true'
-        }
+        userblock = res.data.data
       },
       fail(res){
         console.log(res.data)
@@ -296,6 +292,17 @@ Page({
                 that.setData({
                   getcommentlist:res.data.data
                 })
+                //用户订阅事件
+                // if (openid == that.data.postlist.openid) {
+                //   wx.requestSubscribeMessage({
+                //     tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+                //     success (res) { 
+                //       console.log(res)
+                //     }
+                //   })
+                // }else{
+                //   userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+                // }
               },
               fail(res){
                 console.log(res.data)
