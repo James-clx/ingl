@@ -50,13 +50,13 @@
 <view class="fix">
 
   <view class="title">
-    <text>校园地图</text>
+    <text>校历 2021-2022</text>
   </view>
 
   <view class="info">
 
     <view class="map">
-      <image class="mapinfo" bindtap="tapimg" data-id="http://qiniu.inguangli.cn/map8-28.jpg" src="http://qiniu.inguangli.cn/map8-28.jpg"></image>
+      <image class="mapinfo" bindtap="tapimg" mode="widthFix" data-id="http://qiniu.inguangli.cn/schoolcalendar2021-2022%20.jpg" src="http://qiniu.inguangli.cn/schoolcalendar2021-2022%20.jpg"></image>
     </view>
 
   </view>

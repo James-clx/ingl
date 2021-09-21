@@ -1,3 +1,4 @@
+const app = getApp()
 import {clearCacheSingle,clearCacheAll} from "../../utils/cache.js"
 import {htmlRequest} from "../../utils/html.js"
 var userlogin = require('../../utils/login.js')
@@ -67,17 +68,34 @@ Page({
     // })
 
     //用户封禁状态
-    getuserinfo.getBlock(openid)
-    .then(res => {
-      userblock = res
-      if (userblock == 'false' && dbhasuser == 'true') {
-        wx.showModal({
-          title: '用户已被封禁',
-          content: '申诉请前往IN广理公众号,在后台回复申诉即可',
-          showCancel:false
+    if(!openid){
+      getuserinfo.getLoginOpenid()
+      .then(res => {
+        getuserinfo.getBlock(res)
+        .then(res => {
+          userblock = res
+          if (userblock == 'false' && dbhasuser == 'true') {
+            wx.showModal({
+              title: '用户已被封禁',
+              content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+              showCancel:false
+            })
+          }
         })
-      }
-    })
+      })
+    }else{
+      getuserinfo.getBlock(openid)
+      .then(res => {
+        userblock = res
+        if (userblock == 'false' && dbhasuser == 'true') {
+          wx.showModal({
+            title: '用户已被封禁',
+            content: '申诉请前往IN广理公众号,在后台回复申诉即可',
+            showCancel:false
+          })
+        }
+      })
+    }
 
     //获取点赞、发帖数
     wx.request({
@@ -165,6 +183,7 @@ Page({
   cleanAllCache(){
     try {
       wx.clearStorageSync()
+      wx.setStorageSync('version', app.globalData.nowversion)
       this.setData({
         userInfo: '',
         likecount: 0,

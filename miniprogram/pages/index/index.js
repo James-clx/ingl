@@ -14,7 +14,8 @@ Page({
     xsimgHeight: 0,
     swiperHeight:0,
     current:0,
-    cloudimg:[]
+    cloudimg:[],
+    bannerurl:[]
   },
 
     // 事件处理函数
@@ -60,6 +61,7 @@ Page({
     var botText=[]
     var bannerimg=[]
     var bannertitle=[]
+    var bannerurl=[]
     that.catchScreenHeight()
     wx.request({
       url: 'https://www.inguangli.cn/ingl/api/tweetswiper',
@@ -102,6 +104,7 @@ Page({
         //给每个字段赋值
         for(var k = 0 ; k < bannerimg.length-1 ;k++){
           bannertitle[k]=bannerimg[k+1].title
+          bannerurl[k]=bannerimg[k+1].url
           //循环存入data，防止setdata数据过长
           var index = "bannerimg[" + k + "]"
           that.setData({
@@ -110,12 +113,31 @@ Page({
         }
         that.setData({
           bannertitle:bannertitle,
+          bannerurl:bannerurl
         })
       },
       fail(res){
         console.log(res)
       }
     })
+    var version = wx.getStorageSync('version')
+    if(!version || version != app.globalData.nowversion){
+      wx.showModal({
+        title: '小程序变强了',
+        content:'赶紧体验一下吧',
+        showCancel:false,
+        success (res) {
+          if (res.confirm) {
+            try {
+              wx.clearStorageSync()
+              wx.setStorageSync('version', app.globalData.nowversion)
+            } catch(e) {
+              // Do something when catch error
+            }
+          }
+        }
+      })
+    }
     // var map = 'https://qiniu.inguangli.cn/map.jpg'
     // const cloudimages = await cloudDownLoad([map])
     // console.log(cloudimages)
@@ -157,10 +179,10 @@ Page({
     })
   },
 
-  //跳转小理出行
-  toxiaolitrip:function(){
+  //跳转公众号推文
+  totweet:function(e){
     wx.navigateTo({
-      url: '../xiaolitrip/xiaolitrip',
+      url: '../tweet/tweet?url='+e.currentTarget.dataset.url,
     })
   },
 

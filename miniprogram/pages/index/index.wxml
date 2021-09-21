@@ -44,19 +44,11 @@
             <from wx:for="{{bannerimg}}" wx:data-item="item" wx:key="key">
               <text>{{bannertitle[index]}}</text>
               <view class="fo-other">
-                <in-rblock src="{{item.src}}" data-id="{{item.src}}" bindtap="tapimg" />
+                <in-rblock wx:if="{{!bannerurl[index]}}" src="{{item.src}}" data-id="{{item.src}}" bindtap="more" />
+                <in-rblock wx:elif="{{bannerurl[index] == 'image'}}" src="{{item.src}}" data-id="{{item.src}}" bindtap="tapimg" />
+                <in-rblock wx:else="{{bannerurl[index]}}" src="{{item.src}}" data-id="{{item.src}}" data-url="{{bannerurl[index]}}" bindtap="totweet" />
               </view>
             </from>
-
-            <!-- <text>校园地图</text>
-            <view class="fo-other">
-              <in-rblock src="http://qiniu.inguangli.cn/map.jpg" data-id="http://qiniu.inguangli.cn/map.jpg" bindtap="tapimg" />
-            </view> -->
-
-            <!-- <text>小理出行</text>
-            <view class="fo-other">
-              <in-rblock src="http://qiniu.inguangli.cn/xiaolitrip.jpg" bindtap="toxiaolitrip" />
-            </view> -->
           </view>
 
           <view class="footer">
@@ -68,11 +60,6 @@
             <text>美团红包</text>
             <view class="fo-other">
               <in-rblock src="http://qiniu.inguangli.cn/mt.jpg" bindtap="mClick" />
-            </view>
-
-            <text>更多</text>
-            <view class="fo-other">
-              <in-rblock src="http://qiniu.inguangli.cn/av1.jpg" bindtap="more"/>
             </view>
           </view>
 

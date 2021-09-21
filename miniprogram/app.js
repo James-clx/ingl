@@ -3,14 +3,15 @@ App({
 
     // 图片云存储下载地址
     cloud_downlode_image_url: "", //主页图片
-    cloud_downlode_userpost_image_url: "" //user发布图片
+    cloud_downlode_userpost_image_url: "" //user发布图片 
   },
-
+  
   onLaunch () {
     this.globalData = {
+      nowversion:'2.1.6',
       showallinput:false,
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
-      open_date: "2021-08-30",
+      open_date: "2021/08/30 0:0:0",
       schedule_go_class_time: [{
         time: "1",
         start: "8:20",

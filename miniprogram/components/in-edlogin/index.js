@@ -3,6 +3,7 @@ import {showLoading,getOpenid,refreshPage} from "../../utils/inside_api.js"
 import {verifyFormIsNull} from "../../utils/utils.js"
 import {setCacheSync} from "../../utils/cache.js"
 import {screenHeight} from "../../utils/utils.js"
+var getuserinfo = require('../../utils/inside_api.js')
 var blockremind = require('../../utils/loginblockremind.js')
 
 Component({
@@ -32,33 +33,48 @@ Component({
         this.canNotInEdbrowserHandler('教务系统驾崩啦')
         return
       }
-      let openid = getOpenid()
-      const loginschedule = await htmlRequest(['access/login_schoolsys', 'POST',{openid}]) // 判断能否进入教务系统
-      console.log(loginschedule.data)
-      if(loginschedule.data == 'false'){
-        wx.showModal({
-          title: '用户已被封禁，请前往我的页面联系IN广理管理员',
+      getuserinfo.getLoginOpenid()
+      .then(res => {
+        var openid = res
+        //var loginschedule = htmlRequest(['access/login_schoolsys', 'POST',{openid}]) // 判断能否进入教务系统
+        wx.request({
+          url: 'https://www.inguangli.cn/ingl/api/access/login_schoolsys',
+          method:'POST',
+          data:{
+            openid:openid
+          },
+          success(res){
+            // console.log(res.data.data)
+            if(res.data.data == 'false'){
+              wx.showModal({
+                title: '用户已被封禁，请前往我的页面联系IN广理管理员',
+              })
+              return;
+            }
+          },
+          fail(res){
+            console.log(res)
+          }
         })
-        return;
-      }
-      var blocklogintime = wx.getStorageSync('blocklogintime')
-      if(blocklogintime){
-        var timestamp = Date.parse(new Date());  
-        timestamp = timestamp / 1000;  
-        console.log(timestamp); 
-        if((timestamp - blocklogintime) < 300){
-          wx.showModal({
-            title: '错误次数过多，请五分钟后再试',
-          })
-          var loginpages = 'schedule'
-          blockremind.sendremind(openid,loginpages,this.data.student_number)
-          return;
-        }else{
-          wx.removeStorageSync('blocklogintime')
-          wx.removeStorageSync('loginfailcount')
-          wx.removeStorageSync('loginfailtime')
+        var blocklogintime = wx.getStorageSync('blocklogintime')
+        if(blocklogintime){
+          var timestamp = Date.parse(new Date());  
+          timestamp = timestamp / 1000;  
+          console.log(timestamp); 
+          if((timestamp - blocklogintime) < 300){
+            wx.showModal({
+              title: '错误次数过多，请五分钟后再试',
+            })
+            var loginpages = 'schedule'
+            blockremind.sendremind(openid,loginpages,this.data.student_number)
+            return;
+          }else{
+            wx.removeStorageSync('blocklogintime')
+            wx.removeStorageSync('loginfailcount')
+            wx.removeStorageSync('loginfailtime')
+          }
         }
-      }
+      })
       // 能进入教务系统的处理
       this.canInEdbrowserHandler()
     },

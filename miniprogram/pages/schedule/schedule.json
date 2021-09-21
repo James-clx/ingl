@@ -1,5 +1,6 @@
 {
   "navigationStyle": "custom",
+  "disableScroll":true,
   "usingComponents": {
     "in-edlogin":"/components/in-edlogin/index",
     "in-schedule":"/components/in-schedule/index"
