@@ -74,8 +74,12 @@ page{
   animation: search 0.5s; 
 }
 
-.talk{
+.headernav{
   margin-top: 180rpx;
+}
+
+.talk{
+  margin-top: 0;
 }
 
 /* 用户推文组件 */
@@ -256,6 +260,15 @@ page{
   color: #acacac;
   font-size: xx-small;
   text-align: center;
+}
+.partition{
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20rpx;
+}
+.partition-detail{
+  margin-top: -1rpx;
+  width: 23%;
 }
 /* 底部提交按钮 */
 .tips{

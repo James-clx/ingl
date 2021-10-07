@@ -105,6 +105,11 @@ page{
   width: 600rpx;
   margin-left: 30rpx;
   margin-top: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 .userpushimg{
   margin-top: 20rpx;

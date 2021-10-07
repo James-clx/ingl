@@ -12,6 +12,7 @@ Component({
   async attached(){
     // 框高
     let screen_height = await screenHeight()
+    console.log(screen_height)
     // 初始化数据
     this.setData({
       swiperHeight: screen_height,

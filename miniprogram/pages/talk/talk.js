@@ -40,7 +40,14 @@ Page({
     swiperHeight:0,
     showsearchtalk:'none',
     Img:"",
-    info:''//发布推文页面输入框数据
+    info:'',//发布推文页面输入框数据
+
+    //导航条选择器数据
+    TabCur: 0,
+    scrollLeft:0,
+    navlist:['最新','提问','寻物'],
+    choosepartition: 0,
+    displaypartition: 0
   },
 
   /**
@@ -138,50 +145,53 @@ Page({
     }
     //获取说说
     inputclean = ''
-    wx.request({
-      url: 'https://www.inguangli.cn/ingl/api/get/forum/list',
-      method: 'POST',
-      data:{
-        limit:7,
-        offest:iforumcount,
-        openid:openid
-      },
-      success (res) {
-        if (that.data.postlist.length-7 != iforumcount) {
-          var pustpostlist = new Array()
-          var pustlikestatus = new Array()
-          var pustlikenum = new Array()
-          pustpostlist = that.data.postlist
-          pustlikestatus = that.data.showlikestatus
-          pustlikenum = that.data.showlikenum
-          for (let i = 0; i < 7; i++) {
-            if (!res.data.forum_list[i]) {
-              morepost = false
-              continue;
-            }else{
-              morepost = true
-              pustpostlist.push(res.data.forum_list[i])
-              pustlikestatus.push(res.data.forum_list[i].have_forum_like)
-              pustlikenum.push(res.data.forum_list[i].forum_like_sum)
+    if(iforumcount >= that.data.postlist.length){
+      wx.request({
+        url: 'https://www.inguangli.cn/ingl/api/get/forum/list',
+        method: 'POST',
+        data:{
+          limit:7,
+          offest:iforumcount,
+          openid:openid,
+          forum_part_id:this.data.displaypartition
+        },
+        success (res) {
+          if (that.data.postlist.length-7 != iforumcount) {
+            var pustpostlist = new Array()
+            var pustlikestatus = new Array()
+            var pustlikenum = new Array()
+            pustpostlist = that.data.postlist
+            pustlikestatus = that.data.showlikestatus
+            pustlikenum = that.data.showlikenum
+            for (let i = 0; i < 7; i++) {
+              if (!res.data.forum_list[i]) {
+                morepost = false
+                continue;
+              }else{
+                morepost = true
+                pustpostlist.push(res.data.forum_list[i])
+                pustlikestatus.push(res.data.forum_list[i].have_forum_like)
+                pustlikenum.push(res.data.forum_list[i].forum_like_sum)
+              }
+            }
+            that.setData({
+              postlist:pustpostlist,
+              showlikestatus:pustlikestatus,
+              showlikenum:pustlikenum,
+              loadModal: false
+            });
+            if (res.data.forum_setup_data.create_time) {
+              that.setData({
+                toppostlist:res.data.forum_setup_data,
+              })
             }
           }
-          that.setData({
-            postlist:pustpostlist,
-            showlikestatus:pustlikestatus,
-            showlikenum:pustlikenum,
-            loadModal: false
-          });
-          if (res.data.forum_setup_data.create_time) {
-            that.setData({
-              toppostlist:res.data.forum_setup_data,
-            })
-          }
+        },
+        fail(res){
+          console.log(res.data)
         }
-      },
-      fail(res){
-        console.log(res.data)
-      }
-    })
+      })
+    }
   },
 
   //登录
@@ -275,6 +285,31 @@ Page({
         filter:'0rpx'
       })
     },50)
+  },
+
+  //顶部导航栏选择
+  tabSelect(e) {
+    var that = this
+    if(e.currentTarget.dataset.id != this.data.TabCur){
+      wx.vibrateShort({type:"heavy"})
+      iforumcount = 0
+      that.setData({
+        TabCur: e.currentTarget.dataset.id,
+        scrollLeft: (e.currentTarget.dataset.id-1)*60,
+        displaypartition:e.currentTarget.dataset.id,
+        loadModal: true,
+        toppostlist:[],
+        postlist:[],
+        showlikenum:[],
+        showlikestatus:[],
+      })
+      that.onShow()
+      setTimeout(function () {
+        that.setData({
+          loadModal: false
+        })
+      },1500)
+    }
   },
 
   //跳转到说说详细页面
@@ -412,6 +447,20 @@ Page({
     })
   },
 
+  //选择分区
+  choosepartition:function(e){
+    var choosenum = e.currentTarget.dataset.id
+    if(choosenum == this.data.choosepartition){
+      this.setData({
+        choosepartition:0
+      })
+    }else{
+      this.setData({
+        choosepartition:choosenum
+      })
+    }
+  },
+
   //确认按钮，上传数据库
   upload:function(){
     var that = this
@@ -480,7 +529,8 @@ Page({
                     hot:0,
                     imgurl:res.imageURL,
                     info:info,
-                    create_time:Date.parse(times.replace(/-/g, '/'))/1000
+                    create_time:Date.parse(times.replace(/-/g, '/'))/1000,
+                    forum_part_id:that.data.choosepartition
                   },
                   success (res) {
                     wx.hideLoading()
@@ -500,6 +550,7 @@ Page({
                       filter:'0rpx',
                       showinputinfo:'none',//打开上传信息页面
                       showinputpage:'block',//隐藏打开页面按钮
+                      choosepartition:0
                     });
                     //重新抓取推文列表
                     that.onShow()
@@ -537,7 +588,8 @@ Page({
               hot:0,
               imgurl:'',
               info:info,
-              create_time:Date.parse(times.replace(/-/g, '/'))/1000
+              create_time:Date.parse(times.replace(/-/g, '/'))/1000,
+              forum_part_id:that.data.choosepartition
             },
             success (res) {
               console.log(res.data)
@@ -558,6 +610,7 @@ Page({
                 filter:'0rpx',
                 showinputinfo:'none',//打开上传信息页面
                 showinputpage:'block',//隐藏打开页面按钮
+                choosepartition:0
               });
               //重新抓取推文列表
               that.onShow()
@@ -592,6 +645,7 @@ Page({
       filter:'0rpx',
       showinputinfo:'none',//打开上传信息页面
       showinputpage:'block',//隐藏打开页面按钮
+      choosepartition:0
     })
   },
 

@@ -28,7 +28,8 @@
     <view style="background-color:#fff;color:#808080;border-radius:0 0 20rpx 20rpx;border-top:1px solid #DCDCDC;padding-top: 10rpx;height: {{swiperHeight+15}}rpx;">
       <view wx:for="{{schedule_go_class_time}}" class="left" wx:key="key" style="height: {{(swiperHeight+15)/10}}rpx;">
         <text wx:if="{{swiperHeight > 1080}}" style="font-size: xx-small;"><text style="font-weight:600">{{item.time}}</text>\n{{item.start}}\n{{item.finish}}</text>
-        <text wx:else style="font-size: xx-small;"><text style="font-weight:600;line-height: 40rpx;">{{item.time}}</text>\n{{item.start}}</text>
+        <!-- <text wx:else style="font-size: xx-small;"><text style="font-weight:600;line-height: 40rpx;">{{item.time}}</text>\n{{item.start}}</text> -->
+        <text wx:else style="font-size:0.85em;margin-top:20rpx"><text style="font-weight:500;line-height: 20rpx;">{{item.time}}</text>\n{{item.start}}\n{{item.finish}}</text>
       </view>
     </view>
 
@@ -69,9 +70,9 @@
     <view style="background-color:#fff;color:#808080;border-radius:0 0 20rpx 20rpx;border-top:1px solid #DCDCDC;padding-top: 10rpx;z-index: 7;height: {{swiperHeight+15}}rpx;">
       <view wx:for="{{schedule_go_class_time}}" class="left" wx:key="key" style="height: {{(swiperHeight+15)/10}}rpx;">
         <text wx:if="{{swiperHeight > 1080}}" style="margin-left:30rpx"><text style="font-weight:600">{{item.time}}</text>\n{{item.start}}\n{{item.finish}}</text>
-        <text wx:else style="margin-left:30rpx"><text style="font-weight:600;line-height: 40rpx;">{{item.time}}</text>\n{{item.start}}</text>
+        <text wx:else style="margin-left:30rpx;font-size:0.85em;margin-top:20rpx"><text style="font-weight:500;line-height: 20rpx;">{{item.time}}</text>\n{{item.start}}\n{{item.finish}}</text>
       </view>
-    </view>
+    </view> 
 
     <view wx:for="{{[1,2,3,4,5,6,7,8,9]}}" wx:key="key">
       <view

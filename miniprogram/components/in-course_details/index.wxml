@@ -1,6 +1,6 @@
 <view class="class-mask" style="height:{{swiperHeight}}rpx;display:{{show_class_message}}" bindtap="hideMask"></view>
 
-<view class="class-massage" style="display:{{show_class_message}};z-index:9999;">
+<view class="class-massage" style="display:{{show_class_message}};z-index:9999;bottom:{{swiperHeight/3}}rpx">
   <view class="class-title">课程信息：</view>
   <view class="class-info">
     <view class="class-detail">课程名称：{{course_info_target.course_name}}</view>
