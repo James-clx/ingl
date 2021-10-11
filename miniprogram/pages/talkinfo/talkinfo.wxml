@@ -23,7 +23,7 @@
   <view class="cu-timeline" style="margin-bottom:180rpx">
     <view class="cu-time">最新</view>
     <view class="cu-item text-grey" wx:for="{{getcommentlist}}" wx:for-item="post" wx:key="unique">
-      <view class="content bg-grey shadow-blur">
+      <view class="content bg-grey shadow-blur" bindlongpress="reply" data-name="{{post.user_name}}" data-id="{{post.openid}}">
         <text>{{post.user_name}}:</text>
         <text user-select="true">{{post.content}}</text>
       </view>

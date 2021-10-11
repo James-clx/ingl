@@ -120,24 +120,28 @@ Page({
         console.log(res)
       }
     })
-    var version = wx.getStorageSync('version')
-    if(!version || version != app.globalData.nowversion){
-      wx.showModal({
-        title: '小程序变强了',
-        content:'赶紧体验一下吧',
-        showCancel:false,
-        success (res) {
-          if (res.confirm) {
-            try {
-              wx.clearStorageSync()
-              wx.setStorageSync('version', app.globalData.nowversion)
-            } catch(e) {
-              // Do something when catch error
-            }
-          }
-        }
-      })
-    }
+
+    //新版本判断
+    // var version = wx.getStorageSync('version')
+    // if(!version || version != app.globalData.nowversion){
+    //   wx.showModal({
+    //     title: '小程序变强了',
+    //     content:'赶紧体验一下吧',
+    //     showCancel:false,
+    //     success (res) {
+    //       if (res.confirm) {
+    //         try {
+    //           wx.clearStorageSync()
+    //           wx.setStorageSync('version', app.globalData.nowversion)
+    //         } catch(e) {
+    //           // Do something when catch error
+    //         }
+    //       }
+    //     }
+    //   })
+    // }
+
+    //七牛云https缓存下载
     // var map = 'https://qiniu.inguangli.cn/map.jpg'
     // const cloudimages = await cloudDownLoad([map])
     // console.log(cloudimages)

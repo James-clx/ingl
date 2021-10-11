@@ -1,6 +1,6 @@
 var gettime=require('./times.js')
 
-function sendremind(openid,postinfo,username,info){
+function sendremind(openid,postinfo,username,info,postid){
   postinfo = postinfo
   username = username
   info = info
@@ -22,7 +22,7 @@ function sendremind(openid,postinfo,username,info){
       forum_content:postinfo,
       username:username,
       comment_content:info,
-      page:'pages/mytalk/mytalk'
+      page:'pages/talkinfo/talkinfo?postid='+postid
     },
     success(res){
       console.log(res)

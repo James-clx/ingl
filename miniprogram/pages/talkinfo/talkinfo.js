@@ -16,6 +16,7 @@ let dbhasuser
 let postid
 let postcount
 let openid
+let replyuser
 
 Page({
   /**
@@ -107,6 +108,7 @@ Page({
         forum_id:postid
       },
       async success (res) {
+        console.log(res)
         if (!res.data.forum_data.create_time) {
           wx.setStorageSync('deletepost', postcount)
           wx.navigateBack({
@@ -145,6 +147,13 @@ Page({
     wx.previewImage({
       current: '', // 当前显示图片的http链接
       urls: [e.currentTarget.dataset.id] // 需要预览的图片http链接列表
+    })
+  },
+
+  reply:function(e){
+    replyuser = e.currentTarget.dataset.id
+    this.setData({
+      inputclean:'@'+e.currentTarget.dataset.name+' '
     })
   },
 
@@ -268,7 +277,7 @@ Page({
         that.setData({
           inputclean : ''
         })
-
+        
         wx.request({
           url: 'https://www.inguangli.cn/ingl/api/add/forum/comment',
           method:'POST',
@@ -292,17 +301,6 @@ Page({
                 that.setData({
                   getcommentlist:res.data.data
                 })
-                //用户订阅事件
-                // if (openid == that.data.postlist.openid) {
-                //   wx.requestSubscribeMessage({
-                //     tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-                //     success (res) { 
-                //       console.log(res)
-                //     }
-                //   })
-                // }else{
-                //   userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
-                // }
               },
               fail(res){
                 console.log(res.data)
@@ -318,18 +316,20 @@ Page({
       
         //发布评论后重新抓取评论列表
         that.onShow()
-        if (openid == that.data.postlist.openid) {
-          wx.requestSubscribeMessage({
-            tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
-            success (res) { 
-              console.log(res)
-            },
-            fail(res){
-              console.log(res)
-            }
-          })
-        }else{
-          userremind.sendremind(that.data.postlist.openid,that.data.postlist.info,name,input)
+        wx.requestSubscribeMessage({
+          tmplIds: ['COikDS9yExM-SsBRbzlxl3fYKu4lHq1PStB66swghOA'],
+          success (res) { 
+            console.log(res)
+          },
+          fail(res){
+            console.log(res)
+          }
+        })
+        if (openid != that.data.postlist.openid) {
+          userremind.sendremind(that.data.postlist.openid , that.data.postlist.info , name , input , postid)
+        }
+        if(replyuser){
+          userremind.sendremind(replyuser , that.data.postlist.info , name , input , postid)
         }
       })
     }

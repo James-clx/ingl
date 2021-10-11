@@ -101,6 +101,7 @@ function getLoginOpenid() {
             code:res.code
           },
           success(res){
+            console.log(res)
             openid = res.data
             resolve(openid)
           },

@@ -94,6 +94,7 @@ Component({
       showLoading("请稍等...")
       //发送登录的网络数据请求
       const result = await htmlRequest(['login', 'POST', {"student_number": student_number,"password": password,"openid":openid}]) 
+      console.log(result)
       
       // 登录失败
       if(!result['status']){
