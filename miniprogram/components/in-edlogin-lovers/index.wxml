@@ -1,6 +1,10 @@
 <view class="cu-modal bottom-modal {{hidelogin=='none'?'':'show'}}"> 
   <view class="cu-dialog">
-    <view class="padding-xl" style="background-color:#FFF">
+    <view class="cu-bar bg-white">
+      <view class="action text-blue" bindtap="hideModal"> </view>
+      <view class="action text-blue" bindtap="hideModal">取消</view>
+    </view>
+    <view class="padding-xl" style="background-color:#FFF;padding-top:0">
       <view class="class-title" style="font-weight: 500;">教务系统登录</view>
       <view class="class-title" style="font-size:small;color:#808080;font-weight: 500;">请使用教务系统账号登录</view>
       <view class="class-info">

@@ -208,6 +208,12 @@ Component({
       })
     },
 
+    hideModal(e){
+      wx.switchTab({
+        url: '../../pages/schedule/schedule',
+      })
+    },
+
     // 以下函数与登录的操作无关
 
     // 防止触摸穿透
