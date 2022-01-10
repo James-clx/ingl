@@ -89,6 +89,12 @@
           "pathName": "pages/schedule-lovers/schedule-lovers",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/achievement/achievement",
+          "pathName": "pages/achievement/achievement",
+          "query": "",
+          "scene": null
         }
       ]
     }

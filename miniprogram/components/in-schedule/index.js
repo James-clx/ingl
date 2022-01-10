@@ -58,6 +58,7 @@ Component({
 
     // 指向今天星期几
     let today = new Date();
+    console.log(today)
     let point_day = today.getDay() == 0 ? 7 : today.getDay()
     var hideweekend = wx.getStorageSync('hideweekend')
     if (hideweekend != false) {
@@ -158,6 +159,12 @@ Component({
     toloversschedule(e){
       wx.navigateTo({
         url: '../../pages/schedule-lovers/schedule-lovers',
+      })
+    },
+
+    queryachievement(e){
+      wx.navigateTo({
+        url: '../../pages/achievement/achievement',
       })
     },
 

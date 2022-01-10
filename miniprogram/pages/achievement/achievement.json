@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "component": true,
+  "usingComponents": {
+    "in-bar":"/components/in-bar/index",
+    "in-edlogin":"/components/in-edlogin/index"
+  }
+}

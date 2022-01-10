@@ -49,24 +49,6 @@ Page({
       userInfo : wx.getStorageSync('userInfo',that.data.userInfo),
     })
 
-    //是否管理员
-    // wx.cloud.callFunction({
-    //   name: 'getadmin',
-    //   key: 'isadmin',
-    //   complete: res => {
-    //     var isadmin = false
-    //     for(var i=0;i<res.result.data.length;i++){
-    //       if(openid == res.result.data[i].useropenid){
-    //         isadmin = true
-    //         break;
-    //       }
-    //     }
-    //     that.setData({
-    //       isadmin:isadmin
-    //     })
-    //   }
-    // })
-
     //用户封禁状态
     if(!openid){
       getuserinfo.getLoginOpenid()
@@ -115,18 +97,6 @@ Page({
         console.log(res.data)
       }
     })
-  
-    //未审核数量
-    // wx.cloud.callFunction({
-    //   name: 'getfalseaudit',
-    //   key: 'rejectcount',
-    //   complete: res => {
-    //     console.log(res.result.total)
-    //     that.setData({
-    //       rejectcount:res.result.total
-    //     })
-    //   }
-    // })     
   },
 
   login:function(openid){

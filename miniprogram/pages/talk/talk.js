@@ -45,9 +45,11 @@ Page({
     //导航条选择器数据
     TabCur: 0,
     scrollLeft:0,
-    navlist:['最新','提问','寻物'],
+    navlist:[],
     choosepartition: 0,
-    displaypartition: 0
+    displaypartition: 0,
+
+    isadmin:false
   },
 
   /**
@@ -65,6 +67,21 @@ Page({
         loadModal: false
       })
     },1500)
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/access/forum_setup',
+      method: 'POST',
+      data:{
+        openid:openid
+      },
+      success (res) {
+        that.setData({
+          isadmin:res.data.data
+        })
+      },
+      fail(res){
+        console.log(res.data)
+      }
+    })
   },
 
   /**
@@ -143,6 +160,25 @@ Page({
         }
       })
     }
+
+    wx.request({
+      url: 'https://www.inguangli.cn/ingl/api/get/forum/part/list',
+      method:'GET',
+      success(res){
+        var topnavlist = []
+        topnavlist[0] = '最新'
+        for(var i = 0 ; i < res.data.data.length ; i++){
+          topnavlist[i+1] = res.data.data[i]
+        }
+        that.setData({
+          navlist:topnavlist
+        })
+      },
+      fail(res){
+        console.log(res)
+      }
+    })
+    
     //获取说说
     inputclean = ''
     if(iforumcount >= that.data.postlist.length){
@@ -386,7 +422,7 @@ Page({
     })
   },
 
-  openinputpage:function(){//打开上传信息页面
+  openinputpage:function(){//打开上传信息页面    
     times = gettime.formatTimes(new Date()),
     this.setData({
       filter:'5rpx',

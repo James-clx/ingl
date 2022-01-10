@@ -1,0 +1,60 @@
+<!--miniprogram/pages/achievement/achievement.wxml-->
+<in-bar title="">
+  <block>
+    <view slot="left" class="bar-set" bindtap="showModal" data-target="DrawerModalL">更多功能</view>
+  </block>
+</in-bar>
+
+<scroll-view scroll-x class="bg-white nav text-center" style="margin-top:160rpx">
+  <view class="cu-item {{index==TabCur?'text-blue cur':''}}" wx:for="{{schoolyear}}" wx:key bindtap="tabSelect" data-id="{{index}}">
+    {{schoolyear[index]}}
+  </view>
+</scroll-view>
+
+<view class="cu-bar bg-white margin-top solid-bottom">
+  <view class="action">
+    <text class="cuIcon-title text-blue"></text>成绩查询
+  </view>
+</view>
+<view class="bg-white padding">
+  <view class="grid col-3 margin-bottom text-center scorelist" wx:for="{{achievement}}" wx:key>
+    <view class="padding">{{item.course_name}}</view>
+    <view class="padding">{{item.elective_or_compulsory}}</view>
+    <view class="padding" style="color:{{item.achievement < 60 ? 'red' : 'black'}}">{{item.achievement}}</view>
+  </view>
+</view>
+
+<!-- 功能菜单 -->
+<view class="cu-modal drawer-modal justify-start {{modalName == 'DrawerModalL'?'show':''}}" bindtap="hideModal">
+  <view class="cu-dialog basis-lg" catchtap style="top:{{CustomBar}}px;height:calc(100vh - {{CustomBar}}px)">
+    <view class="cu-list menu text-left" style="margin-top: 100rpx;">
+
+      <view class="cu-item arrow" bindtap="myschedule">
+        <view class="content">
+          <view>我的课表</view>
+        </view>
+      </view>
+
+      <view class="cu-item arrow" bindtap="toloversschedule">
+        <view class="content">
+          <view>情侣课表</view>
+        </view>
+      </view>
+
+      <view class="cu-item arrow" bindtap="queryachievement">
+        <view class="content">
+          <view>成绩查询</view>
+        </view>
+      </view>
+      
+    </view>
+  </view>
+</view>
+
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <image src='/images/logo.jpg' class='png' mode='aspectFit'></image>
+  <view class='gray-text'>加载中...</view>
+</view>
+
+<!-- 教务系统登录界面 -->
+<in-edlogin hidelogin="{{hidelogin}}" />

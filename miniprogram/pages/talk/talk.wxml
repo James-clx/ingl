@@ -130,8 +130,10 @@
 
     <!-- 分区选择 -->
     <view class="partition">
-      <text style="line-height:80rpx">请选择要关联的分区：</text>
-      <view class="cu-capsule round partition-detail" wx:for="{{navlist.length-1}}" wx:data="item" wx:key="key" bindtap="choosepartition" data-id="{{index+1}}">
+      <!-- <view> -->
+        <text style="line-height:80rpx">请选择要关联的分区：</text>
+      <!-- </view> -->
+      <view wx:if="{{isadmin == true}}" class="cu-capsule round partition-detail" wx:for="{{navlist.length-1}}" wx:data="item" wx:key="key" bindtap="choosepartition" data-id="{{index+1}}" style="margin-left:{{index % 4 == 0?'0':''}}">
         <view class="cu-tag {{choosepartition == [index+1] ? 'bg-blue':'bg-gray'}} ">
           <text class="cuIcon-tagfill"></text>
         </view>
@@ -139,6 +141,16 @@
           {{navlist[index+1]}}
         </view>
       </view>
+
+      <view wx:if="{{isadmin == false}}" class="cu-capsule round partition-detail" wx:for="{{navlist.length-2}}" wx:data="item" wx:key="key" bindtap="choosepartition" data-id="{{index+1}}" style="margin-left:{{index % 4 == 0?'0':''}}">
+        <view class="cu-tag {{choosepartition == [index+1] ? 'bg-blue':'bg-gray'}} ">
+          <text class="cuIcon-tagfill"></text>
+        </view>
+        <view class="cu-tag {{choosepartition == [index+1] ? 'line-blue':'line-gray'}}">
+          {{navlist[index+1]}}
+        </view>
+      </view>
+
     </view>
 
     <!-- 底部提交按钮 -->

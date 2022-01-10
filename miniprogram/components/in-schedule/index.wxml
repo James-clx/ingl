@@ -145,6 +145,12 @@
           <view>情侣课表</view>
         </view>
       </view>
+
+      <view class="cu-item arrow" bindtap="queryachievement">
+        <view class="content">
+          <view>成绩查询</view>
+        </view>
+      </view>
       
     </view>
   </view>

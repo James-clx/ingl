@@ -1,0 +1,16 @@
+/* miniprogram/pages/achievement/achievement.wxss */
+.scorelist{
+  border-bottom: 1px solid #e9e9e9;
+}
+.bar-set{
+  margin-top: 95rpx;
+  margin-left: 40rpx;
+  width: 150rpx;
+  height: 60rpx;
+  border: 1rpx solid rgb(201, 199, 199);
+  border-radius: 30rpx;
+  text-align: center;
+  line-height: 60rpx;
+  font-size: small;
+  z-index: 999999;
+}
