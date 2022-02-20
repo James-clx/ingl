@@ -166,35 +166,35 @@ Component({
 
     // 登录失败
     loginFail(title,message){
-      var loginfailtime = wx.getStorageSync('loginfailtime')
-      var loginfailcount = wx.getStorageSync('loginfailcount')
-      if(!loginfailcount){
-        wx.setStorageSync('loginfailcount', 1)
-      }
-      if(!loginfailtime){
-        var timestamp = Date.parse(new Date());  
-        timestamp = timestamp / 1000;  
-        console.log(timestamp);  
-        wx.setStorageSync('loginfailtime', timestamp)
-      }
-      if(message.slice(0,10) == '您的帐号或密码不正确' && loginfailcount < 5){
-        var timestamp = Date.parse(new Date());  
-        timestamp = timestamp / 1000;  
-        console.log(timestamp);  
-        if((timestamp-loginfailtime)<60){
-          wx.setStorageSync('loginfailcount', loginfailcount + 1)
-        }else{
-          wx.setStorageSync('loginfailtime', timestamp)
-          wx.setStorageSync('loginfailcount', 1)
-        }
-      }
-      if(message.slice(0,10) == '您的帐号或密码不正确' && loginfailcount >= 5){
-        var timestamp = Date.parse(new Date());  
-        timestamp = timestamp / 1000;  
-        console.log(timestamp);  
-        wx.setStorageSync('blocklogintime', timestamp)
-        wx.setStorageSync('loginfailcount', 0)
-      }
+      // var loginfailtime = wx.getStorageSync('loginfailtime')
+      // var loginfailcount = wx.getStorageSync('loginfailcount')
+      // if(!loginfailcount){
+      //   wx.setStorageSync('loginfailcount', 1)
+      // }
+      // if(!loginfailtime){
+      //   var timestamp = Date.parse(new Date());  
+      //   timestamp = timestamp / 1000;  
+      //   console.log(timestamp);  
+      //   wx.setStorageSync('loginfailtime', timestamp)
+      // }
+      // if(message.slice(0,10) == '您的帐号或密码不正确' && loginfailcount < 5){
+      //   var timestamp = Date.parse(new Date());  
+      //   timestamp = timestamp / 1000;  
+      //   console.log(timestamp);  
+      //   if((timestamp-loginfailtime)<60){
+      //     wx.setStorageSync('loginfailcount', loginfailcount + 1)
+      //   }else{
+      //     wx.setStorageSync('loginfailtime', timestamp)
+      //     wx.setStorageSync('loginfailcount', 1)
+      //   }
+      // }
+      // if(message.slice(0,10) == '您的帐号或密码不正确' && loginfailcount >= 5){
+      //   var timestamp = Date.parse(new Date());  
+      //   timestamp = timestamp / 1000;  
+      //   console.log(timestamp);  
+      //   wx.setStorageSync('blocklogintime', timestamp)
+      //   wx.setStorageSync('loginfailcount', 0)
+      // }
       wx.showModal({
         title: title,
         content: message,
