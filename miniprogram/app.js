@@ -11,7 +11,7 @@ App({
       nowversion:'2.1.6',
       showallinput:false,
       base_url: "https://www.inguangli.cn/ingl/api/", //API请求的url前缀
-      open_date: "2022/2/21 0:0:0",
+      open_date: "2022/8/29 0:0:0",
       schedule_go_class_time: [{
         time: "1",
         start: "8:20",
